@@ -1,0 +1,120 @@
+/**
+ * Font sizing shortend
+ */
+
+@mixin font-size($font-size, $line-height, $letter-spacing) {
+    @if ($font-size) {
+        font-size: calc-rem($font-size);
+    }
+    @if ($line-height) {
+        line-height: calc-leading($font-size, $line-height);
+    }
+    @if ($letter-spacing) {
+        letter-spacing: calc-spacing($letter-spacing);
+    }
+}
+
+/**
+ * Get custom font family from map
+ */
+
+@mixin font-family($name, $weight: 400, $style: "normal") {
+    @if ($style != "normal") {
+        font-style: $style;
+    }
+    @if ($name) {
+        font-family: unquote(get-font($name));
+    }
+    @if ($weight != 400 and $weight != "normal") {
+        font-weight: $weight;
+    }
+}
+
+/**
+ * Generatetes input element placeholder crossbrowser scss
+ *
+ * Usage:
+ *
+ * input {
+ *      @include input-placeholder {
+ *          opacity: 1;
+ *      }
+ * }
+ *
+ *
+ * Generates:
+ *
+ * input {
+ *      &:-moz-placeholder,
+ *      &::-moz-placeholder,
+ *      &:-ms-input-placeholder,
+ *      &::-webkit-input-placeholder {
+ *          opacity: 1;
+ *      }
+ * }
+ *
+ * @return {mixed} scss code
+ */
+
+@mixin input-placeholder {
+
+    &::-webkit-input-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+}
+
+/**
+ * Links styling
+ *
+ * Usage:
+ *
+ * a {
+ *     @include link-colors('red', 'white');
+ * }
+ *
+ * Generates follwoing CSS:
+ *
+ * a:link,
+ * a:focus,
+ * a:active,
+ * a:visites {
+ *     color: red;
+ * }
+ *
+ * a:hover {
+ *     color: white;
+ * }
+ *
+ * If $hover is ommited $normal var is used as a hover as well.
+ *
+ * @return {mixed} scss code
+ */
+
+@mixin link-colors($normal, $hover: "none") {
+    @if ($hover == "none") {
+        $hover: $normal;
+    }
+
+    &:link,
+    &:focus,
+    &:active,
+    &:visited {
+        color: $normal;
+    }
+
+    &:hover {
+        color: $hover;
+    }
+}

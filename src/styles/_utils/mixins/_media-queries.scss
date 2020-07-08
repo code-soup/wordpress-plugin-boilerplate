@@ -1,0 +1,16 @@
+/**
+ * Targte IE10/IE11 Media Query
+ *
+ * Usage:
+ *
+ * @include ie10-11 {
+ *
+ *     .my-rule { display: none; }
+ * }
+ */
+
+@mixin ie10-11 {
+    @media screen and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        @content;
+    }
+}

@@ -1,0 +1,91 @@
+{
+    "name": "wppb-webpack",
+    "version": "1.0.0",
+    "description": "WordPress Plugin Boilerplate with webpack build script",
+    "authors": [
+        {
+            "name": "Vlado Bosnjak",
+            "email": "vb@bobz.co",
+            "homepage": "https://www.bobz.co"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "GPL-3.0",
+            "url": "http://www.gnu.org/licenses/gpl-3.0.html"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/code-soup/wordpress-plugin-boilerplate.git"
+    },
+    "bugs": {
+        "url": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
+    },
+    "keywords": [
+        "wppb",
+        "wordpress",
+        "wordpress plugin",
+        "wordpress plugin boilerplate"
+    ],
+    "engines": {
+        "node": ">= 12.16.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 3 versions",
+        "android 4",
+        "safari 10",
+        "not ie <= 8"
+    ],
+    "scripts": {
+        "build": "webpack --mode development --progress --config src/config/webpack.config.js",
+        "start": "webpack-dev-server --mode development --color --watch --config src/config/webpack.config.js",
+        "build:prod": "webpack --mode production --progress --config src/config/webpack.config.js",
+        "lint": "npm run -s lint:scripts && npm run -s lint:styles",
+        "lint:scripts": "eslint src/scripts src/config",
+        "lint:styles": "stylelint \"src/styles/**/*.{css,sass,scss}\"",
+        "test": "npm run -s lint",
+        "clean": "rimraf dist",
+        "reinit": "rimraf dist && rimraf node_modules && yarn"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.10.4",
+        "@babel/plugin-proposal-class-properties": "^7.10.4",
+        "@babel/preset-env": "^7.10.4",
+        "babel-loader": "^8.1.0",
+        "breakpoint-sass": "^2.7.1",
+        "cache-loader": "~4.1.0",
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-globs-webpack-plugin": "^0.3.0",
+        "css-loader": "^3.6.0",
+        "cssnano": "^4.1.10",
+        "eslint": "^7.4.0",
+        "eslint-loader": "^4.0.2",
+        "eslint-plugin-import": "^2.22.0",
+        "file-loader": "^6.0.0",
+        "friendly-errors-webpack-plugin": "^1.7.0",
+        "imagemin-mozjpeg": "^9.0.0",
+        "imagemin-webpack-plugin": "^2.4.2",
+        "import-glob": "^1.5.0",
+        "jquery": "^3.5.1",
+        "mini-css-extract-plugin": "^0.9.0",
+        "node-sass": "^4.14.1",
+        "postcss-loader": "^3.0.0",
+        "resolve-url-loader": "^3.1.1",
+        "rimraf": "^3.0.2",
+        "sass-loader": "^9.0.1",
+        "style-loader": "^1.2.1",
+        "stylelint": "^13.6.1",
+        "stylelint-config-wordpress": "^17.0.0",
+        "stylelint-webpack-plugin": "^2.1.0",
+        "svg-spritemap-webpack-plugin": "^3.5.6",
+        "url-loader": "^4.1.0",
+        "webpack": "^4.43.0",
+        "webpack-assets-manifest": "^3.1.1",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0",
+        "webpack-merge": "^4.2.2",
+        "yargs": "~15.4.0"
+    }
+}
