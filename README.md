@@ -37,10 +37,10 @@ Make sure all dependencies have been installed before moving on:
 Run `git clone git@github.com:code-soup/wordpress-plugin-boilerplate.git .` in that local dir via terminal.
 All the following comands need to be run in this folder via terminal.
 
-2. Remove template git repo & start fresh (one command at a time)
-`rm -rf .git`
-`git init`
-`git add .`
+2. Remove template git repo & start fresh (one command at a time)\
+`rm -rf .git`\
+`git init`\
+`git add .`\
 `git commit -am 'init'`
 
 3. Update `wppb` namespace in `composer.json`, `run.php` and `includes` folder files.
@@ -49,15 +49,15 @@ All the following comands need to be run in this folder via terminal.
 
 5. Update plugin details (Name, Description, etc..) in `index.php` file header.
 
-6. Install PHP dependencies
+6. Install PHP dependencies\
 `composer install`
 
-7. Install node packages
+7. Install node packages\
 `yarn`
 
 8. Make a copy of `/src/config.js`, rename it to `/src/config-local.js` and update paths to your local environment.
 
-9. Create initial build
+9. Create initial build\
 `yarn build`
 
 10. Go to `wp-admin/plugins.php` and activate your plugin.
