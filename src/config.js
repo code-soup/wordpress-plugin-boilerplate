@@ -2,6 +2,7 @@ module.exports = {
     entry: {
         main: ["scripts/main.js", "styles/main.scss"],		// root javascript and style files - frontend
         admin: ["scripts/admin.js", "styles/admin.scss"],	// root javascript and style files - backend
+        clipboard: ["scripts/_npm-modules/clipboard.js"],	// clipboard for c/p system status report
     },
     openBrowserOnWatch: false,				// open browser with devUrl url on watch
     showErrorsInBrowser: true,				// show webpack errors on frontent
