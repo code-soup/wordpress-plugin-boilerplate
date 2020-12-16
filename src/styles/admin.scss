@@ -3,3 +3,7 @@
 @import "_utils/mixins/general";
 @import "_utils/mixins/media-queries";
 @import "_utils/placeholders";
+
+// import style for the system-report copy element container
+
+@import "partials/system-status";

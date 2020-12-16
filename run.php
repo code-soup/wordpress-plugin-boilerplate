@@ -16,11 +16,15 @@ define( 'PLUGIN_URI', plugin_dir_url( __FILE__ ) );
 define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 // Plugin details
-define( 'PLUGIN_NAME', 'WPPB Plugin');
-define( 'PLUGIN_VERSION', '1.0.0');
-define( 'PLUGIN_TEXT_DOMAIN', 'wppb-plugin');
+define( 'PLUGIN_NAME', 'CodeSoup WPPB');
+define( 'PLUGIN_VERSION', '1.0.1');
+define( 'PLUGIN_TEXT_DOMAIN', 'cs-wppb');
 
-
+// Plugin minimum requirements shown on the System Status Page
+define( 'CS_WPPB_MIN_WP_VERSION_SUPPORT_TERMS', '5.0');
+define( 'CS_WPPB_MIN_WP_VERSION', '5.0');
+define( 'CS_WPPB_MIN_PHP_VERSION', '7.1');
+define( 'CS_WPPB_MIN_MYSQL_VERSION', '5.0.0');
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/Activator.php

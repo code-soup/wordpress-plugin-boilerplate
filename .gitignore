@@ -26,6 +26,7 @@ Thumbs.db
 nbproject
 *.sublime-project
 *.sublime-workspace
+pnpm-lock.yaml
 
 # Dreamweaver added files
 _notes

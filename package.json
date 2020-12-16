@@ -87,5 +87,8 @@
         "webpack-dev-server": "^3.11.0",
         "webpack-merge": "^4.2.2",
         "yargs": "~15.4.0"
+    },
+    "dependencies": {
+        "clipboard": "^2.0.6"
     }
 }

@@ -16,7 +16,7 @@
  * Author URI:        https://www.bobz.co, https://brbs.works/, https://kodelato.hr/
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain:       wppb-plugin
+ * Text Domain:       cs-wppb
  * Domain Path:       /languages
  */
 
