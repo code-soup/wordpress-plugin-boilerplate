@@ -37,7 +37,7 @@ class System_Options {
 	public static function system_options() {
 
 		// Display page header.
-		System_Status::page_header( 'Options' );
+		System_Status::page_header( 'General' );
 
 		// wp_print_styles( array( 'thickbox' ) );
 

@@ -63,12 +63,12 @@ class Admin {
 	public static function register_menu_page() {
 
 		add_menu_page(
-			__( 'WPPB', 'cs-wppb' ),
-			__( 'WPPB', 'cs-wppb' ),
+			__( 'Plugin Settings', 'cs-wppb' ),
+			__( 'Plugin Settings', 'cs-wppb' ),
 			'manage_options',
 			'cs-wppb',
 			array( __CLASS__, 'render_options' ),
-			'dashicons-layout'
+			'dashicons-admin-generic'
 		);
 
 	}
