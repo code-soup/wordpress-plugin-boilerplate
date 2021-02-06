@@ -61,8 +61,8 @@ class PluginInit {
 	 */
 	public function __construct() {
 
-		$this->plugin_name = PLUGIN_NAME;
-		$this->version = PLUGIN_VERSION;
+		$this->plugin_name = CS_WPPB_PLUGIN_NAME;
+		$this->version = CS_WPPB_PLUGIN_VERSION;
 
 		$this->load_dependencies();
 		$this->set_locale();
