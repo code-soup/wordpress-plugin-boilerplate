@@ -1,6 +1,6 @@
 <?php
 
-namespace wppb\status;
+namespace wppb\options;
 
 // Exit if accessed directly.
 defined( 'WPINC' ) || die;
@@ -12,7 +12,7 @@ defined( 'WPINC' ) || die;
  *
  * @since  1.0.1
  */
-class System_Options {
+class Init {
 
 	/**
 	 * Whether background tasks are enabled.

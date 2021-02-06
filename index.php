@@ -27,24 +27,19 @@
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
-// Minimum requirements
-define( 'CS_WPPB_MIN_WP_VERSION_SUPPORT_TERMS', '5.0');
-define( 'CS_WPPB_MIN_WP_VERSION', '5.0');
-define( 'CS_WPPB_MIN_PHP_VERSION', '7.1');
-define( 'CS_WPPB_MIN_MYSQL_VERSION', '5.0.0');
-
-
 /**
  * Check for PHP version and include file if everything is ok
- */
-if ( version_compare( PHP_VERSION, CS_WPPB_MIN_PHP_VERSION, '<' ) )
+
+$min_php_ver = strtoupper( $constants_prefix . $constants_define['MIN_PHP_VERSION'] );
+
+if ( version_compare( PHP_VERSION, $min_php_ver, '<' ) )
 {
     // Current PHP version is lower than required
     add_action('admin_notices', function () {
 
         $message = sprintf(
             __('Minimum PHP version required to run this plugin is %s. Your current version is %s', 'cs-wppb'),
-            CS_WPPB_MIN_PHP_VERSION,
+            $min_php_ver,
             PHP_VERSION
         );
 

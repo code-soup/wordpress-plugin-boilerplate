@@ -22,6 +22,8 @@ defined( 'WPINC' ) || die;
  */
 class PluginInit {
 
+	use Utils;
+
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
@@ -31,24 +33,6 @@ class PluginInit {
 	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
-
-	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-	 */
-	protected $plugin_name;
-
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
-	protected $version;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -61,12 +45,16 @@ class PluginInit {
 	 */
 	public function __construct() {
 
-		$this->plugin_name = CS_WPPB_PLUGIN_NAME;
-		$this->version = CS_WPPB_PLUGIN_VERSION;
-
+		// Loader Init
 		$this->load_dependencies();
+
+		// Set textdomain
 		$this->set_locale();
+
+		// Admin hooks
 		$this->define_admin_hooks();
+
+		// Frontend hooks
 		$this->define_public_hooks();
 
 	}
@@ -97,9 +85,10 @@ class PluginInit {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new I18n();
+		$loader     = $this->get_loader();
+		$class_i18n = new I18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$loader->add_action( 'plugins_loaded', $class_i18n, 'load_plugin_textdomain' );
 
 	}
 
@@ -112,10 +101,11 @@ class PluginInit {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Admin( $this->get_plugin_name(), $this->get_version() );
+		$loader      = $this->get_loader();
+		$class_admin = new Admin();
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$loader->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_styles' );
+		$loader->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_scripts' );
 
 	}
 
@@ -128,10 +118,11 @@ class PluginInit {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Frontend( $this->get_plugin_name(), $this->get_version() );
+		$loader       = $this->get_loader();
+		$class_public = new Frontend();
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$loader->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_styles' );
+		$loader->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_scripts' );
 
 	}
 
@@ -145,17 +136,6 @@ class PluginInit {
 	}
 
 	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name() {
-		return $this->plugin_name;
-	}
-
-	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
@@ -164,15 +144,4 @@ class PluginInit {
 	public function get_loader() {
 		return $this->loader;
 	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function get_version() {
-		return $this->version;
-	}
-
 }

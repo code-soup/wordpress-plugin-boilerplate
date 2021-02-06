@@ -8,9 +8,6 @@ defined( 'WPINC' ) || die;
 /**
  * Get paths for assets
  */
-/**
- * Get paths for assets
- */
 class Assets {
 
     /**
@@ -37,10 +34,10 @@ class Assets {
     /**
      * Initiate
      */
-    public function __construct() {
+    public function __construct( string $plugin_uri, string $plugin_path ) {
 
-        $this->dist_path     = sprintf( '%sdist', CS_WPPB_PLUGIN_PATH );
-        $this->dist_uri      = sprintf( '%sdist', CS_WPPB_PLUGIN_URI );
+        $this->dist_uri      = sprintf( '%sdist', $plugin_uri );
+        $this->dist_path     = sprintf( '%sdist', $plugin_path );
         $this->manifest_path = sprintf( '%s/assets.json', $this->dist_path );
 
         /**
