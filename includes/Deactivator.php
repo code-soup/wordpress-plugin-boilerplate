@@ -16,7 +16,7 @@ defined( 'WPINC' ) || die;
 class Deactivator {
 
 	public static function deactivate() {
-
+        // Put code that you want to run on deactivation in here
 	}
 
 }

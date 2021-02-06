@@ -37,7 +37,7 @@ class Admin {
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( PLUGIN_NAME . '/wp/css', $this->assets->get( 'styles/admin.css' ), array(), PLUGIN_VERSION, 'all' );
+		wp_enqueue_style( CS_WPPB_PLUGIN_NAME . '/wp/css', $this->assets->get( 'styles/admin.css' ), array(), CS_WPPB_PLUGIN_VERSION, 'all' );
 	}
 
 	/**
@@ -47,8 +47,10 @@ class Admin {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( PLUGIN_NAME . '/wp/js', $this->assets->get( 'scripts/admin.js' ), array(), PLUGIN_VERSION, false );
-		wp_enqueue_script( PLUGIN_NAME . '/wp/js-clipboard', $this->assets->get( 'scripts/clipboard.js' ), array(), '2.0', true );
+		wp_enqueue_script(
+			CS_WPPB_PLUGIN_NAME . '/wp/js', $this->assets->get( 'scripts/admin.js' ), array(), CS_WPPB_PLUGIN_VERSION, false );
+		
+		wp_enqueue_script( CS_WPPB_PLUGIN_NAME . '/wp/js-clipboard', $this->assets->get( 'scripts/clipboard.js' ), array(), '2.0', true );
 	}
 
 	/**

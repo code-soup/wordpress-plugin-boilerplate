@@ -35,7 +35,7 @@ class Frontend {
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( PLUGIN_NAME . '/css', $this->assets->get('styles/main.css'), [], PLUGIN_VERSION, 'all' );
+		wp_enqueue_style( CS_WPPB_PLUGIN_NAME . '/css', $this->assets->get('styles/main.css'), [], CS_WPPB_PLUGIN_VERSION, 'all' );
 	}
 
 	/**
@@ -47,7 +47,7 @@ class Frontend {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( PLUGIN_NAME . '/js', $this->assets->get('scripts/main.js'), [], PLUGIN_VERSION, false );
+		wp_enqueue_script( CS_WPPB_PLUGIN_NAME . '/js', $this->assets->get('scripts/main.js'), [], CS_WPPB_PLUGIN_VERSION, false );
 	}
 
 }
