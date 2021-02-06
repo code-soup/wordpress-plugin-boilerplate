@@ -2,7 +2,7 @@
 
 namespace wppb\frontend;
 
-use wppb\Assets;
+use wppb\Utils;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -15,15 +15,15 @@ defined( 'WPINC' ) || die;
  */
 class Frontend {
 
+    use Utils;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-        
-        // Load assets from manifest.json
-        $this->assets = new Assets();
+        // Do something if required
 	}
 
 	/**
@@ -35,7 +35,14 @@ class Frontend {
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( CS_WPPB_PLUGIN_NAME . '/css', $this->assets->get('styles/main.css'), [], CS_WPPB_PLUGIN_VERSION, 'all' );
+        // Generate CSS handle
+        wp_enqueue_style(
+            $this->get_plugin_id( '/css' ),
+            $this->get_asset( 'styles/main.css' ),
+            array(),
+            $this->get_plugin_version(),
+            'all'
+        );
 	}
 
 	/**
@@ -47,7 +54,14 @@ class Frontend {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( CS_WPPB_PLUGIN_NAME . '/js', $this->assets->get('scripts/main.js'), [], CS_WPPB_PLUGIN_VERSION, false );
+        // Generate wp-admin Js handle
+        wp_enqueue_script(
+            $this->get_plugin_id( '/js' ),
+            $this->get_asset( 'scripts/main.js' ),
+            array(),
+            $this->get_plugin_version(),
+            false
+        );
 	}
 
 }
