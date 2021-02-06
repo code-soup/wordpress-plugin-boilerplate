@@ -36,10 +36,8 @@ class Frontend {
 	public function enqueue_styles() {
 
         // Generate CSS handle
-        $handle = $this->get_plugin_id() . '/css';
-
         wp_enqueue_style(
-            $handle,
+            $this->get_plugin_id( '/css' ),
             $this->get_asset( 'styles/main.css' ),
             array(),
             $this->get_plugin_version(),
@@ -57,10 +55,8 @@ class Frontend {
 	public function enqueue_scripts() {
 
         // Generate wp-admin Js handle
-        $handle = $this->get_plugin_id() . '/js';
-
         wp_enqueue_script(
-            $handle,
+            $this->get_plugin_id( '/js' ),
             $this->get_asset( 'scripts/main.js' ),
             array(),
             $this->get_plugin_version(),

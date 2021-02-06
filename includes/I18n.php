@@ -26,7 +26,7 @@ class I18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'cs-wppb',
+			'textdomain-cs-wppb',
 			false,
 			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 		);

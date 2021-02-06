@@ -11,13 +11,6 @@ defined( 'WPINC' ) || die;
 trait Utils {
 
     /**
-     * Plugin prefix is used for all database options
-     * 
-     * @var string
-     */
-    private $prefix = 'CS_WPPB_';
-
-    /**
      * Define plugin constants that
      * 
      * @var array
@@ -27,6 +20,7 @@ trait Utils {
         'MIN_WP_VERSION'               => '5.0',
         'MIN_PHP_VERSION'              => '7.1',
         'MIN_MYSQL_VERSION'            => '5.0.0',
+        'PLUGIN_PREFIX'                => 'CS_WPPB_',
         'PLUGIN_NAME'                  => 'WordPress Plugin Boilerplate',
         'PLUGIN_VERSION'               => '1.0.0',
     ];
@@ -57,7 +51,10 @@ trait Utils {
      */
     private function get_asset( string $filename ) {
 
-        $assets = new Assets( $this->get_plugin_dir_url(), $this->get_plugin_dir_path() );
+        $assets = new Assets(
+            $this->get_plugin_dir_url(),
+            $this->get_plugin_dir_path()
+        );
 
         return $assets->get( $filename );
     }
@@ -86,14 +83,17 @@ trait Utils {
 
 
     /**
-     * Returns PLUGIN_NAME constant as ID
-     * Eg: plugin-name
+     * Returns PLUGIN_PREFIX constant as ID
+     * Converts to-slug-like-id
+     * and appends additional text at the end for custom unique id
      * 
      * @return string
      */
-    private function get_plugin_id() {
+    private function get_plugin_id( string $append = '' ) {
 
-        return sanitize_title( $this->get_constant( 'PLUGIN_NAME' ) );
+        $dashed = str_replace( '_', '-', $this->get_constant( 'PLUGIN_NAME' ) );
+
+        return sanitize_title( $dashed ) . $append;
     }
     
 
