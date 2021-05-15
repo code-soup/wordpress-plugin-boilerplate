@@ -3,8 +3,6 @@
 // Autoload all classes via composer
 $composer = require "vendor/autoload.php";
 
-use wppb\PluginInit;
-
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
@@ -18,5 +16,5 @@ defined( 'WPINC' ) || die;
  *
  * @since    1.0.0
  */
-$plugin = new PluginInit();
+$plugin = new wppb\PluginInit();
 $plugin->run();

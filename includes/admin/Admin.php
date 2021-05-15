@@ -2,8 +2,6 @@
 
 namespace wppb\admin;
 
-use wppb\Utils;
-
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
@@ -16,7 +14,7 @@ defined( 'WPINC' ) || die;
  */
 class Admin {
 
-	use Utils;
+	use wppb\Utils;
 
 	/**
 	 * Initialize the class and set its properties.

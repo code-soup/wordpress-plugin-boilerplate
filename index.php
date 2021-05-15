@@ -1,8 +1,6 @@
-<?php // Silence is golden
+<?php
 
 /**
- * The plugin bootstrap file
- *
  * @author            Code Soup
  * @copyright         2021 Code Soup
  * @license           GPL-3.0+
@@ -19,7 +17,7 @@
  * Contributors:      bobz, brbs, Kodelato
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain:       textdomain-cs-wppb
+ * Text Domain:       cs-wppb
  * Domain Path:       /languages
  */
 
@@ -27,8 +25,8 @@
 defined( 'WPINC' ) || die;
 
 /**
- * NOTE: Needs to be inside index.php file or it might not work properly
- * It can fail without error, WordPress is not sending back reason for error
+ * NOTE: Activation hooks need to be inside index.php file or it might not work properly
+ * It can fail without error, WordPress is silently failing in case of error
  *
  * 
  * The code that runs during plugin activation.

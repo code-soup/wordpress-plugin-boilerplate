@@ -1,0 +1,46 @@
+/**
+ * Grid sizing settings
+ */
+$grid: (
+    'gutter': 20px,
+    'columns': 12,
+    'container': 1440px
+);
+
+/**
+ * Font settings
+ */
+$fonts: (
+    'base-size': 16,
+    'base-height': 19,
+    'arial': 'Arial, sans-serif',
+    'roboto': 'Roboto, Arial, sans-serif',
+);
+
+/**
+ * Colors
+ */
+$colors: (
+    'brand': #0c5a9a,
+    'black': #000,
+    'white': #fff
+);
+
+/**
+ * Breakpoints
+ *
+ * Based on: https://yesviz.com/viewport/
+ */
+$breakpoints: (
+    'mobile-m': 370px,
+    'mobile-l': 410px,
+    'tablet-s': 620px,
+    'tablet-m': 750px,
+    'laptop-s': 1020px,
+    'laptop-m': 1170px,
+    'laptop-l': 1320px,
+    'desktop-s': 1400px,
+    'desktop-m': 1640px,
+    'desktop-l': 1880px,
+    'desktop-xl': 2480px
+);

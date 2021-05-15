@@ -1,9 +1,9 @@
 {
 	"name": "codesoup/wppb",
-	"type": "wordpress-plugin",
-	"license": "MIT",
-	"description": "WordPress plugin boilerplate with Webpack dev server, Webpack build script and PSR-4 namespacing",
+	"description": "WordPress plugin boilerplate with Webpack build script and PSR-4 namespacing",
 	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0",
     "support": {
         "issues": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
     },
@@ -12,7 +12,12 @@
 			"name": "Vlado Bosnjak",
 			"email": "vb@bobz.co",
 			"homepage": "https://www.bobz.co"
-		}
+		},
+        {
+            "name": "Code Soup",
+            "email": "hi@codesoup.co",
+            "homepage": "https://www.codesoup.co"
+        }
 	],
 	"keywords": [
         "wppb",
@@ -27,7 +32,8 @@
     },
 	"require": {
 		"php": ">=7.3.0",
-		"composer/installers": "~1.0"
+		"composer/installers": "~1.0",
+		"vlucas/phpdotenv": "^5.3"
 	},
 	"extra": {
 		"installer-paths": {

@@ -2,10 +2,10 @@
 
 namespace wppb;
 
-use wppb\Loader;
+use wppb\Hooker;
 use wppb\I18n;
 use wppb\admin\Admin;
-use wppb\frontend\Frontend;
+use wppb\public\Public;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -25,14 +25,14 @@ class PluginInit {
 	use Utils;
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
+	 * The hooker that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Hooker    $hooker    Maintains and registers all hooks for the plugin.
 	 */
-	protected $loader;
+	protected $hooker;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -45,7 +45,7 @@ class PluginInit {
 	 */
 	public function __construct() {
 
-		// Loader Init
+		// Hooker Init
 		$this->load_dependencies();
 
 		// Set textdomain
@@ -54,7 +54,7 @@ class PluginInit {
 		// Admin hooks
 		$this->define_admin_hooks();
 
-		// Frontend hooks
+		// Public hooks
 		$this->define_public_hooks();
 
 	}
@@ -62,7 +62,7 @@ class PluginInit {
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
-	 * Create an instance of the loader which will be used to register the hooks
+	 * Create an instance of the hooker which will be used to register the hooks
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -70,7 +70,7 @@ class PluginInit {
 	 */
 	private function load_dependencies() {
 
-		$this->loader = new Loader();
+		$this->hooker = new Hooker();
 
 	}
 
@@ -85,10 +85,10 @@ class PluginInit {
 	 */
 	private function set_locale() {
 
-		$loader     = $this->get_loader();
+		$hooker     = $this->get_hooker();
 		$class_i18n = new I18n();
 
-		$loader->add_action( 'plugins_loaded', $class_i18n, 'load_plugin_textdomain' );
+		$hooker->add_action( 'plugins_loaded', $class_i18n, 'load_plugin_textdomain' );
 
 	}
 
@@ -101,11 +101,11 @@ class PluginInit {
 	 */
 	private function define_admin_hooks() {
 
-		$loader      = $this->get_loader();
+		$hooker      = $this->get_hooker();
 		$class_admin = new Admin();
 
-		$loader->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_styles' );
-		$loader->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_scripts' );
+		$hooker->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_styles' );
+		$hooker->add_action( 'admin_enqueue_scripts', $class_admin, 'enqueue_scripts' );
 
 	}
 
@@ -118,30 +118,30 @@ class PluginInit {
 	 */
 	private function define_public_hooks() {
 
-		$loader       = $this->get_loader();
-		$class_public = new Frontend();
+		$hooker       = $this->get_hooker();
+		$class_public = new Public();
 
-		$loader->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_styles' );
-		$loader->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_scripts' );
+		$hooker->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_styles' );
+		$hooker->add_action( 'wp_enqueue_scripts', $class_public, 'enqueue_scripts' );
 
 	}
 
 	/**
-	 * Run the loader to execute all of the hooks with WordPress.
+	 * Run the hooker to execute all of the hooks with WordPress.
 	 *
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->loader->run();
+		$this->hooker->run();
 	}
 
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Ticket_Support_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Hooker    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
-		return $this->loader;
+	public function get_hooker() {
+		return $this->hooker;
 	}
 }
