@@ -15,7 +15,7 @@ trait Utils {
      * 
      * @var array
      */
-    private $constants = [
+    private $constants = array(
         'MIN_WP_VERSION_SUPPORT_TERMS' => '5.0',
         'MIN_WP_VERSION'               => '5.0',
         'MIN_PHP_VERSION'              => '7.1',
@@ -23,14 +23,14 @@ trait Utils {
         'PLUGIN_PREFIX'                => 'CS_WPPB_',
         'PLUGIN_NAME'                  => 'WordPress Plugin Boilerplate',
         'PLUGIN_VERSION'               => '1.0.0',
-    ];
+    );
 
 
     /**
-     * Return r
+     * Return path to
      * @return [type] [description]
      */
-    private function get_plugin_dir_path( string $sub_path = '' ) {
+    private function get_plugin_dir_path( string $sub_path = '' ) : string {
 
         return plugin_dir_path( __FILE__ );
     }
@@ -40,7 +40,7 @@ trait Utils {
      * Return r
      * @return [type] [description]
      */
-    private function get_plugin_dir_url( string $sub_path = '' ) {
+    private function get_plugin_dir_url( string $sub_path = '' ) : string {
         
         return plugin_dir_url( __FILE__ );
     }
@@ -49,7 +49,7 @@ trait Utils {
     /**
      * 
      */
-    private function get_asset( string $filename ) {
+    private function get_asset( string $filename ) : string {
 
         $assets = new Assets(
             $this->get_plugin_dir_url(),
@@ -65,7 +65,7 @@ trait Utils {
      * 
      * @return string
      */
-    private function get_plugin_name() {
+    private function get_plugin_name() : string {
 
         return $this->get_constant( 'PLUGIN_NAME' );
     }
@@ -76,7 +76,7 @@ trait Utils {
      * 
      * @return string
      */
-    private function get_plugin_version() {
+    private function get_plugin_version() : string {
 
         return $this->get_constant( 'PLUGIN_VERSION' );
     }
@@ -89,7 +89,7 @@ trait Utils {
      * 
      * @return string
      */
-    private function get_plugin_id( string $append = '' ) {
+    private function get_plugin_id( string $append = '' ) : string {
 
         $dashed = str_replace( '_', '-', $this->get_constant( 'PLUGIN_NAME' ) );
 
@@ -98,27 +98,42 @@ trait Utils {
     
 
     /**
-     * Get plugin contstant
+     * Get plugin contstant by name
+     * 
      * @param  string $name [description]
      * @return [type]       [description]
      */
-    private function get_constant( string $name ) {
+    private function get_constant( string $name ) : string {
+
+        $constants = $this->get_constants();
+        $constant  = strtoupper( $name );
 
         // Check if constant is defined first
-        if ( ! array_key_exists( $name, $this->constants ) )
+        if ( ! array_key_exists( $constant, $constants ) )
         {   
             // Force string to avoid compiler errors
-            $to_string = print_r( $name, true );
+            $to_string = print_r( $constant, true );
 
             // Log to error for debugging
-            $this->log_error( 'Invalid constant: ' . $to_string );
+            $this->log_error( 'Invalid constant requested: ' . $to_string );
 
             // Exit
             return;
         }
         
         // Return value by key
-        return $this->constants[ strtoupper( $name ) ];
+        return $constants[ $constant ];
+    }
+
+
+    /**
+     * Get all defined plugin contstants
+     *
+     * @return array Return all plugin constants
+     */
+    private function get_constants() {
+        
+        return $this->constants;
     }
 
 

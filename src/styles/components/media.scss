@@ -1,0 +1,12 @@
+.svg-icon {
+    display: inline-flex;
+
+    svg {
+        width: 1em;
+        height: 1em;
+        padding: 1px;
+        overflow: hidden;
+        fill: currentColor;
+        vertical-align: top;
+    }
+}

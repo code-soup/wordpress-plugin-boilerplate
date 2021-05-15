@@ -1,0 +1,44 @@
+/**
+ * Generatetes input element placeholder crossbrowser scss
+ *
+ * Usage:
+ *
+ * input {
+ *      @include input-placeholder {
+ *          opacity: 1;
+ *      }
+ * }
+ *
+ *
+ * Generates:
+ *
+ * input {
+ *      &:-moz-placeholder,
+ *      &::-moz-placeholder,
+ *      &:-ms-input-placeholder,
+ *      &::-webkit-input-placeholder {
+ *          opacity: 1;
+ *      }
+ * }
+ *
+ * @return {mixed} scss code
+ */
+
+@mixin input-placeholder {
+
+    &::-webkit-input-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+}

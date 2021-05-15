@@ -45,8 +45,7 @@ class Assets {
          */
         $this->manifest = file_exists($this->manifest_path)
             ? json_decode(file_get_contents($this->manifest_path), true)
-            : [];
-        
+            : array();
     }
 
 
