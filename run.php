@@ -17,7 +17,4 @@ function wppb() {
 }
 
 // Init plugin and make instance globally available
-$instance = wppb();
-$instance->run();
-
-$GLOBALS['wppb'] = $instance;
+$GLOBALS['wppb'] = wppb();
