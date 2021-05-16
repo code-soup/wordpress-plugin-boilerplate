@@ -122,8 +122,6 @@ final class Init {
 	private function init_hooks() {
 
 		add_action( 'init', array( $this, 'init' ), 0 );
-
-		$this->run();
 	}
 
 
@@ -147,6 +145,9 @@ final class Init {
 
 		// Public related stuff.
 		new Frontend\Init();
+
+		// Run all hooks
+		$this->run();
 	}
 
 

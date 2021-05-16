@@ -15,7 +15,7 @@ defined( 'WPINC' ) || die;
 class Init {
 
 
-    use \WPPBTraits\HelpersTrait;
+    use \WPPB\Traits\HelpersTrait;
 
 
     // Main plugin instance
@@ -34,7 +34,7 @@ class Init {
     public function __construct() {
 
         // Main plugin instance
-        $instance     = ziploy();
+        $instance     = wppb();
         $hooker       = $instance->get_hooker();
         $this->assets = $instance->get_assets();
 
