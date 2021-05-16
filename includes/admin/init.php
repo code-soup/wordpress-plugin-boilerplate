@@ -12,7 +12,7 @@ defined( 'WPINC' ) || die;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  */
-class Admin {
+class Init {
 
 	use wppb\Utils;
 
