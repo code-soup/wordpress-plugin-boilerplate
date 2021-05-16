@@ -15,7 +15,7 @@ defined( 'WPINC' ) || die;
  */
 class Init {
 
-	use \WPPBTraits\HelpersTrait;
+	use \WPPB\Traits\HelpersTrait;
 
 	// Main plugin instance.
 	protected static $instance = null;

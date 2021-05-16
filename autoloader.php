@@ -20,8 +20,9 @@ spl_autoload_register(function ($class) {
 
     $rel_class = substr($class, $length);
     $unslashed = str_replace('\\', '/', $rel_class);
-
     $filename  = strtolower( sprintf('%s/%s.php', $base_dir, $unslashed) );
+
+    error_log( print_r($filename, true));
 
     // Test for original filename.
     if (file_exists($filename))
