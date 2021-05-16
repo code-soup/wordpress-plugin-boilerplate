@@ -122,6 +122,8 @@ final class Init {
 	private function init_hooks() {
 
 		add_action( 'init', array( $this, 'init' ), 0 );
+
+		$this->run();
 	}
 
 
