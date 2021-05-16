@@ -1,6 +1,6 @@
 {
 	"name": "codesoup/wppb",
-	"description": "WordPress plugin boilerplate with Webpack build script and PSR-4 namespacing",
+	"description": "WordPress Plugin Boilerplate",
 	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
     "type": "wordpress-plugin",
     "license": "GPL-3.0",
@@ -26,9 +26,7 @@
         "wordpress plugin boilerplate"
 	],
     "autoload": {
-        "psr-4": {
-            "wppb\\": "includes/"
-        }
+        "classmap": ["includes/"]
     },
 	"require": {
 		"php": ">=7.3.0",

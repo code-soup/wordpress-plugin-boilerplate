@@ -1,12 +1,13 @@
 <?php
 
-namespace wppb;
+namespace WPPB;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
 
 /**
+ * @file
  * Fired during plugin deactivation.
  *
  * This class defines all code necessary to run during the plugin's deactivation.
@@ -15,9 +16,8 @@ defined( 'WPINC' ) || die;
  */
 class Deactivator {
 
-	public static function deactivate() {
-        // Put code that you want to run on deactivation in here
-        update_option( '_deactivator', time() );
-	}
 
+    public static function deactivate() {
+        // Put code that you want to run on deactivation in here.
+    }
 }
