@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       WordPress Plugin Boilerplate
  * Plugin URI:        https://github.com/code-soup/wordpress-plugin-boilerplate
- * Description:       WordPress Plugin Boilerplate with webpack build script, composer autoloader and php namespacing
+ * Description:       WordPress Plugin Boilerplate with webpack build script, composer autoloader and namespacing
  * Version:           1.0.0
  * Author:            Code Soup
  * Author URI:        https://www.codesoup.co
@@ -35,7 +35,7 @@ defined( 'WPINC' ) || die;
 register_activation_hook( __FILE__, function() {
 
     // On activate do this
-    wppb\Activator::activate();
+    WPPB\Activator::activate();
 });
 
 
@@ -47,7 +47,7 @@ register_activation_hook( __FILE__, function() {
 register_deactivation_hook( __FILE__, function () {
     
     // On deactivate do that
-    wppb\Deactivator::deactivate();
+    WPPB\Deactivator::deactivate();
 });
 
 

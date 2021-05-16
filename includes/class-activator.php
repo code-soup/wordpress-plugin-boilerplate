@@ -1,8 +1,8 @@
 <?php
 
-namespace wppb;
+namespace WPPB;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'WPINC' ) || die;
 
 /**
@@ -14,7 +14,7 @@ defined( 'WPINC' ) || die;
  */
 class Activator {
 
-	public static function activate() {
-        // Put code that you want to run on activation in here
-	}
+    public static function activate() {
+        // Put code that you want to run on activation in here.
+    }
 }

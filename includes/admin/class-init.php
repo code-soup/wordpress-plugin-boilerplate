@@ -1,20 +1,29 @@
 <?php
 
-namespace wppb\admin;
+namespace WPPB\Admin;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
 
 /**
+ * @file
  * The admin-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  */
-class Admin {
+class Init {
 
-	use wppb\Utils;
+	use \WPPBTraits\HelpersTrait;
+
+	// Main plugin instance.
+	protected static $instance = null;
+
+	
+	// Assets loader class.
+	protected $assets;
+
 
 	/**
 	 * Initialize the class and set its properties.
@@ -22,20 +31,27 @@ class Admin {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		// Add if something
+
+		// Main plugin instance.
+		$instance     = wppb();
+		$hooker       = $instance->get_hooker();
+		$this->assets = $instance->get_assets();
+
+		// Admin hooks.
+		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
+		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
 
 	/**
-	 * Enqueue the stylesheets for wp-admin
+	 * Enqueue the stylesheets for wp-admin.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
 
-		// Generate wp-admin CSS handle
 		wp_enqueue_style(
-			$this->get_plugin_id( '/wp/css' ),
-			$this->get_asset( 'styles/admin.css' ),
+			$this->get_plugin_id('/wp/css'),
+			$this->assets->get('styles/admin.css'),
 			array(),
 			$this->get_plugin_version(),
 			'all'
@@ -50,8 +66,8 @@ class Admin {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script(
-			$this->get_plugin_id( '/wp/js' ),
-			$this->get_asset( 'scripts/admin.js' ),
+			$this->get_plugin_id('/wp/js'),
+			$this->assets->get('scripts/admin.js'),
 			array(),
 			$this->get_plugin_version(),
 			false

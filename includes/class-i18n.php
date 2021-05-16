@@ -1,18 +1,31 @@
 <?php
 
-namespace wppb;
+namespace WPPB;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
 /**
+ * @file
  * Define the internationalization functionality.
  *
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
- *
  */
 class I18n {
+
+	// Main plugin instance.
+	protected static $instance = null;
+
+	public function __construct() {
+		// Main plugin instance
+		$instance = wppb();
+		$hooker   = $instance->get_hooker();
+
+		// Hooks
+		$hooker->add_action( 'plugins_loaded', $this, 'load_plugin_textdomain' );
+	}
+
 
 
 	/**
@@ -26,10 +39,9 @@ class I18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'textdomain-cs-wppb',
+			'cs-wppb',
 			false,
 			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 		);
-
 	}
 }

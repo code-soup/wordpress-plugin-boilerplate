@@ -1,20 +1,23 @@
 <?php
 
-// Autoload all classes via composer
-$composer = require "vendor/autoload.php";
-
 // If this file is called directly, abort.
-defined( 'WPINC' ) || die;
+defined('WPINC') || die;
 
+// Autoload all classes via composer.
+require "autoloader.php";
 
 /**
- * Load plugin
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
+ * Make main plugin class available via global function call.
  *
  * @since    1.0.0
  */
-$plugin = new wppb\PluginInit();
-$plugin->run();
+function wppb() {
+
+    return WPPB\Init::get_instance();
+}
+
+// Init plugin and make instance globally available
+$instance = wppb();
+$instance->run();
+
+$GLOBALS['wppb'] = $instance;
