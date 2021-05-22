@@ -4,7 +4,7 @@ const config = require('../config.vars.js');
 /**
  * We do this to enable injection over SSL.
  */
-if (url.parse(config.devUrl).protocol === 'https:') {
+if (url.parse(config.devHost).protocol === 'https:') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 }
 
