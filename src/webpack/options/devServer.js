@@ -12,9 +12,11 @@ const options = {
     devServer: {
         clientLogLevel: 'silent',
         compress: true,
+        inline: true,
         hot: true,
         https: config.useSSLinDev,
         injectClient: true,
+        disableHostCheck: true,
         open: config.openBrowserOnWatch,
         overlay: config.showErrorsInBrowser,
         port: config.proxyPort,
