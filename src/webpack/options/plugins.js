@@ -1,9 +1,7 @@
 const config  = require('../config.vars.js');
 const webpack = require('webpack');
 
-const ESLintPlugin           = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin   = require('mini-css-extract-plugin');
-const StyleLintPlugin        = require('stylelint-webpack-plugin');
 const SVGSpritemapPlugin     = require('svg-spritemap-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -26,9 +24,4 @@ module.exports = [
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
     }),
-    new StyleLintPlugin({
-        failOnError: config.enabled.production,
-        syntax: 'scss',
-    }),
-    new ESLintPlugin(),
 ];

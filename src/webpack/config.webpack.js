@@ -94,6 +94,8 @@ if (config.enabled.production && config.optimizeImages )
 if (config.enabled.production)
 {
     const WebpackAssetsManifest = require('webpack-assets-manifest');
+    const StyleLintPlugin       = require('stylelint-webpack-plugin');
+    const ESLintPlugin          = require('eslint-webpack-plugin');
 
     webpackConfig.plugins.push(
         
@@ -104,7 +106,14 @@ if (config.enabled.production)
             writeToDisk: true,
             assets: {},
             replacer: require('./utils/assetManifestsReplacer'),
-        })
+        }),
+
+        new StyleLintPlugin({
+            failOnError: true,
+            syntax: 'scss',
+        }),
+
+        new ESLintPlugin(), 
     );
 
     // Optimize
