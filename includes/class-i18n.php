@@ -18,12 +18,12 @@ class I18n {
 	protected static $instance = null;
 
 	public function __construct() {
+		
 		// Main plugin instance
 		$instance = wppb();
 		$hooker   = $instance->get_hooker();
 
-		// Hooks
-		$hooker->add_action( 'plugins_loaded', $this, 'load_plugin_textdomain' );
+		$hooker->add_action('init', $this, 'load_textdomain');
 	}
 
 
@@ -36,12 +36,14 @@ class I18n {
 	 * @since    1.0.0
 	 * @link ( https://developer.wordpress.org/themes/functionality/internationalization/#add-text-domain-to-strings, Add text domain to strings )
 	 */
-	public function load_plugin_textdomain() {
+	public function load_textdomain() {
+
+		$root = untrailingslashit( dirname( plugin_basename(__FILE__), 2) );
 
 		load_plugin_textdomain(
 			'cs-wppb',
 			false,
-			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+			$root . '/languages/'
 		);
 	}
 }
