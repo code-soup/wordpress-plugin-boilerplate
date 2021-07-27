@@ -138,9 +138,7 @@ final class Init {
 		$this->assets = new Assets();
 
 		// Internationalizations.
-		$i18n = new I18n();
-		$this->hooker->add_action('init', $i18n, 'load_textdomain');
-		
+		new I18n();
 
 		// WP Admin related stuff.
 		new Admin\Init();
