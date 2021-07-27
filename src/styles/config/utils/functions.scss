@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /**
  * Get breakpoint size from $breakpoints map
  */
@@ -59,7 +61,7 @@
     @if (1 == $leading) {
         @return 1;
     }
-    @return $font-size + ($leading / 2) * 1%;
+    @return $font-size + math.div($leading, 2) * 1%;
 }
 
 /**
@@ -71,7 +73,7 @@
  */
 
 @function calc-spacing($spacing) {
-    @return ($spacing / 1000) * 1rem;
+    @return math.div($spacing, 1000) * 1rem;
 }
 
 /**
@@ -83,7 +85,7 @@
  */
 
 @function calc-rem($font-size) {
-    @return $font-size / get-font('base-size') * 1rem;
+    @return math.div($font-size, get-font('base-size')) * 1rem;
 }
 
 /**
@@ -97,8 +99,8 @@
  */
 
 @function span($span, $grid-columns: get-opt('columns')) {
-    $column: 100 / $grid-columns;
-    @return percentage($span * $column) / 100;
+    $column: math.div(100, $grid-columns);
+    @return math.div(percentage($span * $column), 100);
 }
 
 /**
