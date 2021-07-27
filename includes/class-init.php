@@ -121,7 +121,7 @@ final class Init {
 	 */
 	private function init_hooks() {
 
-		add_action( 'init', array( $this, 'init' ), 0 );
+		add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 	}
 
 
@@ -138,7 +138,9 @@ final class Init {
 		$this->assets = new Assets();
 
 		// Internationalizations.
-		new I18n();
+		$i18n = new I18n();
+		$this->hooker->add_action('init', $i18n, 'load_textdomain');
+		
 
 		// WP Admin related stuff.
 		new Admin\Init();
