@@ -38,12 +38,10 @@ class I18n {
 	 */
 	public function load_textdomain() {
 
-		$root = untrailingslashit( dirname( plugin_basename(__FILE__), 2) );
-
 		load_plugin_textdomain(
 			'cs-wppb',
 			false,
-			$root . '/languages/'
+			'/languages'
 		);
 	}
 }
