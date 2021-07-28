@@ -39,7 +39,7 @@ class I18n {
 	public function load_textdomain() {
 
 		load_plugin_textdomain(
-			'cs-wppb',
+			'wppb',
 			false,
 			'/languages'
 		);

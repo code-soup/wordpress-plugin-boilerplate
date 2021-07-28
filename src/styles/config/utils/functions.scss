@@ -110,7 +110,7 @@
 @function gutter($half: false) {
     $gutter: get-opt('gutter');
     @if ($half == true) {
-        @return $gutter / 2;
+        @return math.div($gutter, 2);
     }
     @return $gutter;
 }
