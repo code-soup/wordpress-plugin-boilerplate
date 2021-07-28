@@ -23,7 +23,8 @@ const options = {
         stats: 'normal',
         watchContentBase: true,
         watchOptions: {
-            poll: true,
+            poll: 1200,
+            ignored: ["node_modules"]
         },
         writeToDisk: true,
     },
