@@ -3,9 +3,9 @@ This is simplified fork of [WordPress Plugin Boilerplate](https://github.com/Dev
 Includes a Webpack build script and webpack-dev-server for local development.
 Integrates PHP namespacing and PSR-4 autoloader for better experience.
 
-Did I mention this is still in Beta phase?
-Should work but might have a bug or two, and no docs yet.
-Please use issues to submit any bugs.
+## Issues
+Please use [Github issues](https://github.com/code-soup/wordpress-plugin-boilerplate/issues) to submit any bugs you may find.
+Also please don't send me personal emails.
 
 
 ## Features
