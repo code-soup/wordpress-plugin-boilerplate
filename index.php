@@ -17,7 +17,7 @@
  * Contributors:      bobz, brbs, Kodelato
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain:       cs-wppb
+ * Text Domain:       wppb
  * Domain Path:       /languages
  */
 
