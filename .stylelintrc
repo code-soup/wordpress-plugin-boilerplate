@@ -30,6 +30,7 @@
                     "responsive",
                     "variants",
                     "screen",
+                    "use",
                 ],
             },
         ],

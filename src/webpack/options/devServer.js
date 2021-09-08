@@ -10,23 +10,25 @@ if (url.parse(config.devHost).protocol === 'https:') {
 
 const options = {
     devServer: {
-        clientLogLevel: 'silent',
-        compress: true,
-        inline: true,
+        allowedHosts: 'all',
+        devMiddleware: {
+            publicPath: config.paths.publicPath,
+            writeToDisk: true,
+        },
+        static: {
+            directory: config.paths.root,
+            watch: {
+                ignored: ['node_modules'],
+            },
+        },
+        client: {
+            logging: 'info',
+            overlay: config.showErrorsInBrowser,
+        },
         hot: true,
         https: config.useSSLinDev,
-        injectClient: true,
-        disableHostCheck: true,
         open: config.openBrowserOnWatch,
-        overlay: config.showErrorsInBrowser,
         port: config.proxyPort,
-        stats: 'normal',
-        watchContentBase: true,
-        watchOptions: {
-            poll: 1200,
-            ignored: ["node_modules"]
-        },
-        writeToDisk: true,
     },
 };
 
