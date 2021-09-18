@@ -62,6 +62,14 @@ final class Init {
 
 
 	/**
+	 * Make constructor protected, to prevent direct instantiation
+	 *
+	 * @since    1.0.0
+	 */
+	protected function __construct() {}
+
+
+	/**
 	 * Main Instance.
 	 *
 	 * Ensures only one instance is loaded or can be loaded.
@@ -79,25 +87,11 @@ final class Init {
         return self::$instance;
     }
 
-	/**
-	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	private function __construct() {
-		$this->init_hooks();
-		$this->set_constants();
-	}
-
 	
 	/**
      * Singletons should not be cloneable.
      */
-    protected function __clone()
+    private function __clone()
     {
     	throw new \Exception('Cannot clone ' . __CLASS__);
     }
@@ -106,30 +100,21 @@ final class Init {
     /**
      * Singletons should not be restorable from strings.
      */
-    public function __wakeup()
+    private function __wakeup()
     {
         throw new \Exception('Cannot unserialize ' . __CLASS__);
     }
 
 
-	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function init_hooks() {
-
-		add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
-	}
-
 
 	/**
 	 * Run everything on init
-	 * @return [type] [description]
+	 * @return void
 	 */
 	public function init() {
+
+		// Define Constants.
+		$this->set_constants();
 
 		// Hooks loader.
 		$this->hooker = new Hooker();
