@@ -11,7 +11,7 @@
  * Plugin Name:       WordPress Plugin Boilerplate
  * Plugin URI:        https://github.com/code-soup/wordpress-plugin-boilerplate
  * Description:       WordPress Plugin Boilerplate with webpack build script, composer autoloader and namespacing
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Code Soup
  * Author URI:        https://www.codesoup.co
  * Contributors:      bobz, brbs, Kodelato

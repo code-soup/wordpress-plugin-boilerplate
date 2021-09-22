@@ -37,6 +37,13 @@ module.exports = {
             loader: 'import-glob',
         },
         {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+            options: {
+                loaders: {},
+            },
+        },
+        {
             test: /\.js$/,
             exclude: [/node_modules/],
             use: [
