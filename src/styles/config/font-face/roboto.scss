@@ -8,23 +8,23 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    src: url('fonts/roboto/latin-regular.eot');
+    src: url('@fonts/roboto/latin-regular.eot');
     src: local(''),
-        url('fonts/roboto/latin-regular.eot?#iefix') format('embedded-opentype'),
-        url('fonts/roboto/latin-regular.woff2') format('woff2'),
-        url('fonts/roboto/latin-regular.woff') format('woff'),
-        url('fonts/roboto/latin-regular.ttf') format('truetype'),
-        url('fonts/roboto/latin-regular.svg#Roboto') format('svg');
+        url('@fonts/roboto/latin-regular.eot?#iefix') format('embedded-opentype'),
+        url('@fonts/roboto/latin-regular.woff2') format('woff2'),
+        url('@fonts/roboto/latin-regular.woff') format('woff'),
+        url('@fonts/roboto/latin-regular.ttf') format('truetype'),
+        url('@fonts/roboto/latin-regular.svg#Roboto') format('svg');
 }
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 900;
-    src: url('fonts/roboto/latin-900.eot');
+    src: url('@fonts/roboto/latin-900.eot');
     src: local(''),
-        url('fonts/roboto/latin-900.eot?#iefix') format('embedded-opentype'),
-        url('fonts/roboto/latin-900.woff2') format('woff2'),
-        url('fonts/roboto/latin-900.woff') format('woff'),
-        url('fonts/roboto/latin-900.ttf') format('truetype'),
-        url('fonts/roboto/latin-900.svg#Roboto') format('svg');
+        url('@fonts/roboto/latin-900.eot?#iefix') format('embedded-opentype'),
+        url('@fonts/roboto/latin-900.woff2') format('woff2'),
+        url('@fonts/roboto/latin-900.woff') format('woff'),
+        url('@fonts/roboto/latin-900.ttf') format('truetype'),
+        url('@fonts/roboto/latin-900.svg#Roboto') format('svg');
 }

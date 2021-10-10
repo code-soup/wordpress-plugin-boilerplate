@@ -63,7 +63,7 @@ module.exports = {
                     loader: 'postcss-loader',
                     options: {
                         postcssOptions: {
-                            config: resolver('/webpack/options/postcss/config.js'),
+                            config: resolver('/webpack/config/postcss/config.js'),
                         },
                     },
                 },
