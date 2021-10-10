@@ -31,7 +31,7 @@ const options = {
         https: false,
         open: config.openBrowserOnWatch,
         port: config.proxyPort,
-        proxy: false,
+        proxy: {},
         webSocketServer: false,
     },
 };

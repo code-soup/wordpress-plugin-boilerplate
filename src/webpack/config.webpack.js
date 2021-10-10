@@ -32,7 +32,7 @@ let webpackConfig = {
     devtool: config.enabled.production
         ? false
         : 'cheap-module-source-map',
-    module: require('./options/module'),
+    module: require('./config/module'),
     resolve: {
         preferRelative: true,
         modules: [
@@ -40,9 +40,11 @@ let webpackConfig = {
             config.paths.node_modules,
         ],
         alias: {
-            utils: resolver('scripts/utils'),
-            images: resolver('/media/images'),
-            icons: resolver('/media/icons'),
+            '@scripts': resolver('scripts'),
+            '@styles': resolver('styles'),
+            '@images': resolver('media/images'),
+            '@icons': resolver('media/icons'),
+            '@fonts': resolver('fonts'),
         },
     },
     externals: {
@@ -51,7 +53,7 @@ let webpackConfig = {
     performance: {
         hints: 'warning',
     },
-    plugins: require('./options/plugins'),
+    plugins: require('./config/plugins'),
 };
 
 /**
@@ -60,7 +62,7 @@ let webpackConfig = {
 if (config.enabled.watcher) {
 
     // Dev server
-    webpackConfig = merge(webpackConfig, require("./options/devServer"));
+    webpackConfig = merge(webpackConfig, require("./config/devServer"));
 }
 
 
@@ -117,7 +119,7 @@ if (config.enabled.production)
     );
 
     // Optimize
-    webpackConfig.optimization = require('./options/optimization');
+    webpackConfig.optimization = require('./config/optimization');
 }
 
 module.exports = webpackConfig;
