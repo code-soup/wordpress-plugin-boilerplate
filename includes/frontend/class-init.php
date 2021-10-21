@@ -69,12 +69,25 @@ class Init {
      * @since    1.0.0
      */
     public function enqueue_scripts() {
+
+        $script_id = $this->get_plugin_id('/js');
+
         wp_enqueue_script(
-            $this->get_plugin_id('/js'),
+            $script_id,
             $this->assets->get('scripts/main.js'),
             array(),
             $this->get_plugin_version(),
             false
+        );
+
+        wp_localize_script(
+            $script_id,
+            'wppb',
+            array(
+                'nonce'    => wp_create_nonce( 'wppb_xhr_nonce' ),
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'post_id'  => get_the_ID(),
+            )
         );
     }
 }
