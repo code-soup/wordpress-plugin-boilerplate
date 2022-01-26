@@ -27,7 +27,7 @@
  */
 
 @mixin link-colors($normal, $hover: 'none') {
-    @if ($hover == 'none') {
+    @if $hover == 'none' {
         $hover: $normal;
     }
 

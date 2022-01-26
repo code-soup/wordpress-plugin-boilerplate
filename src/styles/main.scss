@@ -1,9 +1,9 @@
 /** Import config */
 
-@import "config/config.scss";
+@import 'config/config';
 
 /** Import everything from npm dependencies */
 
-@import "node-modules/**/*.scss";
-@import "common/**/*.scss";
-@import "components/**/*.scss";
+@import 'node-modules/**/*';
+@import 'common/**/*';
+@import 'components/**/*';

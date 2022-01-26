@@ -112,7 +112,6 @@ if (config.enabled.production)
 
         new StyleLintPlugin({
             failOnError: true,
-            syntax: 'scss',
         }),
 
         new ESLintPlugin(), 
