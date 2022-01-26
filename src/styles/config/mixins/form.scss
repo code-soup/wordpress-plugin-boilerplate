@@ -24,8 +24,22 @@
  * @return {mixed} scss code
  */
 
+/* stylelint-disable selector-no-vendor-prefix */
+
 @mixin input-placeholder {
-    &::placeholder {
+    &::-webkit-input-placeholder {
+        @content;
+    }
+
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
         @content;
     }
 }
