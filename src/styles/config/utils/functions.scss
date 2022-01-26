@@ -32,7 +32,7 @@
     @if map-has-key($fonts, $name) {
         @return map-get($fonts, $name);
     }
-    @warn "`# {$key}` not defined, please add font to $fonts in styles/utils/variables";
+    @warn '`# {$key}` not defined, please add font to $fonts in styles/utils/variables';
     @return null;
 }
 
@@ -58,7 +58,7 @@
  */
 
 @function calc-leading($font-size, $leading: 19) {
-    @if (1 == $leading) {
+    @if 1 == $leading {
         @return 1;
     }
     @return $font-size + math.div($leading, 2) * 1%;
@@ -108,8 +108,8 @@
  */
 
 @function gutter($half: false) {
-    $gutter: get-opt('gutter');
-    @if ($half == true) {
+    $gutter: get-option('gutter');
+    @if true == $half {
         @return math.div($gutter, 2);
     }
     @return $gutter;

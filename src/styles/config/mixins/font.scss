@@ -3,13 +3,13 @@
  */
 
 @mixin font-size($font-size, $line-height, $letter-spacing: 0) {
-    @if ($font-size) {
+    @if $font-size {
         font-size: calc-rem($font-size);
     }
-    @if ($line-height) {
+    @if $line-height {
         line-height: calc-leading($font-size, $line-height);
     }
-    @if ( 0 != $letter-spacing) {
+    @if 0 != $letter-spacing {
         letter-spacing: calc-spacing($letter-spacing);
     }
 }
@@ -19,13 +19,13 @@
  */
 
 @mixin font-family( $name: '', $weight: 400, $style: 'normal') {
-    @if ($style != 'normal') {
+    @if $style != 'normal' {
         font-style: $style;
     }
-    @if ($name) {
+    @if $name {
         font-family: get-font($name);
     }
-    @if ($weight != 400 and $weight != 'normal') {
+    @if $weight != 400 and $weight != 'normal' {
         font-weight: $weight;
     }
 }
