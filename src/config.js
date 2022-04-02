@@ -22,19 +22,19 @@ module.exports = {
     // show webpack compailing errors in browser while in watch mode
     showErrorsInBrowser: true,
     // use https: in devUrl
-    useSSLinDev: false,
+    useSSLinDev: true,
     // URL to root folder on web server
     // This is very important line, most common reason why things break
     // because paths to files are determined by this
-    publicPath: "/wp-content/plugins/wppb",
+    publicPath: "/plugin-boilerplate/wp-content/plugins/wppb",
     // production path to /dist folder, if different from 
     publicPathProd: "/wp-content/plugins/wppb",
     // localhost or custom host name
-    devHost: "http://localhost",
+    devHost: "https://cs.zz",
     // Use webpack-dev-server built-in proxy server
     useProxy: false,
     // proxyUrl, when watch mode is enabled you will access website on this url
-    proxyHost: "http://localhost",
+    proxyHost: "https://localhost",
     // proxy port used in watch mode
     proxyPort: 3000,
     // folders / files to include in while in watch mode to monitor for changes

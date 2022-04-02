@@ -10,7 +10,6 @@ if (url.parse(config.devHost).protocol === 'https:') {
 
 const options = {
     devServer: {
-        http2: true,
         compress: true,
         allowedHosts: 'all',
         devMiddleware: {
@@ -28,11 +27,10 @@ const options = {
             overlay: config.showErrorsInBrowser,
         },
         hot: true,
-        https: false,
+        server: config.useSSLinDev ? 'https' : 'http',
         open: config.openBrowserOnWatch,
         port: config.proxyPort,
         proxy: {},
-        webSocketServer: false,
     },
 };
 
@@ -44,7 +42,7 @@ if ( config.useProxy )
     options.devServer.proxy = {
         '/': {
             target: 'http://neki.site',
-            ssl: false,
+            secure: false,
             changeOrigin: true,
             autoRewrite: true,
         },
