@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const MiniCssExtractPlugin   = require('mini-css-extract-plugin');
 const SVGSpritemapPlugin     = require('svg-spritemap-webpack-plugin');
-const VueLoaderPlugin        = require("vue-loader/lib/plugin");
+const { VueLoaderPlugin }    = require('vue-loader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = [
