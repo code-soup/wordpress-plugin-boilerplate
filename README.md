@@ -1,5 +1,5 @@
 ## WordPress Plugin Boilerplate
-2021 verision of [WordPress Plugin Boilerplate](https://github.com/DevinVinson/WordPress-Plugin-Boilerplate).
+Updated verision of [WordPress Plugin Boilerplate](https://github.com/DevinVinson/WordPress-Plugin-Boilerplate).
 Includes a Webpack build script and webpack-dev-server for local development.
 Integrates PHP namespacing and PSR-4 autoloader for better experience.
 
