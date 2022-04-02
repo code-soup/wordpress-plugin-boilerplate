@@ -24,7 +24,6 @@ Plugin documentation with instalation instruction and best practices can be foun
 * PSR-4 Autoloader
 * [SVG Spritemap by cascornelissen](https://github.com/cascornelissen/svg-spritemap-webpack-plugin)
 
-
 ## Requirements
 Make sure all dependencies have been installed before moving on:
 * [WordPress](https://wordpress.org/) >= 4.7
@@ -33,6 +32,16 @@ Make sure all dependencies have been installed before moving on:
 * [Node.js](http://nodejs.org/) >= 14.x
 * [Yarn](https://yarnpkg.com/en/docs/install)
 
+## Coding Standards
+
+- `wpcs` : analyze code against the WordPress coding standards with PHP_CodeSniffer.
+- `cbf` : fix coding standards warnings/errors automatically with PHP Code Beautifier.
+- `lint` : lint PHP files against parse errors.
+
+To check a file against the WordPress coding standards or to automatically fix coding standards, simply specify the file's location:
+
+- `wpcs includes/class-init.php`
+- `cbf includes/class-init.php`
 
 #### License
 This project is licensed under the [GPL license](http://www.gnu.org/licenses/gpl-3.0.txt).
