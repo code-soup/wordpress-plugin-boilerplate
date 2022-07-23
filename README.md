@@ -26,10 +26,10 @@ Plugin documentation with instalation instruction and best practices can be foun
 
 ## Requirements
 Make sure all dependencies have been installed before moving on:
-* [WordPress](https://wordpress.org/) >= 4.7
-* [PHP](http://php.net/manual/en/install.php) >= 7.2
+* [WordPress](https://wordpress.org/) >= 5.0
+* [PHP](http://php.net/manual/en/install.php) >= 7.3
 * [Composer](https://getcomposer.org/download/)
-* [Node.js](http://nodejs.org/) >= 14.x
+* [Node.js](http://nodejs.org/) >= 16.16
 * [Yarn](https://yarnpkg.com/en/docs/install)
 
 ## Coding Standards
