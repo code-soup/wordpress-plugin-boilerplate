@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.2] - 2022-07-23
+### Added
+- Renamed `yarn start` to `yarn dev`
+- Dependencies update to latest versions
 
 ## [1.0.2] - 2021-10-10
 ### Added
