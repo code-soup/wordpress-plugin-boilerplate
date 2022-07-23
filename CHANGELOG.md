@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.2] - 2022-07-23
+### Update
+- Renamed `yarn start` to `yarn dev`
+- Dependencies update to latest versions
+- Minimum node version required is now 16.16.0
 
 ## [1.0.2] - 2021-10-10
 ### Added
