@@ -31,7 +31,7 @@ final class Init {
 	private $constants = array(
 		'MIN_WP_VERSION_SUPPORT_TERMS' => '5.0',
 		'MIN_WP_VERSION'               => '5.0',
-		'MIN_PHP_VERSION'              => '7.1',
+		'MIN_PHP_VERSION'              => '7.4',
 		'MIN_MYSQL_VERSION'            => '5.0.0',
 		'PLUGIN_PREFIX'                => 'WPPB',
 		'PLUGIN_NAME'                  => 'WordPress Plugin Boilerplate',

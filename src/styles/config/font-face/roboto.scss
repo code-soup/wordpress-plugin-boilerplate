@@ -10,6 +10,7 @@
     font-weight: 400;
     src: url('@fonts/roboto/latin-regular.eot');
     src:
+        local('Roboto Regular'), local('Roboto-Regular'),
         url('@fonts/roboto/latin-regular.eot?#iefix') format('embedded-opentype'),
         url('@fonts/roboto/latin-regular.woff2') format('woff2'),
         url('@fonts/roboto/latin-regular.woff') format('woff'),

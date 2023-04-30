@@ -1,8 +1,6 @@
 const resolver = require('../utils/resolve');
 const config   = require( resolver('webpack/config.vars.js') );
 
-// console.log( resolver );
-
 /**
  * Style Loader is used for watch mode, he injects CSS changes without reload
  */

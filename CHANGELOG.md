@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.3] - 2022-04-30
+### Update
+- Dependencies update to latest versions
+- Minimum node version required is now 16.16.0
+- Automatic image optimization removed
+
 ## [1.0.2] - 2022-07-23
 ### Update
 - Renamed `yarn start` to `yarn dev`

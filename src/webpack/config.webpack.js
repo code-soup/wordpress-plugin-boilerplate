@@ -65,31 +65,6 @@ if (config.enabled.watcher) {
     webpackConfig = merge(webpackConfig, require("./config/devServer"));
 }
 
-
-/**
- * Optimize images from assets folder 
- */
-if (config.enabled.production && config.optimizeImages )
-{
-    const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-
-    webpackConfig.plugins.push(
-        new ImageMinimizerPlugin({
-            minimizerOptions: {
-                plugins: [
-                    ['gifsicle', { interlaced: true }],
-                    ['jpegtran', { progressive: true }],
-                    ['optipng', { optimizationLevel: 5 }],
-                    ['svgo', {
-                        plugins: [{removeViewBox: false}],
-                    }],
-                ],
-            },
-        })
-    );
-}
-
-
 /**
  * Production only config
  */
