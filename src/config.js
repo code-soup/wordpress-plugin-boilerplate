@@ -9,11 +9,6 @@ module.exports = {
             "styles/admin.scss",
         ],
     },
-    // run image optimization
-    // if you optimize images manually then you might want to turn this off
-    // if you have a lot of images consider manually optimizing them
-    // it will reduce build time
-    optimizeImages: false,
     // inline images smaller than 16kb
     // this will base64 encode images inside of CSS file that are smaller than 16kb
     imageSizeInline: 16,
@@ -22,19 +17,19 @@ module.exports = {
     // show webpack compailing errors in browser while in watch mode
     showErrorsInBrowser: true,
     // use https: in devUrl
-    useSSLinDev: true,
+    useSSLinDev: false,
     // URL to root folder on web server
     // This is very important line, most common reason why things break
     // because paths to files are determined by this
-    publicPath: "/plugin-boilerplate/wp-content/plugins/wppb",
+    publicPath: "/wp-content/plugins/wordpress-plugin-boilerplate",
     // production path to /dist folder, if different from 
-    publicPathProd: "/wp-content/plugins/wppb",
+    publicPathProd: "/wp-content/plugins/wordpress-plugin-boilerplate",
     // localhost or custom host name
-    devHost: "https://cs.zz",
+    devHost: "http://localhost",
     // Use webpack-dev-server built-in proxy server
     useProxy: false,
     // proxyUrl, when watch mode is enabled you will access website on this url
-    proxyHost: "https://localhost",
+    proxyHost: "http://localhost",
     // proxy port used in watch mode
     proxyPort: 3000,
     // folders / files to include in while in watch mode to monitor for changes

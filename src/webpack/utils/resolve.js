@@ -13,9 +13,6 @@ module.exports = dir => {
     // We will use /src as a root folder
     const rootPath = path.join(__dirname, '/../..');
 
-    console.log(dir);
-    console.log(rootPath);
-
     // dir not specified, return root
     if ( 'undefined' === typeof dir )
     {
