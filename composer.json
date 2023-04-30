@@ -29,9 +29,9 @@
 		"classmap": ["includes/"]
 	},
 	"require": {
-		"php": ">=7.3.0",
+		"php": ">=7.4.0",
 		"composer/installers": "~1.0",
-		"vlucas/phpdotenv": "^5.3",
+		"vlucas/phpdotenv": "^5.3"
 	},
 	"require-dev": {
 		"wp-coding-standards/wpcs": "*",

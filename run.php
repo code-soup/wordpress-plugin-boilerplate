@@ -1,5 +1,7 @@
 <?php
 
+namespace WPPB;
+
 // If this file is called directly, abort.
 defined('WPINC') || die;
 
@@ -11,13 +13,13 @@ require "vendor/autoload.php";
  *
  * @since    1.0.0
  */
-function wppb() {
+function plugin_init() {
 
     return WPPB\Init::get_instance();
 }
 
 // Init plugin and make instance globally available
-$wppb = wppb();
-$wppb->init();
+$plugin = plugin_init();
+$plugin->init();
 
-$GLOBALS['wppb'] = $wppb;
+$GLOBALS['wppb'] = $plugin;
