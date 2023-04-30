@@ -6,7 +6,6 @@ Integrates PHP namespacing and PSR-4 autoloader for better experience.
 
 ## Issues
 Please use [Github issues](https://github.com/code-soup/wordpress-plugin-boilerplate/issues) to submit any bugs you may find.
-Also please don't send me personal emails.
 
 
 ## Documentation
