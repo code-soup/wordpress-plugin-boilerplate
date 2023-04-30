@@ -20,10 +20,10 @@ class I18n {
 	public function __construct() {
 		
 		// Main plugin instance
-		$instance = wppb();
-		$hooker   = $instance->get_hooker();
+		// $instance = wppb();
+		// $hooker   = $instance->get_hooker();
 
-		$hooker->add_action('init', $this, 'load_textdomain');
+		// $hooker->add_action('init', $this, 'load_textdomain');
 	}
 
 

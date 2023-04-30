@@ -13,13 +13,11 @@ require "vendor/autoload.php";
  *
  * @since    1.0.0
  */
-function plugin_init() {
+function plugin_instance() {
 
-    return WPPB\Init::get_instance();
+    return \WPPB\Init::get_instance();
 }
 
 // Init plugin and make instance globally available
-$plugin = plugin_init();
+$plugin = plugin_instance();
 $plugin->init();
-
-$GLOBALS['wppb'] = $plugin;
