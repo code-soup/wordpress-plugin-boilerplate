@@ -26,12 +26,14 @@
 		"wordpress plugin boilerplate"
 	],
 	"autoload": {
-		"classmap": ["includes/"]
+		"classmap": [
+			"includes/"
+		]
 	},
 	"require": {
-		"php": ">=7.3.0",
-		"composer/installers": "~1.0",
-		"vlucas/phpdotenv": "^5.3",
+		"php": ">=7.4.0",
+		"composer/installers": "^2.2.0",
+		"vlucas/phpdotenv": "^5.5"
 	},
 	"require-dev": {
 		"wp-coding-standards/wpcs": "*",
@@ -53,7 +55,9 @@
 	},
 	"extra": {
 		"installer-paths": {
-			"vendor/{$name}": ["vendor/package"]
+			"vendor/{$name}": [
+				"vendor/package"
+			]
 		},
 		"scripts-description": {
 			"wpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",

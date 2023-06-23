@@ -58,7 +58,7 @@ class Hooker {
 	public function add_action( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 ) {
 
 		// Custom callback method or fallback to same as hook
-		$method = $callback
+		$method = ( ! empty( $callback ) )
 			? $callback
 			: $hook;
 
@@ -85,7 +85,7 @@ class Hooker {
 	public function add_filter( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 ) {
 
 		// Custom callback method or fallback to same as hook
-		$method = $callback
+		$method = ( ! empty( $callback ) )
 			? $callback
 			: $hook;
 

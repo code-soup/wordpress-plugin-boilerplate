@@ -1,9 +1,1 @@
-/** Import config */
-
-@import 'config/config';
-
-/** Import everything from npm dependencies */
-
-@import 'node-modules/**/*';
-//@import 'common/**/*';
-@import 'components/**/*';
+@import "_utils/_require-dev-build";

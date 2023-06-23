@@ -1,0 +1,112 @@
+/**
+ * Get breakpoint size from $breakpoints map
+ */
+
+@function get-bp($key) {
+    @if map-has-key($breakpoints, $key) {
+        @return map-get($breakpoints, $key);
+    }
+    @warn "`# {$key}` not defined in $breakpoints.";
+    @return null;
+}
+
+/**
+ * Get color hex from $colors map
+ */
+
+@function get-color($key) {
+    @if map-has-key($colors, $key) {
+        @return map-get($colors, $key);
+    }
+    @warn "`# {$key}` not defined in $colors, please add color to styles/_utils/variables";
+    @return null;
+}
+
+/**
+ * Get font family from $font map
+ */
+
+@function get-font($name) {
+    @if map-has-key($fonts, $name) {
+        @return map-get($fonts, $name);
+    }
+    @warn "`# {$key}` not defined in $fonts, please add color to styles/_utils/variables";
+    @return null;
+}
+
+/**
+ * Get grid option from $grid map
+ */
+
+@function get-option($name) {
+    @if map-has-key($grid, $name) {
+        @return map-get($grid, $name);
+    }
+    @warn "`# {$key}` not defined in $grid, please add color to styles/_utils/variables";
+    @return null;
+}
+
+/**
+ * Converts Photoshop 'leading' to css line-height
+ *
+ * @param  {int} $font-size font-size in pixels
+ * @param  {int} $leading   'leading' pixel value in photoshop
+ *
+ * @return {int}            line-height in %
+ */
+
+@function calc-leading($font-size, $leading)
+{
+    $lh: (($leading / 2) + $font-size);
+    @if $lh < 100 {
+        $lh: $lh + 100;
+    }
+    @return (($leading / $font-size) * 100) * 1%;
+}
+
+/**
+ * Converts Photoshop 'tracking' to css letter-spacing
+ *
+ * @param  {int} $spacing 'tracking' numeric value in photoshop
+ *
+ * @return {int}          letter-spacing in rem
+ */
+
+@function calc-spacing($spacing) {
+    @return ($spacing / 1000) * 1rem;
+}
+
+/**
+ * Convert pixel to REM
+ */
+
+@function calc-rem($pixels, $context: get-font("base-size")) {
+    @return #{$pixels / $context}rem;
+}
+
+/**
+ *
+ * GRID FUNCTIONS
+ *
+ */
+
+/**
+ * Columns span
+ */
+
+@function span($span, $grid-columns: get-option("columns")) {
+    $column: 100 / $grid-columns;
+    @return percentage($span * $column) / 100;
+}
+
+/**
+ * Get gutter width
+ */
+
+@function gutter($half: false) {
+    $gutter: get-option("gutter");
+    @if $half == true {
+        @return $gutter / 2;
+    }
+    @return $gutter;
+}

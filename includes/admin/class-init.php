@@ -33,7 +33,7 @@ class Init {
 	public function __construct() {
 
 		// Main plugin instance.
-		$instance     = wppb();
+		$instance     = \WPPB\plugin_instance();
 		$hooker       = $instance->get_hooker();
 		$this->assets = $instance->get_assets();
 
