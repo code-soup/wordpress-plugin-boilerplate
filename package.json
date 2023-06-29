@@ -39,9 +39,9 @@
         "not ie <= 8"
     ],
     "scripts": {
-        "dev": "webpack serve --hot --mode development --color --config src/config.webpack.js",
-        "build": "webpack --mode development --progress --config src/config.webpack.js",
-        "build:prod": "webpack --mode production --progress --config src/config.webpack.js",
+        "dev": "webpack serve --hot --mode development --color --config src/config/config.webpack.js",
+        "build": "webpack --mode development --progress --config src/config/config.webpack.js",
+        "build:prod": "webpack --mode production --progress --config src/config/config.webpack.js",
         "lint": "npm run -s lint:scripts && npm run -s lint:styles",
         "lint:scripts": "eslint src/scripts src/webpack",
         "lint:styles": "stylelint \"src/styles/**/*.{css,sass,scss}\"",
