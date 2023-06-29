@@ -12,6 +12,9 @@ for dir in "${directories[@]}"; do
   done
 done
 
+# Update Namespace in run.php
+sed -i '' "s/WPPB/$php_namespace/g" "run.php"
+
 # Replace the placeholders in includes/class-init.php
 sed -i '' "s/__PLUGIN_MIN_WP_VERSION__/$requires_wordpress/g" "includes/class-init.php"
 sed -i '' "s/__PLUGIN_MIN_PHP_VERSION__/$requires_php/g" "includes/class-init.php"
