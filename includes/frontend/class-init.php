@@ -53,7 +53,7 @@ class Init {
     public function enqueue_styles() {
         wp_enqueue_style(
             $this->get_plugin_id('/css'),
-            $this->assets->get('styles/common.css'),
+            $this->assets->get('common.css'),
             array(),
             $this->get_plugin_version(),
             'all'
@@ -74,7 +74,7 @@ class Init {
 
         wp_enqueue_script(
             $script_id,
-            $this->assets->get('scripts/common.js'),
+            $this->assets->get('common.js'),
             array(),
             $this->get_plugin_version(),
             false
