@@ -56,3 +56,9 @@ read -rp "$(echo -e "${RED}Enter PHP namespace (required): ${NC} ")" php_namespa
 while [[ -z "$php_namespace" ]]; do
     read -rp "$(echo -e "${RED}Enter PHP namespace (required): ${NC} ")" php_namespace
 done
+
+# Prompt the user for input plugin prefix
+read -rp "$(echo -e "${RED}Enter Plugin Prefix (required): ${NC} ")" plugin_prefix
+while [[ -z "$plugin_prefix" ]]; do
+    read -rp "$(echo -e "${RED}Enter Plugin Prefix (required): ${NC} ")" plugin_prefix
+done
