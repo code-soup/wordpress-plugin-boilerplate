@@ -1,12 +1,13 @@
 /**
  * Various stuff that is required only during dev/build
  */
-@import "~@styles/_utils/variables";
-@import "~@styles/_utils/functions";
-@import "~@styles/_utils/mixins";
-@import "~@styles/_utils/placeholders";
+@import '~@styles/_utils/variables';
+@import '~@styles/_utils/functions';
+@import '~@styles/_utils/mixins/general';
+@import '~@styles/_utils/mixins/media-queries';
+@import '~@styles/_utils/placeholders';
 
-@import "~@styles/autoload/breakpoint-sass";
-@import "~@styles/autoload/sprites";
-@import "~@styles/base/global";
-@import "~@styles/base/icons";
+@import '~@styles/_npm-modules/breakpoint-sass';
+@import '~@styles/_npm-modules/sprites';
+@import '~@styles/base/global';
+@import '~@styles/base/icons';

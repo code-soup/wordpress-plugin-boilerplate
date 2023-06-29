@@ -1,7 +1,7 @@
-const { merge } = require("webpack-merge")
-const resolver = require("./util/resolve")
-const config = require("./config")
-const entries = require("./util/dynamic-entry")
+const { merge } = require('webpack-merge');
+const resolver = require('./util/resolve');
+const config = require('./config');
+const entries = require('./util/dynamic-entry');
 
 let webpackConfig = {
     entry: entries,
@@ -15,42 +15,43 @@ let webpackConfig = {
     stats: {
         assets: true,
         colors: true,
-        logging: "warn",
+        logging: 'warn',
         modules: false,
         entrypoints: false,
     },
     cache: true,
-    target: "web",
-    devtool: "inline-source-map",
-    module: require("./webpack/config.module"),
+    target: 'web',
+    devtool: 'inline-source-map',
+    module: require('./webpack/config.module'),
     resolve: {
-        modules: [config.paths.src, "node_modules"],
+        modules: [config.paths.src, 'node_modules'],
         enforceExtension: false,
         alias: {
-            utils: resolver("../scripts/util"),
+            utils: resolver('../scripts/util'),
+            '@styles': resolver('../styles'),
         },
     },
     externals: {
-        jquery: "jQuery",
+        jquery: 'jQuery',
     },
     performance: {
-        hints: "error",
+        hints: 'error',
         maxEntrypointSize: 1000000,
         maxAssetSize: 1000000,
     },
-    plugins: require("./webpack/config.plugins"),
-    optimization: require("./webpack/config.optimization"),
-}
+    plugins: require('./webpack/config.plugins'),
+    optimization: require('./webpack/config.optimization'),
+};
 
 if (config.enabled.watcher) {
-    webpackConfig = merge(webpackConfig, require("./webpack/config.watch"))
+    webpackConfig = merge(webpackConfig, require('./webpack/config.watch'));
 }
 
 /**
  * Production only config
  */
 if (config.enabled.production) {
-    const WebpackAssetsManifest = require("webpack-assets-manifest")
+    const WebpackAssetsManifest = require('webpack-assets-manifest');
 
     /**
      * Additional plugins for production build
@@ -60,12 +61,12 @@ if (config.enabled.production) {
          * Assets versioning with manifest.json
          */
         new WebpackAssetsManifest({
-            output: "assets.json",
+            output: 'assets.json',
             space: 4,
             writeToDisk: true,
             assets: {},
         })
-    )
+    );
 }
 
-module.exports = webpackConfig
+module.exports = webpackConfig;
