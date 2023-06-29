@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Prompt the user to confirm git setup
-read -rp "Do you want to run git setup? (y/n): " run_git_setup
+read -rp "Do you want to run git setup? (Recommended. This will remove Boilerplate history and create new clean git repository) (y/n): " run_git_setup
 
 if [[ "$run_git_setup" == "y" || "$run_git_setup" == "Y" ]]; then
   # Delete existing .git directory if it exists
