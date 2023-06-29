@@ -27,8 +27,9 @@ let webpackConfig = {
         modules: [config.paths.src, 'node_modules'],
         enforceExtension: false,
         alias: {
-            utils: resolver('../scripts/util'),
+            '@utils': resolver('../scripts/util'),
             '@styles': resolver('../styles'),
+            '@scripts': resolver('../scripts'),
         },
     },
     externals: {
