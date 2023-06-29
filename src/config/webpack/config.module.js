@@ -41,13 +41,13 @@ module.exports = {
                 {
                     loader: 'resolve-url-loader',
                     options: {
-                        sourceMap: !config.enabled.production,
+                        sourceMap: true,
                     },
                 },
                 {
                     loader: 'sass-loader',
                     options: {
-                        sourceMap: !config.enabled.production,
+                        sourceMap: true,
                     },
                 },
             ],

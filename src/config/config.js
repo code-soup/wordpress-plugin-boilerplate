@@ -8,12 +8,12 @@ const rootPath = process.cwd();
  */
 module.exports = {
     mode: isProduction ? 'production' : 'development',
-    fileName: isProduction ? '[name]-[hash:8]' : '[name]',
+    fileName: isProduction ? '[name]-[fullhash:8]' : '[name]',
     paths: {
         root: rootPath,
         src: path.join(rootPath, 'src'),
         path: path.join(rootPath, 'dist'),
-        publicPath: '/wp-content/themes/dist/',
+        publicPath: '/wp-content/plugins/',
     },
     enabled: {
         watcher: argv.watch,
