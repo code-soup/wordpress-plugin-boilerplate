@@ -50,3 +50,9 @@ read -rp "$(echo -e "${RED}Text Domain (The gettext text domain of the plugin.) 
 while [[ -z "$plugin_textdomain" ]]; do
     read -rp "$(echo -e "${RED}Text Domain (The gettext text domain of the plugin.) (required):${NC} ")" plugin_textdomain
 done
+
+# Prompt the user for input to replace WPPB with PHP namespace
+read -rp "$(echo -e "${RED}Enter PHP namespace (required): ${NC} ")" php_namespace
+while [[ -z "$php_namespace" ]]; do
+    read -rp "$(echo -e "${RED}Enter PHP namespace (required): ${NC} ")" php_namespace
+done
