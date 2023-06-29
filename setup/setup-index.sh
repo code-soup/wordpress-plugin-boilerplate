@@ -45,7 +45,8 @@ echo "$header_content" > index.php
 
 # The code that runs during plugin activation.
 # - includes/Activator.php
-activation_hook_content="register_activation_hook( __FILE__, function() {
+activation_hook_content="\n
+register_activation_hook( __FILE__, function() {
 
     // On activate do this
     \\$php_namespace\Activator::activate();
@@ -55,7 +56,8 @@ echo "$activation_hook_content" >> index.php
 
 # The code that runs during plugin deactivation.
 # - includes/Deactivator.php
-deactivation_hook_content="register_deactivation_hook( __FILE__, function () {
+deactivation_hook_content="\n
+register_deactivation_hook( __FILE__, function () {
     
     // On deactivate do that
     \\$php_namespace\Deactivator::deactivate();
