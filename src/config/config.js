@@ -1,22 +1,34 @@
 const path = require('path');
-const { argv } = require('yargs');
-const isProduction = 'production' === argv.mode;
+const dotenv = require('dotenv');
+const isProduction = -1 !== process.argv.indexOf('development');
 const rootPath = process.cwd();
+const pluginDirName = path.basename(path.join(__dirname, '../..'));
+
+dotenv.config({
+    path: path.join(rootPath, '.env.local'),
+});
+
+/**
+ * Auto-set publich path or read from .env
+ */
+const publicPath =
+    'undefined' === typeof process.env.WP_PUBLIC_PATH
+        ? `${process.env.WP_CONTENT_PATH}/${pluginDirName}/dist/`
+        : process.env.WP_PUBLIC_PATH;
 
 /**
  * Base config
  */
 module.exports = {
     mode: isProduction ? 'production' : 'development',
-    fileName: isProduction ? '[name]-[fullhash:8]' : '[name]',
     paths: {
         root: rootPath,
         src: path.join(rootPath, 'src'),
-        path: path.join(rootPath, 'dist'),
-        publicPath: '/wp-content/plugins/',
+        dist: path.join(rootPath, 'dist'),
+        publicPath: publicPath,
     },
     enabled: {
-        watcher: argv.watch,
+        watcher: -1 !== process.argv.indexOf('serve'),
         production: isProduction,
     },
 };

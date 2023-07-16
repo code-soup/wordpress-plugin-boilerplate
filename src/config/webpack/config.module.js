@@ -1,10 +1,9 @@
 /**
  * Webpack modules
  */
-
-// const path = require("path");
 const config = require('../config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const svgToMiniDataURI = require('mini-svg-data-uri');
 
 module.exports = {
     rules: [
@@ -23,7 +22,7 @@ module.exports = {
             test: /\.s?[ca]ss$/,
             include: config.paths.src,
             use: [
-                config.enabled.watcher
+                process.env.WEBPACK_SERVE
                     ? 'style-loader'
                     : MiniCssExtractPlugin.loader,
                 {
@@ -53,23 +52,25 @@ module.exports = {
             ],
         },
         {
-            test: /\.(ttf|otf|eot|woff2?|png|jpe?g|gif|svg|ico)$/,
-            include: config.paths.src,
-            loader: 'url-loader',
-            options: {
-                limit: 4096,
-                name: `[path]${config.fileName}.[ext]`,
+            test: /\.(ttf|otf|eot|woff2?|png|jpe?g|svg|gif|ico)$/,
+            type: 'asset',
+            generator: {
+                filename: 'static/[name]-[hash][ext]',
+                dataUrl: (content) => {
+                    content = content.toString();
+                    return svgToMiniDataURI(content);
+                },
             },
         },
-        {
-            test: /\.(ttf|otf|eot|woff2?|png|jpe?g|gif|svg|ico)$/,
-            include: /node_modules/,
-            loader: 'url-loader',
-            options: {
-                limit: 4096,
-                outputPath: 'vendor/',
-                name: `${config.fileName}.[ext]`,
-            },
-        },
+        // {
+        //     test: /\.(ttf|otf|eot|woff2?|png|jpe?g|gif|svg|ico)$/,
+        //     include: /node_modules/,
+        //     loader: 'url-loader',
+        //     options: {
+        //         limit: 4096,
+        //         outputPath: 'vendor/',
+        //         name: `${config.fileName}.[ext]`,
+        //     },
+        // },
     ],
 };

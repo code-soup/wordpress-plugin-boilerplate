@@ -7,7 +7,7 @@ let webpackConfig = {
     entry: entries,
     context: config.paths.src,
     output: {
-        path: config.paths.path,
+        path: config.paths.dist,
         publicPath: config.paths.publicPath,
         filename: `scripts/${config.fileName}.js`,
     },
@@ -30,6 +30,8 @@ let webpackConfig = {
             '@utils': resolver('../scripts/util'),
             '@styles': resolver('../styles'),
             '@scripts': resolver('../scripts'),
+            '@icons': resolver('../icons'),
+            '@images': resolver('../images'),
         },
     },
     externals: {
