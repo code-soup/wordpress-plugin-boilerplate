@@ -1,4 +1,6 @@
-[
-    "scripts/main.js",
-    "styles/main.scss"
-]
+{
+	"entry": [
+		"scripts/main.js",
+		"styles/main.scss"
+	]
+}

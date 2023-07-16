@@ -51,7 +51,7 @@ class Init {
 
 		wp_enqueue_style(
 			$this->get_plugin_id('/wp/css'),
-			$this->assets->get('styles/admin.css'),
+			$this->assets->get('admin.css'),
 			array(),
 			$this->get_plugin_version(),
 			'all'
@@ -69,7 +69,7 @@ class Init {
 
 		wp_enqueue_script(
 			$script_id,
-			$this->assets->get('scripts/admin.js'),
+			$this->assets->get('admin.js'),
 			array(),
 			$this->get_plugin_version(),
 			false

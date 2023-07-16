@@ -108,6 +108,4 @@ package-lock.json
 
 # dotenv environment variables file
 .env
-
-# Don't commit local configuration file
-src/config-local.js
+.env.local
