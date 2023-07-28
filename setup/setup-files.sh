@@ -3,6 +3,7 @@
 # Check the operating system
 OS=$(uname)
 
+
 # Define the directories to scan
 directories=("./templates" "./includes")
 
