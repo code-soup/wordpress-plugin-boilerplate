@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Update files, let user know
+echo "Updating files. Please wait"
+
 # Check the operating system
 OS=$(uname)
 
@@ -15,7 +18,8 @@ for dir in "${directories[@]}"; do
       sed -i '' "s/WPPB/$php_namespace/g" "$filename"
       sed -i '' "s/wppb/$plugin_prefix/g" "$filename"
     else
-      # For Linux and Windows (including Git Bash), use sed without the '-i' option
+      # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
+      dos2unix "$filename" >/dev/null 2>&1
       sed "s/WPPB/$php_namespace/g" "$filename" > "$filename.tmp" && mv "$filename.tmp" "$filename"
       sed "s/wppb/$plugin_prefix/g" "$filename" > "$filename.tmp" && mv "$filename.tmp" "$filename"
     fi
@@ -27,7 +31,8 @@ if [[ "$OS" == "Darwin" ]]; then
   # For macOS, use sed with the '-i' option, but provide an empty string for backup
   sed -i '' "s/WPPB/$php_namespace/g" "run.php"
 else
-  # For Linux and Windows (including Git Bash), use sed without the '-i' option
+  # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
+  dos2unix "run.php" >/dev/null 2>&1
   sed "s/WPPB/$php_namespace/g" "run.php" > "run.php.tmp" && mv "run.php.tmp" "run.php"
 fi
 
@@ -41,7 +46,8 @@ if [[ "$OS" == "Darwin" ]]; then
   sed -i '' "s/__PLUGIN_NAME__/$plugin_name/g" "includes/class-init.php"
   sed -i '' "s/__PLUGIN_VERSION__/$plugin_version/g" "includes/class-init.php"
 else
-  # For Linux and Windows (including Git Bash), use sed without the '-i' option
+  # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
+  dos2unix "includes/class-init.php" >/dev/null 2>&1
   sed "s/__PLUGIN_MIN_WP_VERSION__/$requires_wordpress/g" "includes/class-init.php" > "includes/class-init.php.tmp" && mv "includes/class-init.php.tmp" "includes/class-init.php"
   sed "s/__PLUGIN_MIN_PHP_VERSION__/$requires_php/g" "includes/class-init.php" > "includes/class-init.php.tmp" && mv "includes/class-init.php.tmp" "includes/class-init.php"
   sed "s/__PLUGIN_MIN_MYSQL_VERSION__/$requires_mysql/g" "includes/class-init.php" > "includes/class-init.php.tmp" && mv "includes/class-init.php.tmp" "includes/class-init.php"
