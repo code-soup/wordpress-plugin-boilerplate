@@ -100,7 +100,7 @@ final class Init {
     /**
      * Singletons should not be restorable from strings.
      */
-    private function __wakeup()
+    public function __wakeup()
     {
         throw new \Exception('Cannot unserialize ' . __CLASS__);
     }

@@ -31,4 +31,5 @@ module.exports = {
         watcher: -1 !== process.argv.indexOf('serve'),
         production: isProduction,
     },
+    fileName: isProduction ? "[name]-[hash:8]" : "[name]",
 };
