@@ -10,8 +10,6 @@ defined( 'WPINC' ) || die;
  */
 trait HelpersTrait {
 
-
-
     /**
      * Return absolute path to plugin dir
      * Always returns path without trailing slash
@@ -38,7 +36,7 @@ trait HelpersTrait {
         // Force baseurl to be plugin root directory.
         $base = plugins_url( '/', dirname( __FILE__, 2 ) );
 
-        return $this->join_path($base, $path);
+        return $this->join_path($base, $path, '/');
     }
 
 
@@ -113,7 +111,7 @@ trait HelpersTrait {
      * @param  string $path Path to append
      * @return string       Combined path
      */
-    private function join_path( string $base = '', string $path = '' ):string {
+    private function join_path( string $base = '', string $path = '', string $seperator = DIRECTORY_SEPARATOR ):string {
 
         // Strip slashes on both ends.
         if ( $path )
@@ -125,7 +123,7 @@ trait HelpersTrait {
         // Strip trailingslash just in case.
         $base = untrailingslashit($base);
         $url  = array_filter(array($base,$path));
-        $url  = implode(DIRECTORY_SEPARATOR,$url);
+        $url  = implode($seperator,$url);
 
         return untrailingslashit($url);
     }
