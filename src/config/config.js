@@ -1,7 +1,7 @@
 const path = require('path');
 const dotenv = require('dotenv');
-const isProduction = -1 !== process.argv.indexOf('development');
 const rootPath = process.cwd();
+const isProduction = -1 === process.argv.indexOf('development');
 const pluginDirName = path.basename(path.join(__dirname, '../..'));
 
 dotenv.config({
@@ -31,5 +31,5 @@ module.exports = {
         watcher: -1 !== process.argv.indexOf('serve'),
         production: isProduction,
     },
-    fileName: isProduction ? "[name]-[hash:8]" : "[name]",
+    fileName: isProduction ? "[name]-[fullhash]" : "[name]",
 };

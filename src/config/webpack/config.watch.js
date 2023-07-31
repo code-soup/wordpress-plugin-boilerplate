@@ -4,7 +4,7 @@ const config = require('./../config');
 /**
  * We do this to enable injection over SSL.
  */
-if (url.parse(process.env.DEV_URL).protocol === 'https:') {
+if (url.parse(process.env.WP_DEV_URL).protocol === 'https:') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 }
 
@@ -31,7 +31,7 @@ module.exports = {
         },
         proxy: {
             '/': {
-                target: process.env.DEV_URL,
+                target: process.env.WP_DEV_URL,
                 changeOrigin: true,
                 autoRewrite: true,
             },
