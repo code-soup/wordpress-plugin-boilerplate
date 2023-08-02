@@ -66,7 +66,8 @@ register_deactivation_hook( __FILE__, function () {
 printf "%b" "$deactivation_hook_content" >> index.php
 
 # Run plugin, run
-run_content="include \"run.php\";"
+run_content="\n
+include \"run.php\";"
 
 printf "%b" "$run_content" >> index.php
 
