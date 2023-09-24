@@ -22,7 +22,7 @@ module.exports = {
         },
         client: {
             logging: 'info',
-            overlay: true,
+            overlay: false,
         },
         static: {
             directory: config.paths.dist,
@@ -35,6 +35,11 @@ module.exports = {
                 changeOrigin: true,
                 autoRewrite: true,
             },
+        },
+        devMiddleware: {
+            publicPath: config.paths.publicPath,
+            serverSideRender: false,
+            writeToDisk: true,
         },
     },
 };

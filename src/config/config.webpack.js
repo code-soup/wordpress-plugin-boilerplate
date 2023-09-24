@@ -21,10 +21,11 @@ let webpackConfig = {
     },
     cache: true,
     target: 'web',
-    devtool: 'inline-source-map',
+    devtool: false,
     module: require('./webpack/config.module'),
     resolve: {
         modules: [config.paths.src, 'node_modules'],
+        extensions: ['*', '.js', '.jsx'],
         enforceExtension: false,
         alias: {
             '@utils': resolver('../scripts/util'),
@@ -38,7 +39,7 @@ let webpackConfig = {
         jquery: 'jQuery',
     },
     performance: {
-        hints: 'error',
+        hints: 'warning',
         maxEntrypointSize: 1000000,
         maxAssetSize: 1000000,
     },
@@ -47,7 +48,7 @@ let webpackConfig = {
 };
 
 if (config.enabled.watcher) {
-    webpackConfig = merge(webpackConfig, require('./webpack/config.watch'));
+    webpackConfig = merge(webpackConfig, require('./webpack/config.devServer'));
 }
 
 /**

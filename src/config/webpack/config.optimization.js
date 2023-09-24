@@ -1,29 +1,25 @@
 const TerserPlugin = require('terser-webpack-plugin');
 
+function normalizeName(name) {
+    return name
+        .replace(/node_modules/g, 'nodemodules')
+        .replace(/[\-_.|]+/g, ' ')
+        .replace(/\b(nodemodules|js|modules|es)\b/g, '')
+        .trim()
+        .replace(/ +/g, '-');
+}
+
 module.exports = {
-    mangleWasmImports: true,
-    removeAvailableModules: true,
-    removeEmptyChunks: true,
-    mergeDuplicateChunks: true,
-    flagIncludedChunks: true,
     splitChunks: {
-        chunks: 'all',
-        minSize: 10000,
-        maxSize: 70000,
-        minChunks: 1,
-        maxAsyncRequests: 6,
-        maxInitialRequests: 4,
-        automaticNameDelimiter: '~',
-        cacheGroups: {
-            defaultVendors: {
-                test: /[\\/]node_modules[\\/]/,
-                priority: -10,
-            },
-            default: {
-                minChunks: 2,
-                priority: -20,
-                reuseExistingChunk: true,
-            },
+        chunks: 'async',
+        name(module, chunks, cacheGroupKey) {
+            const moduleFileName = module
+                .identifier()
+                .split('/')
+                .reduceRight((item) => item);
+            return (
+                'vendor/' + normalizeName(moduleFileName.replace(/[\/]/g, '-'))
+            );
         },
     },
     minimize: true,
@@ -31,7 +27,6 @@ module.exports = {
         new TerserPlugin({
             parallel: true,
             terserOptions: {
-                ecma: undefined,
                 compress: true,
                 safari10: true,
             },

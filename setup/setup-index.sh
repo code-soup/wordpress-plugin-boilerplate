@@ -2,7 +2,7 @@
 
 # Delete index.php file if it exists
 if [[ -f "index.php" ]]; then
-  rm index.php
+    rm index.php
 fi
 
 header_content="<?php
@@ -38,7 +38,7 @@ fi
 header_content+="\n * Text Domain: $plugin_textdomain
  */"
 
-printf "%b" "$header_content" > index.php
+printf "%b" "$header_content" >index.php
 
 # NOTE: Activation hooks need to be inside index.php file or it might not work properly
 # It can fail without error, WordPress is silently failing in case of error
@@ -52,7 +52,7 @@ register_activation_hook( __FILE__, function() {
     \\$php_namespace\Activator::activate();
 });"
 
-printf "%b" "$activation_hook_content" >> index.php
+printf "%b" "$activation_hook_content" >>index.php
 
 # The code that runs during plugin deactivation.
 # - includes/Deactivator.php
@@ -63,12 +63,12 @@ register_deactivation_hook( __FILE__, function () {
     \\$php_namespace\Deactivator::deactivate();
 });"
 
-printf "%b" "$deactivation_hook_content" >> index.php
+printf "%b" "$deactivation_hook_content" >>index.php
 
 # Run plugin, run
 run_content="\n
 include \"run.php\";"
 
-printf "%b" "$run_content" >> index.php
+printf "%b" "$run_content" >>index.php
 
 echo "index.php setup completed."

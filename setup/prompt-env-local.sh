@@ -17,7 +17,7 @@ read -rp "Enter DEV_PROXY_PORT [default: 8080]: " dev_proxy_port
 dev_proxy_port=${dev_proxy_port:-8080}
 
 # Create a new .env.local file and add the variables as constants
-cat > .env.local <<EOF
+cat >.env.local <<EOF
 WP_DEV_URL=$wp_dev_url
 WP_CONTENT_PATH=$wp_content_path
 DEV_PROXY_URL=$dev_proxy_url
