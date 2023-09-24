@@ -14,7 +14,7 @@ module.exports = {
             loader: 'import-glob',
         },
         {
-            test: /\.js$/,
+            test: /\.(js|jsx)$/,
             exclude: [/node_modules/],
             use: [{ loader: 'babel-loader' }],
         },
