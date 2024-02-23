@@ -48,7 +48,7 @@ let webpackConfig = {
 };
 
 if (config.enabled.watcher) {
-    webpackConfig = merge(webpackConfig, require('./webpack/config.devServer'));
+    webpackConfig = merge(webpackConfig, require('./webpack/config.watch'));
 }
 
 /**
