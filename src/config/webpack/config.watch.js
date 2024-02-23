@@ -29,13 +29,14 @@ module.exports = {
             publicPath: config.paths.publicPath,
             serveIndex: false,
         },
-        proxy: {
-            '/': {
+        proxy: [
+            {
+                context: ['/'],
                 target: process.env.WP_DEV_URL,
                 changeOrigin: true,
                 autoRewrite: true,
             },
-        },
+        ],
         devMiddleware: {
             publicPath: config.paths.publicPath,
             serverSideRender: false,
