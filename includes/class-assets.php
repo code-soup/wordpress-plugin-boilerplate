@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace WPTester;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -92,6 +92,17 @@ class Assets {
         // Return URL to requested file from manifest.
         if ( array_key_exists( $filename, $this->manifest ) ) {
             return sprintf( '%s/%s', $this->dist_uri, $this->manifest[ $filename ] );
+        }
+
+        switch( pathinfo($filename, PATHINFO_EXTENSION) )
+        {
+            case 'js':
+                $filename = sprintf('scripts/%s', $filename);
+            break;
+
+            case 'css':
+                $filename = sprintf('styles/%s', $filename);
+            break;
         }
 
         // Return default file location.
