@@ -54,13 +54,20 @@ class Assets {
         $this->dist_uri      = $this->get_plugin_dir_url('/dist');
         $this->dist_path     = $this->get_plugin_dir_path('/dist');
         $this->manifest_path = $this->get_plugin_dir_path('/dist/assets.json');
+        $this->manifest      = array();
+        
+        if ( file_exists($this->manifest_path) )
+        {
+            $response = wp_remote_get($this->manifest_path);   
 
-        /**
-         * Test for assets.json
-         */
-        $this->manifest = file_exists($this->manifest_path)
-            ? json_decode( file_get_contents($this->manifest_path), true )
-            : array();
+            if (is_wp_error($response)) {
+                $error_message = $response->get_error_message();
+                error_log("Error retrieving manifest: $error_message");
+            }
+            else {
+                $this->manifest = json_decode(wp_remote_retrieve_body($response), true);
+            }
+        }
     }
 
 
