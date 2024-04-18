@@ -38,16 +38,15 @@ class Init {
 		$this->assets = $instance->get_assets();
 
 		// Admin hooks.
-		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
-		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+		$hooker->add_action( 'admin_enqueue_scripts', $this );
 	}
 
 	/**
-	 * Enqueue the stylesheets for wp-admin.
+	 * Register the CSS/JavaScript for the admin area.
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function admin_enqueue_scripts() {
 
 		wp_enqueue_style(
 			$this->get_plugin_id('/wp/css'),
@@ -56,14 +55,6 @@ class Init {
 			$this->get_plugin_version(),
 			'all'
 		);
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
 
 		$script_id = $this->get_plugin_id('/wp/js');
 

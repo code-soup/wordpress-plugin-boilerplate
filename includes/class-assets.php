@@ -23,22 +23,6 @@ class Assets {
 
 
     /**
-     * Manifest file object containing list of all hashed assets
-     *
-     * @var Object
-     */
-    private $manifest_path;
-
-
-    /**
-     * Absolut path to theme 'dist' folder
-     *
-     * @var string
-     */
-    private $dist_path;
-
-
-    /**
      * URI to theme 'dist' folder
      *
      * @var string
@@ -51,23 +35,31 @@ class Assets {
      */
     public function __construct() {
 
-        $this->dist_uri      = $this->get_plugin_dir_url('/dist');
-        $this->dist_path     = $this->get_plugin_dir_path('/dist');
-        $this->manifest_path = $this->get_plugin_dir_path('/dist/assets.json');
-        $this->manifest      = array();
-        
-        if ( file_exists($this->manifest_path) )
-        {
-            $response = wp_remote_get($this->manifest_path);   
+        $this->dist_uri = $this->get_plugin_dir_url('/dist');
+        $manifest_path  = $this->get_plugin_dir_path('/dist/assets.json');
 
-            if (is_wp_error($response)) {
-                $error_message = $response->get_error_message();
-                error_log("Error retrieving manifest: $error_message");
-            }
-            else {
-                $this->manifest = json_decode(wp_remote_retrieve_body($response), true);
-            }
+        /**
+         * Use built in WordPress classes
+         */
+        if ( ! defined('FS_CHMOD_DIR') ) {
+            define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );    
         }
+        
+        if ( ! defined('FS_CHMOD_FILE') ) {
+            define( 'FS_CHMOD_FILE', ( 0644 & ~ umask() ) );
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+        require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+
+        $fs = new \WP_Filesystem_Direct('');
+
+        /**
+         * Test for assets.json
+         */
+        $this->manifest = $fs->exists($manifest_path)
+            ? json_decode( $fs->get_contents($manifest_path), true )
+            : array();
     }
 
 
