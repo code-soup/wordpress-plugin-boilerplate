@@ -72,6 +72,24 @@ class Hooker {
 		);
 	}
 
+
+	/**
+	 * Add array of actions at once
+	 */
+	public function add_actions( array $actions = [] ) {
+
+		foreach( $actions as $action )
+		{
+			$hook         = isset($action[0]) ? $action[0] : '';
+			$component    = isset($action[1]) ? $action[1] : '';
+			$callback     = isset($action[2]) ? $action[2] : '';
+			$priority     = isset($action[3]) ? $action[3] : 10;
+			$accepted_arg = isset($action[4]) ? $action[4] : 1;
+
+			$this->add_action( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 );
+		}
+	}
+
 	/**
 	 * Add a new filter to the collection to be registered with WordPress.
 	 *
@@ -97,6 +115,24 @@ class Hooker {
 			$priority,
 			$accepted_args
 		);
+	}
+
+
+	/**
+	 * Add array of filters at once
+	 */
+	public function add_filters( array $filters = [] ) {
+
+		foreach( $filters as $filter )
+		{
+			$hook         = isset($filter[0]) ? $filter[0] : '';
+			$component    = isset($filter[1]) ? $filter[1] : '';
+			$callback     = isset($filter[2]) ? $filter[2] : '';
+			$priority     = isset($filter[3]) ? $filter[3] : 10;
+			$accepted_arg = isset($filter[4]) ? $filter[4] : 1;
+
+			$this->add_filter( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 );
+		}
 	}
 
 	/**

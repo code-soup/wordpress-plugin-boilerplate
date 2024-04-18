@@ -38,8 +38,10 @@ class Init {
         $hooker       = $instance->get_hooker();
         $this->assets = $instance->get_assets();
 
-        $hooker->add_action( 'wp_enqueue_scripts', $this, 'enqueue_styles' );
-        $hooker->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
+        $hooker->add_actions([
+            ['wp_enqueue_scripts', $this, 'enqueue_styles'],
+            ['wp_enqueue_scripts', $this, 'enqueue_scripts']
+        ]);
     }
 
 
