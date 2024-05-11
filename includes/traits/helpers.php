@@ -83,24 +83,26 @@ trait HelpersTrait {
      * @param  string $name [description]
      * @return [type]       [description]
      */
-    private function get_constant( string $name ): string {
+    private function get_constant( string $key ): string {
 
-        $constant = strtoupper( $name );
+        $constants = \WPPB\Init::$constants;
+        $name      = trim( strtoupper( $key ) );
 
         // Check if constant is defined first
-        if ( ! defined( $constant ) ) {
+        if ( isset($constants[ $name ] ) ) {
+
             // Force string to avoid compiler errors
-            $to_string = print_r( $constant, true );
+            $to_string = print_r( $name, true );
 
             // Log to error for debugging
-            $this->log( 'Invalid constant requested: ' . $to_string );
+            $this->log( "Invalid constant requested: $to_string" );
 
             // Exit
             return false;
         }
 
         // Return value by key
-        return constant( $constant );
+        return $constants[ $name ];
     }
 
 
