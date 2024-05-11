@@ -89,7 +89,7 @@ trait HelpersTrait {
         $name      = trim( strtoupper( $key ) );
 
         // Check if constant is defined first
-        if ( isset($constants[ $name ] ) ) {
+        if ( ! isset($constants[ $name ] ) ) {
 
             // Force string to avoid compiler errors
             $to_string = print_r( $name, true );

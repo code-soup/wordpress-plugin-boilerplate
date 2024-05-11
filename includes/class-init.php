@@ -28,15 +28,7 @@ final class Init {
 	 *
 	 * @var array
 	 */
-	private static $constants = array(
-		'MIN_WP_VERSION_SUPPORT_TERMS' => '__PLUGIN_MIN_WP_VERSION__',
-		'MIN_WP_VERSION'               => '__PLUGIN_MIN_WP_VERSION__',
-		'MIN_PHP_VERSION'              => '__PLUGIN_MIN_PHP_VERSION__',
-		'MIN_MYSQL_VERSION'            => '__PLUGIN_MIN_MYSQL_VERSION__',
-		'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
-		'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
-		'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
-	);
+	public static $constants;
 
 
 	/**
@@ -160,5 +152,10 @@ final class Init {
 	 */
 	public function get_assets() {
 		return $this->assets;
+	}
+
+
+	public function set_constants( array $constants ) {
+		self::$constants = $constants;
 	}
 }
