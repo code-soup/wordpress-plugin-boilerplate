@@ -28,15 +28,7 @@ final class Init {
 	 *
 	 * @var array
 	 */
-	private $constants = array(
-		'MIN_WP_VERSION_SUPPORT_TERMS' => '__PLUGIN_MIN_WP_VERSION__',
-		'MIN_WP_VERSION'               => '__PLUGIN_MIN_WP_VERSION__',
-		'MIN_PHP_VERSION'              => '__PLUGIN_MIN_PHP_VERSION__',
-		'MIN_MYSQL_VERSION'            => '__PLUGIN_MIN_MYSQL_VERSION__',
-		'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
-		'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
-		'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
-	);
+	public static $constants;
 
 
 	/**
@@ -113,9 +105,6 @@ final class Init {
 	 */
 	public function init() {
 
-		// Define Constants.
-		$this->set_constants();
-
 		// Hooks loader.
 		$this->hooker = new Hooker();
 
@@ -133,23 +122,6 @@ final class Init {
 
 		// Run all hooks
 		$this->run();
-	}
-
-
-	/**
-	 * Define Constants.
-	 */
-	private function set_constants() {
-
-		$constants = $this->get_constants();
-
-		foreach ( $constants as $define => $value )
-		{
-			if ( ! defined($define) )
-			{
-				define( $define, $value );
-			}
-		}
 	}
 
 
@@ -182,13 +154,8 @@ final class Init {
 		return $this->assets;
 	}
 
-	/**
-	 * The reference to the class that orchestrates the assets with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Hooker    Orchestrates the assets of the plugin.
-	 */
-	public function get_constants() {
-		return $this->constants;
+
+	public function set_constants( array $constants ) {
+		self::$constants = $constants;
 	}
 }
