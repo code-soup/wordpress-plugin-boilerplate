@@ -1,6 +1,6 @@
 <?php
 
-namespace WPTester;
+namespace WPPB;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
