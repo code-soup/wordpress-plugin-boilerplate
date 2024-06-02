@@ -80,13 +80,13 @@ class Hooker {
 
 		foreach( $actions as $action )
 		{
-			$hook         = isset($action[0]) ? $action[0] : '';
-			$component    = isset($action[1]) ? $action[1] : '';
-			$callback     = isset($action[2]) ? $action[2] : '';
-			$priority     = isset($action[3]) ? $action[3] : 10;
-			$accepted_arg = isset($action[4]) ? $action[4] : 1;
+			$hook          = isset($action[0]) ? $action[0] : '';
+			$component     = isset($action[1]) ? $action[1] : '';
+			$callback      = isset($action[2]) ? $action[2] : '';
+			$priority      = isset($action[3]) ? $action[3] : 10;
+			$accepted_args = isset($action[4]) ? $action[4] : 1;
 
-			$this->add_action( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 );
+			$this->add_action( $hook, $component, $callback, $priority, $accepted_args );
 		}
 	}
 
@@ -131,7 +131,7 @@ class Hooker {
 			$priority     = isset($filter[3]) ? $filter[3] : 10;
 			$accepted_arg = isset($filter[4]) ? $filter[4] : 1;
 
-			$this->add_filter( $hook, $component, $callback = '', $priority = 10, $accepted_args = 1 );
+			$this->add_filter( $hook, $component, $callback, $priority, $accepted_args );
 		}
 	}
 
@@ -147,7 +147,7 @@ class Hooker {
 	 * @param    string $callback         The name of the function definition on the $component.
 	 * @param    int    $priority         The priority at which the function should be fired.
 	 * @param    int    $accepted_args    The number of arguments that should be passed to the $callback.
-	 * @return   array                                  The collection of actions and filters registered with WordPress.
+	 * @return   array                    The collection of actions and filters registered with WordPress.
 	 */
 	private function add( $hooks, $hook, $component, $callback, $priority, $accepted_args ) {
 
