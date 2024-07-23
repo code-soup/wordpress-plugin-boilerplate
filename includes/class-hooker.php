@@ -125,11 +125,11 @@ class Hooker {
 
 		foreach( $filters as $filter )
 		{
-			$hook         = isset($filter[0]) ? $filter[0] : '';
-			$component    = isset($filter[1]) ? $filter[1] : '';
-			$callback     = isset($filter[2]) ? $filter[2] : '';
-			$priority     = isset($filter[3]) ? $filter[3] : 10;
-			$accepted_arg = isset($filter[4]) ? $filter[4] : 1;
+			$hook          = isset($filter[0]) ? $filter[0] : '';
+			$component     = isset($filter[1]) ? $filter[1] : '';
+			$callback      = isset($filter[2]) ? $filter[2] : '';
+			$priority      = isset($filter[3]) ? $filter[3] : 10;
+			$accepted_args = isset($filter[4]) ? $filter[4] : 1;
 
 			$this->add_filter( $hook, $component, $callback, $priority, $accepted_args );
 		}
