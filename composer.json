@@ -31,9 +31,9 @@
 		]
 	},
 	"require": {
-		"php": ">=7.4.0",
-		"composer/installers": "^2.2.0",
-		"vlucas/phpdotenv": "^5.5"
+		"php": ">=8.1.0",
+		"composer/installers": "^2.3.0",
+		"vlucas/phpdotenv": "^5.6"
 	},
 	"require-dev": {
 		"wp-coding-standards/wpcs": "*",
