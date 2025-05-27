@@ -19,6 +19,9 @@ final class Init {
 
 	/**
 	 * Main plugin instance
+	 *
+	 * @var self|null
+	 * @since 1.0.0
 	 */
 	private static $instance;
 
@@ -26,7 +29,8 @@ final class Init {
 	/**
 	 * Define plugin constants
 	 *
-	 * @var array
+	 * @var array<string, string>
+	 * @since 1.0.0
 	 */
 	public static $constants;
 
@@ -35,9 +39,9 @@ final class Init {
 	 * The hooker that's responsible for maintaining and registering all hooks that
 	 * are loaded with the plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Hooker    $hooker    Maintains and registers all hooks for the plugin.
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Hooker The hooker instance that maintains and registers all hooks for the plugin.
 	 */
 	protected $hooker;
 
@@ -46,9 +50,9 @@ final class Init {
 	 * The assets loader is responsible for all plugin assets, Js, CSS and images.
 	 * Loads appropriate hashed files based on current environment
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Hooker    $hooker    Maintains and registers all hooks for the plugin.
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Assets The assets instance that handles all plugin assets.
 	 */
 	protected $assets;
 
@@ -56,7 +60,7 @@ final class Init {
 	/**
 	 * Make constructor protected, to prevent direct instantiation
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	protected function __construct() {}
 
@@ -66,34 +70,38 @@ final class Init {
 	 *
 	 * Ensures only one instance is loaded or can be loaded.
 	 *
-	 * @since 1.0
-	 * @static
-	 * @return Main instance.
+	 * @since 1.0.0
+	 * @return self Main instance.
 	 */
-	public static function get_instance()
-    {
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
+	public static function get_instance(): self {
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
 
-        return self::$instance;
-    }
+		return self::$instance;
+	}
 
 	
 	/**
      * Singletons should not be cloneable.
+     *
+     * @since 1.0.0
+     * @throws \Exception If clone is attempted.
+     * @return void
      */
-    private function __clone()
-    {
+    private function __clone() {
     	throw new \Exception('Cannot clone ' . __CLASS__);
     }
 
     
     /**
      * Singletons should not be restorable from strings.
+     *
+     * @since 1.0.0
+     * @throws \Exception If unserialize is attempted.
+     * @return void
      */
-    public function __wakeup()
-    {
+    public function __wakeup() {
         throw new \Exception('Cannot unserialize ' . __CLASS__);
     }
 
@@ -101,9 +109,10 @@ final class Init {
 
 	/**
 	 * Run everything on init
+	 * @since 1.0.0
 	 * @return void
 	 */
-	public function init() {
+	public function init(): void {
 
 		// Hooks loader.
 		$this->hooker = new Hooker();
@@ -128,34 +137,35 @@ final class Init {
 	/**
 	 * Run the hooker to execute all of the hooks with WordPress.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
+	 * @return void
 	 */
-	public function run() {
+	public function run(): void {
 		$this->hooker->run();
 	}
 
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
-	 * @return    Hooker    Orchestrates the hooks of the plugin.
+	 * @since 1.0.0
+	 * @return Hooker Orchestrates the hooks of the plugin.
 	 */
-	public function get_hooker() {
+	public function get_hooker(): Hooker {
 		return $this->hooker;
 	}
 
 	/**
 	 * The reference to the class that orchestrates the assets with the plugin.
 	 *
-	 * @since     1.0.0
-	 * @return    Hooker    Orchestrates the assets of the plugin.
+	 * @since 1.0.0
+	 * @return Assets Orchestrates the assets of the plugin.
 	 */
-	public function get_assets() {
+	public function get_assets(): Assets {
 		return $this->assets;
 	}
 
 
-	public function set_constants( array $constants ) {
+	public function set_constants( array $constants ): void {
 		self::$constants = $constants;
 	}
 }

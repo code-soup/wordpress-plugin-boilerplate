@@ -1,0 +1,45 @@
+// Reset styles for the plugin
+.wppb {
+  box-sizing: border-box;
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+  
+  // Reset margins and paddings
+  h1, h2, h3, h4, h5, h6,
+  p, ul, ol, dl,
+  blockquote, figure {
+    margin: 0;
+    padding: 0;
+  }
+  
+  // Reset lists
+  ul, ol {
+    list-style: none;
+  }
+  
+  // Reset buttons
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  // Reset links
+  a {
+    text-decoration: none;
+    color: inherit;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+} 

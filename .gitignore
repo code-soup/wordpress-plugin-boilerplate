@@ -19,6 +19,8 @@ Thumbs.db
 .project
 .settings
 .tmproj
+.vscode
+.cursor
 *.esproj
 ._*
 .Spotlight-V100
@@ -48,6 +50,7 @@ bower_components
 node_modules
 _test-src
 dist
+_local
 
 # Logs
 logs

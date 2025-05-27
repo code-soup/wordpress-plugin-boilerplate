@@ -2,14 +2,18 @@
 
 namespace WPPB;
 
+use WPPB\Interfaces\AssetsInterface;
+
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
 /**
  * @file
  * Get paths for assets
+ *
+ * @since 1.0.0
  */
-class Assets {
+class Assets implements AssetsInterface {
 
     use Traits\HelpersTrait;
 
@@ -17,7 +21,8 @@ class Assets {
     /**
      * Manifest file object containing list of all hashed assets
      *
-     * @var Object
+     * @var array<string, string>
+     * @since 1.0.0
      */
     private $manifest;
 
@@ -26,12 +31,15 @@ class Assets {
      * URI to theme 'dist' folder
      *
      * @var string
+     * @since 1.0.0
      */
     private $dist_uri;
 
 
     /**
      * Initiate
+     *
+     * @since 1.0.0
      */
     public function __construct() {
 
@@ -66,6 +74,7 @@ class Assets {
     /**
      * Get full URI to single asset
      *
+     * @since 1.0.0
      * @param  string $filename File name
      * @return string           URI to resource
      */
@@ -79,8 +88,9 @@ class Assets {
     /**
      * Fix URL for requested files
      *
+     * @since 1.0.0
      * @param  string $filename Requested asset
-     * @return [type]           [description]
+     * @return string           URL to the asset
      */
     private function locate( string $filename = '' ):string {
 

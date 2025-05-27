@@ -5,7 +5,6 @@ namespace WPPB\Admin;
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
-
 /**
  * @file
  * The admin-specific functionality of the plugin.
@@ -17,13 +16,21 @@ class Init {
 
 	use \WPPB\Traits\HelpersTrait;
 
-	// Main plugin instance.
+	/**
+	 * Main plugin instance.
+	 * 
+	 * @var \WPPB\Init|null
+	 * @since 1.0.0
+	 */
 	protected static $instance = null;
 
-	
-	// Assets loader class.
+	/**
+	 * Assets loader class.
+	 * 
+	 * @var \WPPB\Assets
+	 * @since 1.0.0
+	 */
 	protected $assets;
-
 
 	/**
 	 * Initialize the class and set its properties.
@@ -45,8 +52,9 @@ class Init {
 	 * Register the CSS/JavaScript for the admin area.
 	 *
 	 * @since    1.0.0
+	 * @return void
 	 */
-	public function admin_enqueue_scripts() {
+	public function admin_enqueue_scripts(): void {
 
 		wp_enqueue_style(
 			$this->get_plugin_id('/wp/css'),

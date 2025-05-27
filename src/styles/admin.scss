@@ -1,1 +1,17 @@
-@import '_utils/_require-dev-build-wp-admin';
+/**
+ * Admin Stylesheet
+ * 
+ * This is the main entry point for the admin-facing styles.
+ */
+
+// Abstract imports (variables, functions, mixins)
+@use 'abstracts' as *;
+
+// Core imports
+// @use './core/admin/index' as *;
+
+// Components
+// @use '@styles/components/admin' as *;
+
+// Vendor/Third-party
+@use 'vendor/sprites' as *;

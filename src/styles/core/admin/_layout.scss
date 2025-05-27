@@ -1,0 +1,14 @@
+// Admin layout styles
+.wppb-admin {
+  padding: 20px;
+  
+  &__header {
+    margin-bottom: 20px;
+  }
+  
+  &__content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+  }
+} 
