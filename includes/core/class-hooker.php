@@ -1,11 +1,13 @@
 <?php
 
-namespace WPPB;
+declare(strict_types=1);
+
+namespace WPPB\Core;
 
 use WPPB\Interfaces\HookerInterface;
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * @file
@@ -14,7 +16,7 @@ defined( 'WPINC' ) || die;
  * Maintain a list of all hooks that are registered throughout
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
- * 
+ *
  * @since 1.0.0
  */
 class Hooker implements HookerInterface {
@@ -26,7 +28,7 @@ class Hooker implements HookerInterface {
 	 * @access protected
 	 * @var array<int, array> The actions registered with WordPress to fire when the plugin loads.
 	 */
-	protected $actions;
+	protected array $actions = array();
 
 	/**
 	 * The array of filters registered with WordPress.
@@ -35,7 +37,7 @@ class Hooker implements HookerInterface {
 	 * @access protected
 	 * @var array<int, array> The filters registered with WordPress to fire when the plugin loads.
 	 */
-	protected $filters;
+	protected array $filters = array();
 
 	/**
 	 * Initialize the collections used to maintain the actions and filters.
@@ -43,8 +45,7 @@ class Hooker implements HookerInterface {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->actions = array();
-		$this->filters = array();
+		// Arrays are already initialized with typed properties
 	}
 
 	/**
@@ -58,9 +59,9 @@ class Hooker implements HookerInterface {
 	 * @param int    $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
 	 * @return void
 	 */
-	public function add_action(string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1): void {
+	public function add_action( string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1 ): void {
 		// Custom callback method or fallback to same as hook
-		$method = (!empty($callback))
+		$method = ( ! empty( $callback ) )
 			? $callback
 			: $hook;
 
@@ -81,15 +82,15 @@ class Hooker implements HookerInterface {
 	 * @param array<int, array> $actions Array of actions to add.
 	 * @return void
 	 */
-	public function add_actions(array $actions = []): void {
-		foreach ($actions as $action) {
-			$hook          = isset($action[0]) ? $action[0] : '';
-			$component     = isset($action[1]) ? $action[1] : '';
-			$callback      = isset($action[2]) ? $action[2] : '';
-			$priority      = isset($action[3]) ? $action[3] : 10;
-			$accepted_args = isset($action[4]) ? $action[4] : 1;
+	public function add_actions( array $actions = array() ): void {
+		foreach ( $actions as $action ) {
+			$hook          = isset( $action[0] ) ? $action[0] : '';
+			$component     = isset( $action[1] ) ? $action[1] : '';
+			$callback      = isset( $action[2] ) ? $action[2] : '';
+			$priority      = isset( $action[3] ) ? $action[3] : 10;
+			$accepted_args = isset( $action[4] ) ? $action[4] : 1;
 
-			$this->add_action($hook, $component, $callback, $priority, $accepted_args);
+			$this->add_action( $hook, $component, $callback, $priority, $accepted_args );
 		}
 	}
 
@@ -104,7 +105,7 @@ class Hooker implements HookerInterface {
 	 * @param int    $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
 	 * @return void
 	 */
-	public function add_filter(string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1): void {
+	public function add_filter( string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1 ): void {
 		// Custom callback method or fallback to same as hook
 		$method = ( ! empty( $callback ) )
 			? $callback
@@ -127,15 +128,15 @@ class Hooker implements HookerInterface {
 	 * @param array<int, array> $filters Array of filters to add.
 	 * @return void
 	 */
-	public function add_filters(array $filters = []): void {
-		foreach ($filters as $filter) {
-			$hook          = isset($filter[0]) ? $filter[0] : '';
-			$component     = isset($filter[1]) ? $filter[1] : '';
-			$callback      = isset($filter[2]) ? $filter[2] : '';
-			$priority      = isset($filter[3]) ? $filter[3] : 10;
-			$accepted_args = isset($filter[4]) ? $filter[4] : 1;
+	public function add_filters( array $filters = array() ): void {
+		foreach ( $filters as $filter ) {
+			$hook          = isset( $filter[0] ) ? $filter[0] : '';
+			$component     = isset( $filter[1] ) ? $filter[1] : '';
+			$callback      = isset( $filter[2] ) ? $filter[2] : '';
+			$priority      = isset( $filter[3] ) ? $filter[3] : 10;
+			$accepted_args = isset( $filter[4] ) ? $filter[4] : 1;
 
-			$this->add_filter($hook, $component, $callback, $priority, $accepted_args);
+			$this->add_filter( $hook, $component, $callback, $priority, $accepted_args );
 		}
 	}
 
@@ -153,7 +154,7 @@ class Hooker implements HookerInterface {
 	 * @param int               $accepted_args    The number of arguments that should be passed to the $callback.
 	 * @return array<int, array> The collection of actions and filters registered with WordPress.
 	 */
-	private function add(array $hooks, string $hook, object $component, string $callback, int $priority, int $accepted_args): array {
+	private function add( array $hooks, string $hook, object $component, string $callback, int $priority, int $accepted_args ): array {
 		$hooks[] = array(
 			'hook'          => $hook,
 			'component'     => $component,
@@ -172,7 +173,7 @@ class Hooker implements HookerInterface {
 	 * @return void
 	 */
 	public function run(): void {
-		foreach ($this->filters as $hook) {
+		foreach ( $this->filters as $hook ) {
 			add_filter(
 				$hook['hook'],
 				array(
@@ -184,7 +185,7 @@ class Hooker implements HookerInterface {
 			);
 		}
 
-		foreach ($this->actions as $hook) {
+		foreach ( $this->actions as $hook ) {
 			add_action(
 				$hook['hook'],
 				array(

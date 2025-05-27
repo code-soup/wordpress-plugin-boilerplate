@@ -3,19 +3,22 @@
 namespace WPPB;
 
 // If this file is called directly, abort.
-defined('WPINC') || die;
+defined('ABSPATH') || die;
 
-// Autoload all classes via composer.
+// Load composer autoloader for dependencies
 require "vendor/autoload.php";
+
+// Load our custom WordPress-compatible PSR-4 autoloader
+require_once "includes/core/class-autoloader.php";
 
 /**
  * Make main plugin class available via global function call.
  *
  * @since 1.0.0
- * @return Init Main plugin instance.
+ * @return Core\Init Main plugin instance.
  */
-function plugin_instance(): Init {
-    return Init::get_instance();
+function plugin_instance(): Core\Init {
+    return Core\Init::get_instance();
 }
 
 try {

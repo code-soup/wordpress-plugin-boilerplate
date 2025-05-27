@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WPPB\Interfaces;
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Interface for the Assets class.
@@ -14,12 +16,12 @@ defined( 'WPINC' ) || die;
  * @since 1.0.0
  */
 interface AssetsInterface {
-    /**
-     * Get full URI to single asset
-     *
-     * @since 1.0.0
-     * @param string $filename File name
-     * @return string URI to resource
-     */
-    public function get(string $filename = ''): string;
-} 
+	/**
+	 * Get full URI to single asset
+	 *
+	 * @since 1.0.0
+	 * @param string $filename File name
+	 * @return string URI to resource
+	 */
+	public function get( string $filename = '' ): string;
+}

@@ -51,6 +51,8 @@ node_modules
 _test-src
 dist
 _local
+_remote
+.cursor
 
 # Logs
 logs

@@ -26,9 +26,19 @@
 		"wordpress plugin boilerplate"
 	],
 	"autoload": {
-		"classmap": [
-			"includes/"
-		]
+		"files": [
+			"includes/core/class-autoloader.php"
+		],
+		"psr-4": {
+			"WPPB\\Core\\": "includes/core/",
+			"WPPB\\Admin\\": "includes/admin/",
+			"WPPB\\Frontend\\": "includes/frontend/",
+			"WPPB\\Providers\\": "includes/providers/",
+			"WPPB\\Abstracts\\": "includes/abstracts/",
+			"WPPB\\Interfaces\\": "includes/interfaces/",
+			"WPPB\\Traits\\": "includes/traits/",
+			"WPPB\\": "includes/"
+		}
 	},
 	"require": {
 		"php": ">=8.1.0",
