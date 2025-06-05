@@ -45,7 +45,7 @@ class Assets implements AssetsInterface {
 	 * @throws \RuntimeException If manifest cannot be loaded.
 	 */
 	public function __construct() {
-		$this->dist_uri = $this->get_plugin_dir_url( '/dist' );
+		$this->dist_uri = $this->get_plugin_dir_url( 'dist' );
 		$this->load_manifest();
 	}
 
@@ -66,7 +66,7 @@ class Assets implements AssetsInterface {
 			return;
 		}
 
-		$manifest_path = $this->get_plugin_dir_path( '/dist/assets.json' );
+		$manifest_path = $this->get_plugin_dir_path( '/dist/manifest.json' );
 
 		// Check if manifest file exists
 		if ( ! file_exists( $manifest_path ) ) {
@@ -116,27 +116,22 @@ class Assets implements AssetsInterface {
 	 * @return string           URL to the asset
 	 */
 	private function locate( string $filename = '' ): string {
-
-		// Trim slashes just in case.
-		$filename = rtrim( $filename, '/' );
-		$filename = ltrim( $filename, '/' );
-
 		// Return URL to requested file from manifest.
 		if ( array_key_exists( $filename, $this->manifest ) ) {
-			return sprintf( '%s/%s', $this->dist_uri, $this->manifest[ $filename ] );
+			return $this->join_path( $this->dist_uri, $this->manifest[ $filename ] );
 		}
 
 		switch ( pathinfo( $filename, PATHINFO_EXTENSION ) ) {
 			case 'js':
-				$filename = sprintf( 'scripts/%s', $filename );
+				$filename = $this->join_path( 'scripts', $filename );
 				break;
 
 			case 'css':
-				$filename = sprintf( 'styles/%s', $filename );
+				$filename = $this->join_path( 'styles', $filename );
 				break;
 		}
 
 		// Return default file location.
-		return sprintf( '%s/%s', $this->dist_uri, $filename );
+		return $this->join_path( $this->dist_uri, $filename );
 	}
 }

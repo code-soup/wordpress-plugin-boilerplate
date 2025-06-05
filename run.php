@@ -32,6 +32,7 @@ try {
         'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
         'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
         'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
+        'PLUGIN_BASE_DIR'              => __DIR__,
     ]);
 
     $plugin->init();

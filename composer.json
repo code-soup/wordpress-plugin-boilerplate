@@ -27,7 +27,7 @@
 	],
 	"autoload": {
 		"files": [
-			"includes/core/class-autoloader.php"
+			"includes/core/Autoloader.php"
 		],
 		"psr-4": {
 			"WPPB\\Core\\": "includes/core/",

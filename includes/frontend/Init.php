@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace WPPB\Frontend;
 
+use WPPB\Core\Init as CoreInit;
+use WPPB\Core\Assets;
+use WPPB\Traits\HelpersTrait;
+
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
@@ -17,25 +21,25 @@ defined( 'ABSPATH' ) || exit;
 class Init {
 
 
-	use \WPPB\Traits\HelpersTrait;
+	use HelpersTrait;
 
 
 	/**
 	 * Main plugin instance
 	 *
-	 * @var \WPPB\Init|null
+	 * @var CoreInit|null
 	 * @since 1.0.0
 	 */
-	protected static ?\WPPB\Init $instance = null;
+	protected static ?CoreInit $instance = null;
 
 
 	/**
 	 * Assets loader class.
 	 *
-	 * @var \WPPB\Assets|null
+	 * @var Assets|null
 	 * @since 1.0.0
 	 */
-	protected ?\WPPB\Assets $assets = null;
+	protected ?Assets $assets = null;
 
 
 	/**

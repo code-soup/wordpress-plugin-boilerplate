@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare( strict_types=1 );
 
 namespace WPPB\Traits;
 
@@ -24,9 +22,19 @@ trait HelpersTrait {
 	 */
 	private function get_plugin_dir_path( string $path = '' ): string {
 		// Force baseurl to be plugin root directory.
-		$base = dirname( __DIR__, 2 );
+		$base      = $this->get_constant( 'PLUGIN_BASE_PATH' );
+		$base      = apply_filters( $this->get_plugin_id( '_plugin_dir_path', false ), $base );
+		$full_path = $this->join_path( $base, $path );
 
-		return $this->join_path( $base, $path );
+		/**
+		 * Filter the plugin directory path
+		 *
+		 * @since 1.0.0
+		 * @param string $full_path The full plugin directory path.
+		 * @param string $path      The appended path.
+		 * @param string $base      The base plugin directory.
+		 */
+		return $full_path;
 	}
 
 	/**
@@ -39,9 +47,19 @@ trait HelpersTrait {
 	 */
 	private function get_plugin_dir_url( string $path = '' ): string {
 		// Force baseurl to be plugin root directory.
-		$base = plugins_url( '/', dirname( __DIR__, 1 ) );
+		$base     = plugins_url( DIRECTORY_SEPARATOR . basename( $this->get_constant( 'PLUGIN_BASE_PATH' ) ) );
+		$base     = apply_filters( $this->get_plugin_id( '_plugin_dir_url', false ), $base );
+		$full_url = $this->join_path( $base, $path );
 
-		return $this->join_path( $base, $path, '/' );
+		/**
+		 * Filter the plugin directory URL
+		 *
+		 * @since 1.0.0
+		 * @param string $full_url The full plugin directory URL.
+		 * @param string $path     The appended path.
+		 * @param string $base     The base plugin directory URL.
+		 */
+		return $full_url;
 	}
 
 	/**
@@ -73,10 +91,13 @@ trait HelpersTrait {
 	 * @param string $append Optional string to append to the ID.
 	 * @return string Plugin ID with optional appended string.
 	 */
-	private function get_plugin_id( string $append = '' ): string {
-		$dashed = str_replace( '_', '-', $this->get_constant( 'PLUGIN_NAME' ) );
+	private function get_plugin_id( string $append = '', bool $is_dashed = true ): string {
+		$dashed = sanitize_title( $this->get_constant( 'PLUGIN_NAME' ) . $append );
 
-		return sanitize_title( $dashed ) . $append;
+		if ( $is_dashed )
+			return $dashed;
+
+		return str_replace( '-', '_', $dashed );
 	}
 
 	/**
@@ -88,7 +109,7 @@ trait HelpersTrait {
 	 * @throws \Exception If constant is not defined.
 	 */
 	private function get_constant( string $key ) {
-		$constants = \WPPB\Init::$constants;
+		$constants = \WPPB\Core\Init::$constants;
 		$name      = trim( strtoupper( $key ) );
 
 		// Check if constant is defined first
@@ -119,8 +140,7 @@ trait HelpersTrait {
 	private function join_path( string $base = '', string $path = '', string $separator = DIRECTORY_SEPARATOR ): string {
 		// Strip slashes on both ends.
 		if ( $path ) {
-			$path = rtrim( $path, '/' );
-			$path = ltrim( $path, '/' );
+			$path = trim( $path, $separator );
 		}
 
 		// Strip trailingslash just in case.
