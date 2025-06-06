@@ -7,8 +7,6 @@
 
 namespace WPPB\Core;
 
-use WPPB\Interfaces\AssetsInterface;
-
 /**
  * If this file is called directly, abort.
  */
@@ -19,7 +17,7 @@ defined( 'ABSPATH' ) || die;
  *
  * @since 1.0.0
  */
-class Assets implements AssetsInterface {
+class Assets {
 
 	use \WPPB\Traits\HelpersTrait;
 
@@ -92,17 +90,6 @@ class Assets implements AssetsInterface {
 			throw new \Exception( esc_html( "Asset '{$asset}' not found in manifest." ) );
 		}
 		return $this->manifest[ $asset ];
-	}
-
-	/**
-	 * Get the path of an asset from the manifest.
-	 *
-	 * @param string $asset The name of the asset.
-	 *
-	 * @return string The asset path.
-	 */
-	public function get_asset_path( string $asset ): string {
-		return str_replace( home_url(), ABSPATH, $this->get_asset_url( $asset ) );
 	}
 
 	/**

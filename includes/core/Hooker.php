@@ -7,7 +7,7 @@
 
 namespace WPPB\Core;
 
-use WPPB\Interfaces\HookerInterface;
+use WPPB\Core\Core;
 
 /**
  * If this file is called directly, abort.
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || die;
  *
  * @since 1.0.0
  */
-class Hooker implements HookerInterface {
+class Hooker {
 
 	/**
 	 * The array of actions registered with WordPress.

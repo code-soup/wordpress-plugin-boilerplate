@@ -41,4 +41,13 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 			}
 		);
 	}
+
+	/**
+	 * Boot the service provider.
+	 */
+	public function boot(): void {
+		if ( ! is_admin() ) {
+			$this->container->set( 'frontend_init', new \WPPB\Frontend\Init() );
+		}
+	}
 }

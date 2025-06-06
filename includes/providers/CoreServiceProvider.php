@@ -44,24 +44,16 @@ class CoreServiceProvider extends AbstractServiceProvider {
 	 * @return void
 	 */
 	public function register(): void {
-		$this->register_service(
-			'core',
-			function () {
-				return new Core();
-			}
-		);
-	}
-
-	/**
-	 * Boot services after all providers have been registered
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function boot(): void {
 		$this->container->set( 'lifecycle', wppb_plugin()->lifecycle );
 		$this->container->set( 'hooker', new Hooker() );
 		$this->container->set( 'assets', new Assets() );
 		$this->container->set( 'i18n', new I18n( 'WPPB' ) );
+
+		$this->register_service(
+			'core_init',
+			function () {
+				return new Core();
+			}
+		);
 	}
 }

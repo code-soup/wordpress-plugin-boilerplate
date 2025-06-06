@@ -113,4 +113,12 @@ package-lock.json
 
 # dotenv environment variables file
 .env
+.env.*
 .env.local
+
+# PHP CodeSniffer cache
+.phpcs.cache
+
+# Distribution archives
+*.zip
+*.tgz
