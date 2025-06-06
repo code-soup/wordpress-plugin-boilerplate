@@ -47,7 +47,7 @@ class CoreServiceProvider extends AbstractServiceProvider {
 		$this->container->set( 'lifecycle', wppb_plugin()->lifecycle );
 		$this->container->set( 'hooker', new Hooker() );
 		$this->container->set( 'assets', new Assets() );
-		$this->container->set( 'i18n', new I18n( 'WPPB' ) );
+		$this->container->set( 'i18n', new I18n() );
 
 		$this->register_service(
 			'core_init',

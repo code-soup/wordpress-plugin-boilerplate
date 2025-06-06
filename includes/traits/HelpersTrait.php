@@ -94,6 +94,15 @@ trait HelpersTrait {
 	}
 
 	/**
+	 * Get the plugin text domain.
+	 *
+	 * @return string
+	 */
+	public function get_text_domain(): string {
+		return $this->config['PLUGIN_TEXTDOMAIN'];
+	}
+
+	/**
 	 * Returns PLUGIN_PREFIX constant as ID
 	 * Converts to-slug-like-id
 	 * and appends additional text at the end for custom unique id

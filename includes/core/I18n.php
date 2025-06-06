@@ -31,19 +31,9 @@ class I18n {
 	protected static ?self $instance = null;
 
 	/**
-	 * The plugin's text domain.
-	 *
-	 * @var string
-	 */
-	protected string $domain;
-
-	/**
 	 * I18n constructor.
-	 *
-	 * @param string $domain The plugin's text domain.
 	 */
-	public function __construct( string $domain ) {
-		$this->domain = $domain;
+	public function __construct() {
 		$this->register_hooks();
 	}
 
@@ -55,29 +45,11 @@ class I18n {
 	 */
 	private function register_hooks(): void {
 		// Get the main plugin instance and hooker.
-		$instance = \WPPB\plugin_instance();
-		$hooker   = $instance->get_hooker();
+		$instance = \WPPB\wppb_plugin();
+		$hooker   = $instance->get( 'hooker' );
 
 		// Register the textdomain loading hook.
-		$hooker->add_action( 'init', $this, 'load_plugin_textdomain' );
-	}
-
-	/**
-	 * Get the text domain.
-	 *
-	 * @return string
-	 */
-	public function get_domain(): string {
-		return $this->domain;
-	}
-
-	/**
-	 * Set the text domain.
-	 *
-	 * @param string $domain The text domain.
-	 */
-	public function set_domain( string $domain ): void {
-		$this->domain = $domain;
+		$hooker->add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 	}
 
 	/**
@@ -85,9 +57,9 @@ class I18n {
 	 */
 	public function load_plugin_textdomain(): void {
 		load_plugin_textdomain(
-			$this->domain,
+			'__PLUGIN_TEXTDOMAIN__',
 			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+			wppb_plugin()->get_basename() . '/languages/'
 		);
 	}
 }

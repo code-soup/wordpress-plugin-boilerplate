@@ -45,6 +45,7 @@ if [[ "$OS" == "Darwin" ]]; then
   sed -i '' "s/__PLUGIN_PREFIX__/$plugin_prefix/g" "run.php"
   sed -i '' "s/__PLUGIN_NAME__/$plugin_name/g" "run.php"
   sed -i '' "s/__PLUGIN_VERSION__/$plugin_version/g" "run.php"
+  sed -i '' "s/__PLUGIN_TEXTDOMAIN__/$plugin_textdomain/g" "run.php"
 else
   # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
   dos2unix "run.php" >/dev/null 2>&1
@@ -54,4 +55,5 @@ else
   sed "s/__PLUGIN_PREFIX__/$plugin_prefix/g" "run.php" >"run.php.tmp" && mv "run.php.tmp" "run.php"
   sed "s/__PLUGIN_NAME__/$plugin_name/g" "run.php" >"run.php.tmp" && mv "run.php.tmp" "run.php"
   sed "s/__PLUGIN_VERSION__/$plugin_version/g" "run.php" >"run.php.tmp" && mv "run.php.tmp" "run.php"
+  sed "s/__PLUGIN_TEXTDOMAIN__/$plugin_textdomain/g" "run.php" >"run.php.tmp" && mv "run.php.tmp" "run.php"
 fi

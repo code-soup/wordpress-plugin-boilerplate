@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || die;
 // Load composer autoloader for dependencies.
 require 'vendor/autoload.php';
 
-use WPPB\Core\Core;
+use WPPB\Core\Init;
 use WPPB\Core\Lifecycle;
 use WPPB\Traits\HelpersTrait;
 
@@ -34,9 +34,9 @@ final class WPPB_Plugin {
 	/**
 	 * The plugin's core functionality
 	 *
-	 * @var Core
+	 * @var Init
 	 */
-	public Core $core;
+	public Init $core;
 
 	/**
 	 * The plugin's lifecycle hooks
@@ -84,10 +84,11 @@ final class WPPB_Plugin {
 	 */
 	private function __construct() {
 		$this->setup_config();
-		$this->core      = new Core();
-		$this->lifecycle = new Lifecycle( $this );
 
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
+		$this->lifecycle = new Lifecycle( $this );
+		$this->core      = new Init();
+
+		$this->core->init();
 	}
 
 	/**
@@ -102,20 +103,10 @@ final class WPPB_Plugin {
 			'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
 			'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
 			'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
+			'PLUGIN_TEXTDOMAIN'            => '__PLUGIN_TEXTDOMAIN__',
 			'PLUGIN_BASE_PATH'             => __DIR__,
 			'PLUGIN_URL'                   => plugin_dir_url( __FILE__ ),
 			'PLUGIN_BASENAME'              => plugin_basename( __FILE__ ),
-		);
-	}
-
-	/**
-	 * Load the plugin text domain for translation.
-	 */
-	public function load_plugin_textdomain(): void {
-		load_plugin_textdomain(
-			'WPPB',
-			false,
-			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 		);
 	}
 }
