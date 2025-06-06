@@ -7,6 +7,8 @@
 
 namespace WPPB\Core;
 
+use WPPB\Plugin;
+
 /**
  * If this file is called directly, abort.
  */
@@ -18,25 +20,20 @@ defined( 'ABSPATH' ) || die;
 class Lifecycle {
 
 	/**
-	 * The minimum required WordPress version.
+	 * The plugin instance.
 	 *
-	 * @var string
+	 * @var Plugin
 	 */
-	protected string $min_wp_version = '5.0';
+	protected Plugin $plugin;
 
 	/**
-	 * The minimum required PHP version.
+	 * Constructor.
 	 *
-	 * @var string
+	 * @param Plugin $plugin The main plugin instance.
 	 */
-	protected string $min_php_version = '7.4';
-
-	/**
-	 * The plugin name.
-	 *
-	 * @var string
-	 */
-	protected string $plugin_name = 'WordPress Plugin Boilerplate';
+	public function __construct( Plugin $plugin ) {
+		$this->plugin = $plugin;
+	}
 
 	/**
 	 * Check if the minimum requirements are met.
@@ -47,7 +44,7 @@ class Lifecycle {
 				sprintf(
 					// translators: 1. Minimum WordPress version, 2. Current WordPress version.
 					esc_html__( 'Minimum WordPress version required: %1$s. You are running version: %2$s.', 'WPPB' ),
-					$this->min_wp_version,
+					$this->plugin->config['MIN_WP_VERSION'],
 					get_bloginfo( 'version' )
 				)
 			);
@@ -58,7 +55,7 @@ class Lifecycle {
 				sprintf(
 					// translators: 1. Minimum PHP version, 2. Current PHP version.
 					esc_html__( 'Minimum PHP version required: %1$s. You are running version: %2$s.', 'WPPB' ),
-					$this->min_php_version,
+					$this->plugin->config['MIN_PHP_VERSION'],
 					phpversion()
 				)
 			);
@@ -71,7 +68,7 @@ class Lifecycle {
 	 * @return bool
 	 */
 	protected function is_wp_version_ok(): bool {
-		return version_compare( get_bloginfo( 'version' ), $this->min_wp_version, '>=' );
+		return version_compare( get_bloginfo( 'version' ), $this->plugin->config['MIN_WP_VERSION'], '>=' );
 	}
 
 	/**
@@ -80,7 +77,7 @@ class Lifecycle {
 	 * @return bool
 	 */
 	protected function is_php_version_ok(): bool {
-		return version_compare( phpversion(), $this->min_php_version, '>=' );
+		return version_compare( phpversion(), $this->plugin->config['MIN_PHP_VERSION'], '>=' );
 	}
 
 	/**
@@ -89,24 +86,8 @@ class Lifecycle {
 	 * @param string $message The message to display.
 	 */
 	protected function deactivate_plugin( string $message ): void {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
+		deactivate_plugins( $this->plugin->config['PLUGIN_BASENAME'] );
 		wp_die( esc_html( $message ) );
-	}
-
-	/**
-	 * The code that runs during plugin activation.
-	 */
-	public static function activate(): void {
-		// Do something on activation.
-		flush_rewrite_rules();
-	}
-
-	/**
-	 * The code that runs during plugin deactivation.
-	 */
-	public static function deactivate(): void {
-		// Do something on deactivation.
-		flush_rewrite_rules();
 	}
 
 	/**
@@ -128,7 +109,7 @@ class Lifecycle {
 		$options = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( 'wppb_' ) . '%'
+				$wpdb->esc_like( wppb_plugin()->config['PLUGIN_PREFIX'] ) . '%'
 			)
 		);
 
@@ -147,7 +128,7 @@ class Lifecycle {
 		$tables = $wpdb->get_col(
 			$wpdb->prepare(
 				'SELECT table_name FROM information_schema.tables WHERE table_name LIKE %s',
-				$wpdb->esc_like( 'wppb_' ) . '%'
+				$wpdb->esc_like( wppb_plugin()->config['PLUGIN_PREFIX'] ) . '%'
 			)
 		);
 

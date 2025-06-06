@@ -59,9 +59,9 @@ class CoreServiceProvider extends AbstractServiceProvider {
 	 * @return void
 	 */
 	public function boot(): void {
-		$this->container->set( 'lifecycle', new Lifecycle() );
+		$this->container->set( 'lifecycle', wppb_plugin()->lifecycle );
 		$this->container->set( 'hooker', new Hooker() );
-		$this->container->set( 'assets', new Assets( WPPB_PLUGIN_BASE_DIR . '/dist/manifest.json' ) );
+		$this->container->set( 'assets', new Assets() );
 		$this->container->set( 'i18n', new I18n( 'WPPB' ) );
 	}
 }

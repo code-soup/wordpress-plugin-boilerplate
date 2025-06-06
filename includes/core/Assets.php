@@ -46,20 +46,9 @@ class Assets implements AssetsInterface {
 	private string $dist_uri;
 
 	/**
-	 * The assets instance.
-	 *
-	 * @var array
-	 */
-	public array $assets;
-
-	/**
 	 * Assets constructor.
 	 */
 	public function __construct() {
-		$this->assets   = array(
-			'scripts' => array(),
-			'styles'  => array(),
-		);
 		$this->dist_uri = $this->get_plugin_dir_url( 'dist' );
 	}
 
@@ -152,55 +141,5 @@ class Assets implements AssetsInterface {
 
 		// Return default file location.
 		return $this->join_path( $this->dist_uri, $filename );
-	}
-
-	/**
-	 * Enqueue scripts.
-	 */
-	public function enqueue_scripts(): void {
-		wp_enqueue_script( 'WPPB-admin', WPPB_URL . 'build/admin.js', array(), WPPB_VERSION, true );
-	}
-
-	/**
-	 * Enqueue styles.
-	 */
-	public function enqueue_styles(): void {
-		wp_enqueue_style( 'WPPB-admin', WPPB_URL . 'build/admin.css', array(), WPPB_VERSION );
-	}
-
-	/**
-	 * Get the list of scripts.
-	 *
-	 * @return array
-	 */
-	public function get_scripts(): array {
-		return $this->assets['scripts'];
-	}
-
-	/**
-	 * Get the list of styles.
-	 *
-	 * @return array
-	 */
-	public function get_styles(): array {
-		return $this->assets['styles'];
-	}
-
-	/**
-	 * Set the list of scripts.
-	 *
-	 * @param array $scripts The list of scripts.
-	 */
-	public function set_scripts( array $scripts ): void {
-		$this->assets['scripts'] = $scripts;
-	}
-
-	/**
-	 * Set the list of styles.
-	 *
-	 * @param array $styles The list of styles.
-	 */
-	public function set_styles( array $styles ): void {
-		$this->assets['styles'] = $styles;
 	}
 }

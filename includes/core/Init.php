@@ -8,8 +8,8 @@
 namespace WPPB\Core;
 
 use WPPB\Core\Container;
-use WPPB\Core\Lifecycle;
 use WPPB\Core\Hooker;
+use WPPB\Core\Lifecycle;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -26,26 +26,11 @@ defined( 'ABSPATH' ) || exit;
 final class Init {
 
 	/**
-	 * Minimum PHP version required.
-	 *
-	 * @var string
-	 */
-	private $min_php_version = '7.4';
-
-	/**
 	 * Plugin instance.
 	 *
 	 * @var Init
 	 */
 	private static $instance = null;
-
-	/**
-	 * Define plugin constants
-	 *
-	 * @var array<string, string>
-	 * @since 1.0.0
-	 */
-	public static array $constants = array();
 
 	/**
 	 * The dependency injection container
@@ -171,17 +156,7 @@ final class Init {
 		$lifecycle = $this->container->get( 'lifecycle' );
 
 		try {
-			$lifecycle->check_php_version( $this->min_php_version );
-			$lifecycle->check_wp_version();
-			$lifecycle->check_mysql_version();
-			$lifecycle->check_required_plugins(
-				array(
-					'woocommerce' => array(
-						'name'    => 'WooCommerce',
-						'version' => '3.0',
-					),
-				)
-			);
+			$lifecycle->check_requirements();
 			return true;
 		} catch ( \Exception $e ) {
 			add_action(
@@ -244,19 +219,6 @@ final class Init {
 	 */
 	public function get_container(): Container {
 		return $this->container;
-	}
-
-	/**
-	 * Set plugin constants.
-	 *
-	 * @param array $constants An array of constants to set.
-	 */
-	public function set_constants( array $constants ): void {
-		foreach ( $constants as $name => $value ) {
-			if ( ! defined( $name ) ) {
-				define( $name, $value );
-			}
-		}
 	}
 
 	/**

@@ -24,5 +24,6 @@ class Activator {
 	 */
 	public static function activate(): void {
 		// Activation code here.
+		flush_rewrite_rules();
 	}
 }

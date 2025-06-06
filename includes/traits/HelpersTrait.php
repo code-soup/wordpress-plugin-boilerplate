@@ -40,40 +40,39 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Get the plugin version.
-	 *
-	 * @return string
-	 */
-	public function get_version(): string {
-		return '1.0.0';
-	}
-
-	/**
 	 * Get the plugin name.
 	 *
 	 * @return string
 	 */
 	public function get_name(): string {
-		return 'WordPress Plugin Boilerplate';
+		return $this->config['PLUGIN_NAME'];
 	}
 
 	/**
-	 * Get the plugin slug.
+	 * Get the plugin version.
 	 *
-	 * @param bool $is_dashed Whether to return the slug as dashed.
 	 * @return string
 	 */
-	public function get_slug( bool $is_dashed = false ): string {
-		return $is_dashed ? 'wordpress-plugin-boilerplate' : 'wordpress_plugin_boilerplate';
+	public function get_version(): string {
+		return $this->config['PLUGIN_VERSION'];
 	}
 
 	/**
-	 * Get the plugin path.
+	 * Get the plugin prefix.
 	 *
 	 * @return string
 	 */
-	public function get_path(): string {
-		return plugin_dir_path( __DIR__ );
+	public function get_prefix(): string {
+		return $this->config['PLUGIN_PREFIX'];
+	}
+
+	/**
+	 * Get the plugin base path.
+	 *
+	 * @return string
+	 */
+	public function get_base_path(): string {
+		return $this->config['PLUGIN_BASE_PATH'];
 	}
 
 	/**
@@ -82,7 +81,7 @@ trait HelpersTrait {
 	 * @return string
 	 */
 	public function get_url(): string {
-		return plugin_dir_url( __DIR__ );
+		return $this->config['PLUGIN_URL'];
 	}
 
 	/**
@@ -91,7 +90,7 @@ trait HelpersTrait {
 	 * @return string
 	 */
 	public function get_basename(): string {
-		return plugin_basename( __DIR__ );
+		return $this->config['PLUGIN_BASENAME'];
 	}
 
 	/**

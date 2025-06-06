@@ -14,20 +14,22 @@ defined( 'ABSPATH' ) || die;
 require 'vendor/autoload.php';
 
 use WPPB\Core\Core;
-use WPPB\Core\Deactivator;
 use WPPB\Core\Lifecycle;
+use WPPB\Traits\HelpersTrait;
 
 /**
  * The main plugin class
  */
-final class Plugin {
+final class WPPB_Plugin {
+
+	use HelpersTrait;
 
 	/**
 	 * The single instance of the class
 	 *
-	 * @var Plugin|null
+	 * @var WPPB_Plugin|null
 	 */
-	private static ?Plugin $instance = null;
+	private static ?WPPB_Plugin $instance = null;
 
 	/**
 	 * The plugin's core functionality
@@ -44,11 +46,18 @@ final class Plugin {
 	public Lifecycle $lifecycle;
 
 	/**
+	 * The plugin's configuration
+	 *
+	 * @var array
+	 */
+	public array $config = array();
+
+	/**
 	 * Main Plugin instance
 	 *
-	 * @return Plugin
+	 * @return WPPB_Plugin
 	 */
-	public static function instance(): Plugin {
+	public static function instance(): WPPB_Plugin {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
 		}
@@ -74,13 +83,29 @@ final class Plugin {
 	 * Constructor
 	 */
 	private function __construct() {
+		$this->setup_config();
 		$this->core      = new Core();
-		$this->lifecycle = new Lifecycle();
-
-		$this->define_constants();
+		$this->lifecycle = new Lifecycle( $this );
 
 		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+	}
+
+	/**
+	 * Setup the plugin configuration.
+	 */
+	private function setup_config(): void {
+		$this->config = array(
+			'MIN_WP_VERSION_SUPPORT_TERMS' => '__MIN_WP_VERSION_SUPPORT_TERMS__',
+			'MIN_WP_VERSION'               => '__MIN_WP_VERSION__',
+			'MIN_PHP_VERSION'              => '__MIN_PHP_VERSION__',
+			'MIN_MYSQL_VERSION'            => '__MIN_MYSQL_VERSION__',
+			'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
+			'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
+			'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
+			'PLUGIN_BASE_PATH'             => __DIR__,
+			'PLUGIN_URL'                   => plugin_dir_url( __FILE__ ),
+			'PLUGIN_BASENAME'              => plugin_basename( __FILE__ ),
+		);
 	}
 
 	/**
@@ -93,54 +118,16 @@ final class Plugin {
 			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 		);
 	}
-
-	/**
-	 * Deactivate the plugin.
-	 */
-	public function deactivate(): void {
-		Deactivator::deactivate();
-	}
-
-	/**
-	 * Define constants.
-	 */
-	private function define_constants(): void {
-		$this->define( 'WPPB_VERSION', '1.0.0' );
-		$this->define( 'WPPB_PATH', plugin_dir_path( __FILE__ ) );
-		$this->define( 'WPPB_URL', plugin_dir_url( __FILE__ ) );
-		$this->define( 'WPPB_BASENAME', plugin_basename( __FILE__ ) );
-	}
-
-	/**
-	 * Define a constant if it's not already defined.
-	 *
-	 * @param string $name The constant name.
-	 * @param mixed  $value The constant value.
-	 */
-	private function define( string $name, $value ): void {
-		if ( ! defined( $name ) ) {
-			define( $name, $value );
-		}
-	}
 }
 
 /**
  * Begins execution of the plugin.
  *
- * @return Plugin
+ * @return WPPB_Plugin
  */
-function wppb_plugin(): Plugin {
-	return Plugin::instance();
+function wppb_plugin(): WPPB_Plugin {
+	return WPPB_Plugin::instance();
 }
 
 // Get the plugin running.
 $wppb_plugin = wppb_plugin();
-
-// Add a separate function for the uninstall hook.
-register_uninstall_hook(
-	__FILE__,
-	function () {
-		// Call the static uninstall method from the Lifecycle class.
-		Lifecycle::uninstall();
-	}
-);
