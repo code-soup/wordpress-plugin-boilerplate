@@ -1,106 +1,37 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Logging trait.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Traits;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+/**
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
 
 /**
- * Logging methods for error handling and debugging
- *
- * @since 1.0.0
+ * The LoggingTrait trait.
  */
 trait LoggingTrait {
+
+
 	/**
-	 * Log a message to the WordPress debug log
+	 * Log a message.
 	 *
-	 * @since 1.0.0
-	 * @param mixed $message Message to log
-	 * @param string $level Log level (debug, info, warning, error)
-	 * @return void
+	 * @param string $message The message to log.
+	 * @param string $level The log level.
 	 */
-	private function log_message( $message, string $level = 'debug' ): void {
-		if ( ! WP_DEBUG ) {
+	public function log( string $message, string $level = 'info' ): void {
+		if ( ! defined( 'WP_DEBUG_LOG' ) || ! WP_DEBUG_LOG ) {
 			return;
 		}
 
-		// Get plugin name if method exists, otherwise use default
-		$plugin_name = method_exists( $this, 'get_plugin_name' )
-			? $this->get_plugin_name()
-			: 'WPPB';
+		$message = sprintf( '[%s] %s: %s', gmdate( 'Y-m-d H:i:s' ), $level, $message );
 
-		$formatted_message = sprintf(
-			'[%s] [%s] %s',
-			$plugin_name,
-			strtoupper( $level ),
-			is_string( $message ) ? $message : print_r( $message, true )
-		);
-
-		error_log( $formatted_message );
-	}
-
-	/**
-	 * Log a debug message
-	 *
-	 * @since 1.0.0
-	 * @param mixed $message Message to log
-	 * @return void
-	 */
-	private function debug( $message ): void {
-		$this->log_message( $message, 'debug' );
-	}
-
-	/**
-	 * Log an info message
-	 *
-	 * @since 1.0.0
-	 * @param mixed $message Message to log
-	 * @return void
-	 */
-	private function info( $message ): void {
-		$this->log_message( $message, 'info' );
-	}
-
-	/**
-	 * Log a warning message
-	 *
-	 * @since 1.0.0
-	 * @param mixed $message Message to log
-	 * @return void
-	 */
-	private function warning( $message ): void {
-		$this->log_message( $message, 'warning' );
-	}
-
-	/**
-	 * Log an error message
-	 *
-	 * @since 1.0.0
-	 * @param mixed $message Message to log
-	 * @return void
-	 */
-	private function error( $message ): void {
-		$this->log_message( $message, 'error' );
-	}
-
-	/**
-	 * Log an exception
-	 *
-	 * @since 1.0.0
-	 * @param \Throwable $exception Exception to log
-	 * @return void
-	 */
-	private function log_exception( \Throwable $exception ): void {
-		$message = sprintf(
-			'Exception: %s in %s on line %d. Trace: %s',
-			$exception->getMessage(),
-			$exception->getFile(),
-			$exception->getLine(),
-			$exception->getTraceAsString()
-		);
-
-		$this->error( $message );
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( $message );
 	}
 }

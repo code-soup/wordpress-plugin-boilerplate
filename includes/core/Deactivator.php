@@ -1,32 +1,26 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Fired during plugin deactivation.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Core;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
-
+/**
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
 
 /**
- * @file
- * Fired during plugin deactivation.
- *
- * This class defines all code necessary to run during the plugin's deactivation.
- *
- * @since      1.0.0
+ * Deactivator class.
  */
 class Deactivator {
 
 	/**
-	 * Plugin deactivation hook
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * Deactivate the plugin.
 	 */
 	public static function deactivate(): void {
-		// Use the lifecycle manager for deactivation
-		$lifecycle = new Lifecycle();
-		$lifecycle->deactivate();
+		flush_rewrite_rules();
 	}
 }

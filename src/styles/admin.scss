@@ -8,10 +8,7 @@
 @use 'abstracts' as *;
 
 // Core imports
-// @use './core/admin/index' as *;
-
-// Components
-// @use '@styles/components/admin' as *;
+@use './core/admin/index' as *;
 
 // Vendor/Third-party
 @use 'vendor/sprites' as *;

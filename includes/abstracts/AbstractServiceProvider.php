@@ -1,29 +1,34 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Abstract Service Provider.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Abstracts;
 
+use WPPB\Core\Container;
 use WPPB\Interfaces\ServiceProviderInterface;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Abstract Service Provider
- *
- * Base class for service providers that provides common functionality
- * and implements the ServiceProviderInterface.
- *
- * @since 1.0.0
+ * AbstractServiceProvider class.
  */
 abstract class AbstractServiceProvider implements ServiceProviderInterface {
 
 	/**
-	 * Services provided by this provider
+	 * The container instance.
 	 *
-	 * @var array<string>
-	 * @since 1.0.0
+	 * @var Container
+	 */
+	protected Container $container;
+
+	/**
+	 * The list of provided services.
+	 *
+	 * @var array
 	 */
 	protected array $provides = array();
 
@@ -36,26 +41,108 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	protected bool $booted = false;
 
 	/**
-	 * Boot services after all providers have been registered
+	 * AbstractServiceProvider constructor.
 	 *
-	 * Default implementation does nothing. Override in child classes as needed.
-	 *
-	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @return void
+	 * @param Container $container The container instance.
 	 */
-	public function boot( \WPPB\Core\Container $container ): void {
-		$this->booted = true;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	/**
-	 * Get the services provided by this provider
+	 * Get the container instance.
 	 *
-	 * @since 1.0.0
-	 * @return array<string> Array of service identifiers
+	 * @return Container
 	 */
-	public function provides(): array {
+	public function get_container(): Container {
+		return $this->container;
+	}
+
+	/**
+	 * Get the list of provided services.
+	 *
+	 * @return array
+	 */
+	public function get_provides(): array {
 		return $this->provides;
+	}
+
+	/**
+	 * Set the list of provided services.
+	 *
+	 * @param array $provides The list of provided services.
+	 */
+	public function set_provides( array $provides ): void {
+		$this->provides = $provides;
+	}
+
+	/**
+	 * Check if the service provider provides a certain service.
+	 *
+	 * @param string $service The service to check.
+	 *
+	 * @return bool
+	 */
+	public function provides( string $service ): bool {
+		return in_array( $service, $this->provides, true );
+	}
+
+	/**
+	 * Register a service.
+	 *
+	 * @param string $id The service ID.
+	 * @param mixed  $service The service instance or callable.
+	 * @param bool   $shared Whether the service should be shared.
+	 */
+	public function register_service( string $id, $service, bool $shared = false ): void {
+		$this->container->add( $id, $service, $shared );
+	}
+
+	/**
+	 * Get a service.
+	 *
+	 * @param string $id The service ID.
+	 *
+	 * @return mixed
+	 */
+	public function get_service( string $id ) {
+		return $this->container->get( $id );
+	}
+
+	/**
+	 * Get a new instance of a service.
+	 *
+	 * @param string $id The service ID.
+	 *
+	 * @return mixed
+	 */
+	public function get_new_service( string $id ) {
+		return $this->container->get_new( $id );
+	}
+
+	/**
+	 * Check if a service exists.
+	 *
+	 * @param string $id The service ID.
+	 *
+	 * @return bool
+	 */
+	public function has_service( string $id ): bool {
+		return $this->container->has( $id );
+	}
+
+	/**
+	 * Register the service provider.
+	 */
+	public function register(): void {
+		// Can be implemented by child classes.
+	}
+
+	/**
+	 * Boot the service provider.
+	 */
+	public function boot(): void {
+		// Can be implemented by child classes.
 	}
 
 	/**
@@ -72,9 +159,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * Register a singleton service
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @param string $id Service identifier
-	 * @param callable|string $concrete Service implementation
+	 * @param \WPPB\Core\Container $container The DI container.
+	 * @param string               $id Service identifier.
+	 * @param callable|string      $concrete Service implementation.
 	 * @return void
 	 */
 	protected function singleton( \WPPB\Core\Container $container, string $id, $concrete ): void {
@@ -86,9 +173,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * Register a factory service
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @param string $id Service identifier
-	 * @param callable|string $concrete Service implementation
+	 * @param \WPPB\Core\Container $container The DI container.
+	 * @param string               $id Service identifier.
+	 * @param callable|string      $concrete Service implementation.
 	 * @return void
 	 */
 	protected function factory( \WPPB\Core\Container $container, string $id, $concrete ): void {
@@ -100,9 +187,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * Register an alias
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @param string $alias Alias name
-	 * @param string $id Original service identifier
+	 * @param \WPPB\Core\Container $container The DI container.
+	 * @param string               $alias Alias name.
+	 * @param string               $id Original service identifier.
 	 * @return void
 	 */
 	protected function alias( \WPPB\Core\Container $container, string $alias, string $id ): void {

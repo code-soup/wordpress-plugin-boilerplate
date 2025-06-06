@@ -1,10 +1,15 @@
 <?php
+/**
+ * Documentation trait.
+ *
+ * @package WPPB
+ */
 
 declare(strict_types=1);
 
 namespace WPPB\Traits;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -257,5 +262,14 @@ trait DocumentationTrait {
 				),
 			),
 		);
+	}
+
+	/**
+	 * Get the documentation URL.
+	 *
+	 * @return string
+	 */
+	public function get_documentation_url(): string {
+		return 'https://wordpress.org/plugins/wppb/';
 	}
 }

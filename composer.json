@@ -26,9 +26,6 @@
 		"wordpress plugin boilerplate"
 	],
 	"autoload": {
-		"files": [
-			"includes/core/Autoloader.php"
-		],
 		"psr-4": {
 			"WPPB\\Core\\": "includes/core/",
 			"WPPB\\Admin\\": "includes/admin/",

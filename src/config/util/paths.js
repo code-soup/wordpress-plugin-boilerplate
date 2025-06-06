@@ -44,26 +44,4 @@ module.exports = {
     getScriptPath: (filename) => `scripts/${filename}`,
     getStylePath: (filename) => `styles/${filename}`,
     getImagePath: (filename) => `images/${filename}`,
-    
-    // Path resolver for aliases (extends the original resolver utility)
-    resolve: (dir) => {
-        if (dir.startsWith('@')) {
-            // Handle alias-style paths
-            const aliasMap = {
-                '@utils': path.join(paths.scripts, 'util'),
-                '@styles': paths.styles,
-                '@scripts': paths.scripts,
-                '@icons': paths.icons,
-                '@images': paths.images,
-            };
-            
-            const [alias, ...segments] = dir.split('/');
-            if (aliasMap[alias]) {
-                return path.join(aliasMap[alias], ...segments);
-            }
-        }
-        
-        // Default to regular path resolution
-        return path.join(paths.config, dir);
-    }
 }; 

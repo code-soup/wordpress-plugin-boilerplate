@@ -10,12 +10,15 @@
     @if $font-size {
         font-size: calc-rem($font-size);
     }
+
     @if $line-height == 1 {
         line-height: 1;
     }
+
     @if $line-height != get-font("base-size") {
         line-height: calc-leading($font-size, $line-height);
     }
+
     @if $letter-spacing != 0 {
         letter-spacing: calc-spacing($letter-spacing);
     }
@@ -29,15 +32,15 @@
     @if $style != "normal" {
         font-style: $style;
     }
+
     @if $name {
         font-family: get-font($name);
     }
+
     @if $weight != 400 and $weight != "normal" {
         font-weight: $weight;
     }
 }
-
-/* stylelint-enable selector-no-vendor-prefix */
 
 /**
  * Links styling

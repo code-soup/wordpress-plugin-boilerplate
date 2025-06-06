@@ -2,64 +2,75 @@
  * Webpack development server configuration
  */
 
-const url = require('url');
-const config = require('./../config');
+// Note: `require('url')` is no longer needed.
 
-// Determine environment safety settings
-const isDev = process.env.NODE_ENV !== 'production';
-const httpsUrl = process.env.WP_DEV_URL && url.parse(process.env.WP_DEV_URL).protocol === 'https:';
-
-/**
- * Safer approach for development SSL
- */
-if (httpsUrl && isDev) {
-    console.warn('\x1b[33m%s\x1b[0m', 'Warning: Using HTTPS in development. For a more secure approach, consider proper certificates.');
-    // Only disable certificate validation in development
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Determine if the target WordPress dev URL is HTTPS using the modern URL API
+let targetIsHttps = false;
+if (process.env.WP_DEV_URL) {
+    try {
+        const devUrl = new URL(process.env.WP_DEV_URL);
+        targetIsHttps = devUrl.protocol === 'https:';
+    } catch {
+        console.error(`\n[Webpack Config] Error: Invalid URL provided for WP_DEV_URL: "${process.env.WP_DEV_URL}"`);
+        console.error('[Webpack Config] Please ensure it is a full URL (e.g., http://localhost:8000).\n');
+        // Assuming http and letting the proxy fail later if it's a real issue.
+        targetIsHttps = false;
+    }
 }
 
+// Define the dev server's host and port.
+// The dev server itself runs on HTTP unless configured otherwise.
+const devServerHost = 'localhost';
+const devServerPort = process.env.DEV_PROXY_PORT || 8080;
+
 module.exports = (config, env) => {
-    // Handle HTTPS certificate validation in development mode
-    if (httpsUrl && env.isDev) {
-        console.warn('\x1b[33m%s\x1b[0m', 'Warning: Using HTTPS in development. For a more secure approach, consider proper certificates.');
-        // Only disable certificate validation in development
+    // Handle self-signed certificate for the PROXY TARGET if it's HTTPS
+    if (targetIsHttps && env.isDev) {
+        console.warn('\x1b[33m%s\x1b[0m', '[Webpack DevServer] Proxying to an HTTPS target. Allowing self-signed certificates.');
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     }
 
     return {
         devServer: {
+            host: devServerHost,
+            port: devServerPort,
             hot: true,
-            port: process.env.DEV_PROXY_PORT || 8080,
             compress: true,
             allowedHosts: 'all',
             watchFiles: {
                 paths: [
                     `${config.paths.root}/templates/**/*.php`, 
                     `${config.paths.root}/includes/**/*`, 
-                    `${config.paths.src}/**/*`
+                    `${config.paths.src}/**/*`,
                 ],
                 options: {
-                    usePolling: true,
+                    usePolling: false,
                 },
             },
             client: {
                 logging: 'info',
-                overlay: false,
+                overlay: {
+                    errors: true,
+                    warnings: false,
+                },
+                // This is the key change:
+                // It tells the client-side script to connect to this specific URL for updates.
+                // The protocol is 'ws' because this dev server is running on HTTP.
+                webSocketURL: `ws://${devServerHost}:${devServerPort}/ws`,
             },
             static: {
                 directory: config.paths.dist,
                 publicPath: config.paths.publicPath,
                 serveIndex: false,
+                watch: false,
             },
-            proxy: process.env.WP_DEV_URL ? [
-                {
-                    context: ['/'],
-                    target: process.env.WP_DEV_URL,
-                    changeOrigin: true,
-                    autoRewrite: true,
-                    secure: !env.isDev, // Only validate certificates in production
-                },
-            ] : undefined,
+            proxy: process.env.WP_DEV_URL ? [{
+                context: ['/'],
+                target: process.env.WP_DEV_URL,
+                changeOrigin: true,
+                autoRewrite: true,
+                secure: !env.isDev,
+            }] : undefined,
             devMiddleware: {
                 publicPath: config.paths.publicPath,
                 serverSideRender: false,

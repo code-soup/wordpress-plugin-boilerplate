@@ -1,17 +1,20 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Core Init Class.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Core;
 
 use WPPB\Core\Container;
 use WPPB\Core\Lifecycle;
+use WPPB\Core\Hooker;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * @file
  * The core plugin class.
  *
  * This is used to define internationalization, admin-specific hooks, and
@@ -23,13 +26,18 @@ defined( 'ABSPATH' ) || exit;
 final class Init {
 
 	/**
-	 * Main plugin instance
+	 * Minimum PHP version required.
 	 *
-	 * @var self|null
-	 * @since 1.0.0
+	 * @var string
 	 */
-	private static $instance;
+	private $min_php_version = '7.4';
 
+	/**
+	 * Plugin instance.
+	 *
+	 * @var Init
+	 */
+	private static $instance = null;
 
 	/**
 	 * Define plugin constants
@@ -38,7 +46,6 @@ final class Init {
 	 * @since 1.0.0
 	 */
 	public static array $constants = array();
-
 
 	/**
 	 * The dependency injection container
@@ -50,13 +57,15 @@ final class Init {
 	protected ?Container $container = null;
 
 	/**
-	 * Service providers
+	 * List of providers.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array<\WPPB\Interfaces\ServiceProviderInterface>
+	 * @var array
 	 */
-	protected array $providers = array();
+	protected $providers = array(
+		\WPPB\Providers\CoreServiceProvider::class,
+		\WPPB\Providers\AdminServiceProvider::class,
+		\WPPB\Providers\FrontendServiceProvider::class,
+	);
 
 	/**
 	 * Plugin lifecycle manager
@@ -67,31 +76,32 @@ final class Init {
 	 */
 	protected ?Lifecycle $lifecycle = null;
 
+	/**
+	 * The Hooker instance.
+	 *
+	 * @var Hooker
+	 */
+	protected Hooker $hooker;
 
 	/**
-	 * Make constructor protected, to prevent direct instantiation
-	 *
-	 * @since 1.0.0
+	 * Class constructor.
 	 */
-	protected function __construct() {}
-
+	private function __construct() {
+		$this->container = new Container();
+		$this->hooker    = new Hooker();
+	}
 
 	/**
-	 * Main Instance.
+	 * Get the plugin instance.
 	 *
-	 * Ensures only one instance is loaded or can be loaded.
-	 *
-	 * @since 1.0.0
-	 * @return self Main instance.
+	 * @return Init
 	 */
-	public static function get_instance(): self {
+	public static function get_instance(): Init {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
-
 		return self::$instance;
 	}
-
 
 	/**
 	 * Singletons should not be cloneable.
@@ -104,7 +114,6 @@ final class Init {
 		throw new \Exception( 'Cannot clone ' . __CLASS__ );
 	}
 
-
 	/**
 	 * Singletons should not be restorable from strings.
 	 *
@@ -116,97 +125,138 @@ final class Init {
 		throw new \Exception( 'Cannot unserialize ' . __CLASS__ );
 	}
 
-
-
 	/**
-	 * Run everything on init
+	 * Initialize the plugin.
 	 *
-	 * @since 1.0.0
-	 * @return void
-	 * @throws \RuntimeException If initialization fails
+	 * @throws \Exception If the plugin is not compatible.
 	 */
 	public function init(): void {
-		try {
-			// Initialize the dependency injection container
-			$this->container = new Container();
-
-			// Initialize lifecycle manager
-			$this->lifecycle = new Lifecycle();
-
-			// Register service providers
-			$this->register_providers();
-
-			// Boot all service providers
-			$this->boot_providers();
-
-		} catch ( \Exception $e ) {
-			// Log the error and re-throw
-			error_log( 'Plugin initialization failed: ' . $e->getMessage() );
-			throw new \RuntimeException( 'Plugin initialization failed: ' . $e->getMessage(), 0, $e );
+		if ( ! $this->is_compatible() ) {
+			return;
 		}
+
+		$this->register_providers();
+		$this->boot_providers();
 	}
 
-
 	/**
-	 * Register all service providers
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * Register the service providers.
 	 */
 	private function register_providers(): void {
-		// Core services (always loaded)
-		$this->providers[] = new \WPPB\Providers\CoreServiceProvider();
-
-		// Context-specific providers
-		if ( is_admin() ) {
-			$this->providers[] = new \WPPB\Providers\AdminServiceProvider();
-		} else {
-			$this->providers[] = new \WPPB\Providers\FrontendServiceProvider();
-		}
-
-		// Register all providers with the container
-		foreach ( $this->providers as $provider ) {
-			$provider->register( $this->container );
+		foreach ( $this->providers as $provider_class ) {
+			$provider = new $provider_class( $this->container );
+			$provider->register();
 		}
 	}
 
 	/**
-	 * Boot all service providers
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * Boot the service providers.
 	 */
 	private function boot_providers(): void {
-		foreach ( $this->providers as $provider ) {
-			$provider->boot( $this->container );
+		foreach ( $this->providers as $provider_class ) {
+			$provider = $this->container->get( $provider_class );
+			if ( $provider ) {
+				$provider->boot();
+			}
 		}
 	}
 
 	/**
-	 * Get the dependency injection container
+	 * Check if the plugin is compatible with the current environment.
 	 *
-	 * @since 1.0.0
-	 * @return Container The DI container
-	 * @throws \RuntimeException If container is not initialized.
+	 * @return bool
+	 * @throws \Exception If a compatibility check fails.
+	 */
+	private function is_compatible(): bool {
+		$lifecycle = $this->container->get( 'lifecycle' );
+
+		try {
+			$lifecycle->check_php_version( $this->min_php_version );
+			$lifecycle->check_wp_version();
+			$lifecycle->check_mysql_version();
+			$lifecycle->check_required_plugins(
+				array(
+					'woocommerce' => array(
+						'name'    => 'WooCommerce',
+						'version' => '3.0',
+					),
+				)
+			);
+			return true;
+		} catch ( \Exception $e ) {
+			add_action(
+				'admin_notices',
+				function () use ( $e ) {
+					echo '<div class="notice notice-error"><p>' . esc_html( $e->getMessage() ) . '</p></div>';
+				}
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Magic method to get a service from the container.
+	 *
+	 * @param string $name The name of the service to get.
+	 *
+	 * @return mixed
+	 */
+	public function __get( string $name ) {
+		return $this->container->get( $name );
+	}
+
+	/**
+	 * Magic method to check if a service is set in the container.
+	 *
+	 * @param string $name The name of the service to check.
+	 *
+	 * @return bool
+	 */
+	public function __isset( string $name ): bool {
+		return $this->container->has( $name );
+	}
+
+	/**
+	 * Get a service from the container.
+	 *
+	 * @param string $name The name of the service to get.
+	 *
+	 * @return mixed
+	 */
+	public function get( string $name ) {
+		return $this->container->get( $name );
+	}
+
+	/**
+	 * Set a service in the container.
+	 *
+	 * @param string $name  The name of the service to set.
+	 * @param mixed  $value The service to set.
+	 */
+	public function set( string $name, $value ): void {
+		$this->container->set( $name, $value );
+	}
+
+	/**
+	 * Get the plugin container.
+	 *
+	 * @return Container
 	 */
 	public function get_container(): Container {
-		if ( null === $this->container ) {
-			throw new \RuntimeException( 'Container not initialized. Call init() first.' );
-		}
-
 		return $this->container;
 	}
 
 	/**
-	 * Get a service from the container
+	 * Set plugin constants.
 	 *
-	 * @since 1.0.0
-	 * @param string $id Service identifier
-	 * @return mixed The resolved service
-	 * @throws \RuntimeException If container is not initialized.
+	 * @param array $constants An array of constants to set.
 	 */
-	public function get( string $id ) {
-		return $this->get_container()->get( $id );
+	public function set_constants( array $constants ): void {
+		foreach ( $constants as $name => $value ) {
+			if ( ! defined( $name ) ) {
+				define( $name, $value );
+			}
+		}
 	}
 
 	/**
@@ -244,10 +294,5 @@ final class Init {
 	 */
 	public function get_assets(): \WPPB\Core\Assets {
 		return $this->get( 'assets' );
-	}
-
-
-	public function set_constants( array $constants ): void {
-		self::$constants = $constants;
 	}
 }

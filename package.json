@@ -16,6 +16,7 @@
     "bugs": {
         "url": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
     },
+    "type": "module",
     "engines": {
         "node": ">=22.0.0"
     },
@@ -32,20 +33,18 @@
         }
     ],
     "browserslist": [
-        "> 1%",
-        "last 3 versions",
-        "android 4",
-        "safari 10",
-        "not ie <= 8"
+        "> 0.5%",
+        "last 2 versions",
+        "not dead"
     ],
     "scripts": {
         "dev": "webpack serve --hot --mode development --color --config src/config/config.webpack.js",
-        "build": "webpack --mode development --progress --config src/config/config.webpack.js",
-        "build:prod": "webpack --mode production --progress --config src/config/config.webpack.js",
+        "build": "webpack --mode production --progress --config src/config/config.webpack.js",
+        "build:dev": "webpack --mode development --progress --config src/config/config.webpack.js",
         "analyze": "webpack --mode production --progress --config src/config/config.webpack.js --analyze",
         "analyze:dev": "webpack --mode development --progress --config src/config/config.webpack.js --analyze",
         "lint": "npm run -s lint:scripts && npm run -s lint:styles",
-        "lint:scripts": "eslint src/scripts src/webpack",
+        "lint:scripts": "eslint src/scripts src/config",
         "lint:styles": "stylelint \"src/styles/**/*.{css,sass,scss}\"",
         "reinit": "rimraf dist && rimraf node_modules && yarn",
         "clean": "rimraf dist"
@@ -61,10 +60,10 @@
         "eslint": "^9.28.0",
         "eslint-plugin-import": "^2.31.0",
         "eslint-webpack-plugin": "^5.0.1",
+        "globals": "^16.2.0",
         "import-glob": "^1.5.0",
         "jquery": "^3.7.1",
         "mini-css-extract-plugin": "^2.9.2",
-        "mini-svg-data-uri": "^1.4.4",
         "postcss": "^8.5.4",
         "postcss-loader": "^8.1.1",
         "postcss-preset-env": "^10.2.1",

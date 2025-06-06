@@ -1,7 +1,7 @@
 // Admin core styles
-@use '@styles/core/_reset' as *;
-@use '@styles/core/_typography' as *;
-@use '@styles/core/_layout' as *;
-@forward './_layout';
-@forward './_typography';
-@forward './_forms'; 
+@use '@styles/core/reset' as *;
+@use '@styles/core/typography' as *;
+@use '@styles/core/layout' as *;
+@forward './layout';
+@forward './typography';
+@forward './forms'; 

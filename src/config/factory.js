@@ -4,7 +4,6 @@
  */
 
 const { merge } = require('webpack-merge');
-const path = require('path');
 
 // Import utilities
 const env = require('./util/env');

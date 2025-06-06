@@ -1,6 +1,9 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Fired during plugin activation.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Core;
 
@@ -17,14 +20,9 @@ defined( 'ABSPATH' ) || exit;
 class Activator {
 
 	/**
-	 * Plugin activation hook
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * The code that runs during plugin activation.
 	 */
 	public static function activate(): void {
-		// Use the lifecycle manager for activation
-		$lifecycle = new Lifecycle();
-		$lifecycle->activate();
+		// Activation code here.
 	}
 }

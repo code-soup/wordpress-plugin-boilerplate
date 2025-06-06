@@ -41,5 +41,5 @@ module.exports = {
     isAnalyzing,
     
     // Helper for getting env-specific values
-    getEnvSpecific: (prodValue, devValue) => isProduction ? prodValue : devValue
+    getEnvSpecific: (prodValue, devValue) => isProduction ? prodValue : devValue,
 }; 

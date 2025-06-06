@@ -49,7 +49,9 @@ function readJsonFiles(dir, result = {}) {
                 const stats = fs.statSync(filePath);
                 
                 if (stats.isDirectory()) {
-                    result[file] = readJsonFiles(filePath, {});
+                    // If it's a directory, recursively call with the same result object
+                    // to ensure a flat structure of entries is built.
+                    readJsonFiles(filePath, result); // Pass 'result' to accumulate
                 } else if (stats.isFile() && path.extname(file) === '.js') {
                     const fileContent = fs.readFileSync(filePath, 'utf8');
                     
@@ -104,18 +106,12 @@ function getDynamicEntries() {
         return entryCache.entries;
     }
     
-    const entries = readJsonFiles(entryDir);
-    const entryValues = Object.values(entries);
-    
-    // Safely handle empty values array
-    const formatted = entryValues.length > 0 
-        ? Object.assign({}, ...entryValues) 
-        : {};
+    const entries = readJsonFiles(entryDir); // This now returns the flat { key: value } object
     
     // Cache the result for subsequent builds in watch mode
-    entryCache.entries = formatted;
+    entryCache.entries = entries; // Cache the correct 'entries' object
     
-    return formatted;
+    return entries; // Return the correct 'entries' object
 }
 
 // Export the function instead of immediately calling it

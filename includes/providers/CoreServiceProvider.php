@@ -1,14 +1,23 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Core Service Provider.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Providers;
 
 use WPPB\Abstracts\AbstractServiceProvider;
-use WPPB\Core\Container;
+use WPPB\Core\Assets;
+use WPPB\Core\Hooker;
+use WPPB\Core\I18n;
+use WPPB\Core\Lifecycle;
+use WPPB\Core\Core;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+/**
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
 
 /**
  * Core Service Provider
@@ -20,61 +29,39 @@ defined( 'ABSPATH' ) || exit;
 class CoreServiceProvider extends AbstractServiceProvider {
 
 	/**
+	 * The provided services.
+	 *
+	 * @var array
+	 */
+	protected array $provides = array(
+		'core',
+	);
+
+	/**
 	 * Register services with the container
 	 *
 	 * @since 1.0.0
-	 * @param Container $container The DI container
 	 * @return void
 	 */
-	public function register( Container $container ): void {
-		// Register Hooker as singleton
-		$this->singleton(
-			$container,
-			'hooker',
-			function ( Container $container ) {
-				return new \WPPB\Core\Hooker();
+	public function register(): void {
+		$this->register_service(
+			'core',
+			function () {
+				return new Core();
 			}
 		);
-
-		// Register Assets as singleton
-		$this->singleton(
-			$container,
-			'assets',
-			function ( Container $container ) {
-				return new \WPPB\Core\Assets();
-			}
-		);
-
-		// Register I18n as singleton
-		$this->singleton(
-			$container,
-			'i18n',
-			function ( Container $container ) {
-				return new \WPPB\Core\I18n();
-			}
-		);
-
-		// Register aliases for easier access
-		$this->alias( $container, 'hooks', 'hooker' );
-		$this->alias( $container, \WPPB\Core\Hooker::class, 'hooker' );
-		$this->alias( $container, \WPPB\Core\Assets::class, 'assets' );
-		$this->alias( $container, \WPPB\Core\I18n::class, 'i18n' );
 	}
 
 	/**
 	 * Boot services after all providers have been registered
 	 *
 	 * @since 1.0.0
-	 * @param Container $container The DI container
 	 * @return void
 	 */
-	public function boot( Container $container ): void {
-		parent::boot( $container );
-
-		// Boot the hooker to register all hooks
-		$hooker = $container->get( 'hooker' );
-		if ( $hooker instanceof \WPPB\Core\Hooker ) {
-			$hooker->run();
-		}
+	public function boot(): void {
+		$this->container->set( 'lifecycle', new Lifecycle() );
+		$this->container->set( 'hooker', new Hooker() );
+		$this->container->set( 'assets', new Assets( WPPB_PLUGIN_BASE_DIR . '/dist/manifest.json' ) );
+		$this->container->set( 'i18n', new I18n( 'WPPB' ) );
 	}
 }

@@ -1,93 +1,161 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Validation trait.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Traits;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+use Respect\Validation\Validator as v;
 
 /**
- * Validation methods for input sanitization and validation
- *
- * @since 1.0.0
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
+
+/**
+ * The ValidationTrait trait.
  */
 trait ValidationTrait {
+
+
 	/**
-	 * Sanitize and validate an email address
+	 * The validator instance.
 	 *
-	 * @since 1.0.0
-	 * @param string $email Email address to validate
-	 * @return string|false Sanitized email or false if invalid
+	 * @var v
 	 */
-	private function validate_email( string $email ) {
-		$email = sanitize_email( $email );
-		return is_email( $email ) ? $email : false;
+	protected v $validator;
+
+	/**
+	 * ValidationTrait constructor.
+	 */
+	public function __construct() {
+		$this->validator = new v();
 	}
 
 	/**
-	 * Sanitize and validate a URL
+	 * Get the validator instance.
 	 *
-	 * @since 1.0.0
-	 * @param string $url URL to validate
-	 * @return string Sanitized URL
+	 * @return v
 	 */
-	private function validate_url( string $url ): string {
-		return esc_url_raw( $url );
+	public function get_validator(): v {
+		return $this->validator;
 	}
 
 	/**
-	 * Sanitize text input
+	 * Set the validator instance.
 	 *
-	 * @since 1.0.0
-	 * @param string $text Text to sanitize
-	 * @return string Sanitized text
+	 * @param v $validator The validator instance.
 	 */
-	private function sanitize_text( string $text ): string {
-		return sanitize_text_field( $text );
+	public function set_validator( v $validator ): void {
+		$this->validator = $validator;
 	}
 
 	/**
-	 * Sanitize textarea input
+	 * Validate a value against a rule.
 	 *
-	 * @since 1.0.0
-	 * @param string $text Text to sanitize
-	 * @return string Sanitized text
+	 * @param mixed  $value The value to validate.
+	 * @param string $rule The rule to validate against.
+	 *
+	 * @return bool
 	 */
-	private function sanitize_textarea( string $text ): string {
-		return sanitize_textarea_field( $text );
+	public function validate( $value, string $rule ): bool {
+		return $this->validator->is( $rule, $value );
 	}
 
 	/**
-	 * Validate and sanitize an integer
+	 * Validate an array of values against an array of rules.
 	 *
-	 * @since 1.0.0
-	 * @param mixed $number Number to validate
-	 * @return int Sanitized integer
+	 * @param array $values The values to validate.
+	 * @param array $rules The rules to validate against.
+	 *
+	 * @return bool
 	 */
-	private function validate_int( $number ): int {
-		return intval( $number );
+	public function validate_array( array $values, array $rules ): bool {
+		foreach ( $rules as $field => $rule ) {
+			if ( ! isset( $values[ $field ] ) || ! $this->validate( $values[ $field ], $rule ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
-	 * Validate and sanitize a float
+	 * Validate a value is not empty.
 	 *
-	 * @since 1.0.0
-	 * @param mixed $number Number to validate
-	 * @return float Sanitized float
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
 	 */
-	private function validate_float( $number ): float {
-		return floatval( $number );
+	public function is_not_empty( $value ): bool {
+		return $this->validate( $value, 'notEmpty' );
 	}
 
 	/**
-	 * Validate a boolean value
+	 * Validate a value is a string.
 	 *
-	 * @since 1.0.0
-	 * @param mixed $value Value to validate
-	 * @return bool Validated boolean
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
 	 */
-	private function validate_bool( $value ): bool {
-		return (bool) $value;
+	public function is_string( $value ): bool {
+		return $this->validate( $value, 'stringType' );
+	}
+
+	/**
+	 * Validate a value is an integer.
+	 *
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
+	 */
+	public function is_int( $value ): bool {
+		return $this->validate( $value, 'intType' );
+	}
+
+	/**
+	 * Validate a value is a float.
+	 *
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
+	 */
+	public function is_float( $value ): bool {
+		return $this->validate( $value, 'floatType' );
+	}
+
+	/**
+	 * Validate a value is a boolean.
+	 *
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
+	 */
+	public function is_bool( $value ): bool {
+		return $this->validate( $value, 'boolType' );
+	}
+
+	/**
+	 * Validate a value is an array.
+	 *
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
+	 */
+	public function is_array( $value ): bool {
+		return $this->validate( $value, 'arrayType' );
+	}
+
+	/**
+	 * Validate a value is an object.
+	 *
+	 * @param mixed $value The value to validate.
+	 *
+	 * @return bool
+	 */
+	public function is_object( $value ): bool {
+		return $this->validate( $value, 'objectType' );
 	}
 }

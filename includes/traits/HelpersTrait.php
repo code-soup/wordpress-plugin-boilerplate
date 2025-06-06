@@ -1,8 +1,15 @@
-<?php declare( strict_types=1 );
+<?php
+/**
+ * Helpers trait.
+ *
+ * @package WPPB
+ */
+
+declare( strict_types=1 );
 
 namespace WPPB\Traits;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -11,6 +18,81 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  */
 trait HelpersTrait {
+
+	/**
+	 * The instance.
+	 *
+	 * @var self
+	 */
+	protected static $instance;
+
+	/**
+	 * Get the instance.
+	 *
+	 * @return self
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Get the plugin version.
+	 *
+	 * @return string
+	 */
+	public function get_version(): string {
+		return '1.0.0';
+	}
+
+	/**
+	 * Get the plugin name.
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return 'WordPress Plugin Boilerplate';
+	}
+
+	/**
+	 * Get the plugin slug.
+	 *
+	 * @param bool $is_dashed Whether to return the slug as dashed.
+	 * @return string
+	 */
+	public function get_slug( bool $is_dashed = false ): string {
+		return $is_dashed ? 'wordpress-plugin-boilerplate' : 'wordpress_plugin_boilerplate';
+	}
+
+	/**
+	 * Get the plugin path.
+	 *
+	 * @return string
+	 */
+	public function get_path(): string {
+		return plugin_dir_path( __DIR__ );
+	}
+
+	/**
+	 * Get the plugin URL.
+	 *
+	 * @return string
+	 */
+	public function get_url(): string {
+		return plugin_dir_url( __DIR__ );
+	}
+
+	/**
+	 * Get the plugin basename.
+	 *
+	 * @return string
+	 */
+	public function get_basename(): string {
+		return plugin_basename( __DIR__ );
+	}
 
 	/**
 	 * Return absolute path to plugin dir
@@ -89,13 +171,15 @@ trait HelpersTrait {
 	 *
 	 * @since 1.0.0
 	 * @param string $append Optional string to append to the ID.
+	 * @param bool   $is_dashed Whether to return dashed or underscored string.
 	 * @return string Plugin ID with optional appended string.
 	 */
 	private function get_plugin_id( string $append = '', bool $is_dashed = true ): string {
 		$dashed = sanitize_title( $this->get_constant( 'PLUGIN_NAME' ) . $append );
 
-		if ( $is_dashed )
+		if ( $is_dashed ) {
 			return $dashed;
+		}
 
 		return str_replace( '-', '_', $dashed );
 	}
@@ -112,19 +196,14 @@ trait HelpersTrait {
 		$constants = \WPPB\Core\Init::$constants;
 		$name      = trim( strtoupper( $key ) );
 
-		// Check if constant is defined first
+		// Check if constant is defined first.
 		if ( ! isset( $constants[ $name ] ) ) {
-			// Force string to avoid compiler errors
-			$to_string = print_r( $name, true );
 
-			// Log to error for debugging
-			$this->log( "Invalid constant requested: $to_string" );
-
-			// Exit
+			// Exit.
 			return false;
 		}
 
-		// Return value by key
+		// Return value by key.
 		return $constants[ $name ];
 	}
 
@@ -152,14 +231,86 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Save something to WordPress debug.log
-	 * Useful for debugging your code, this method will print_r any variable into log
+	 * Sanitize a string.
 	 *
-	 * @since 1.0.0
-	 * @param mixed $variable Variable to log.
-	 * @return void
+	 * @param string $value The string to sanitize.
+	 * @return string
 	 */
-	private function log( $variable ): void {
-		error_log( print_r( $variable, true ) );
+	public function sanitize_string( string $value ): string {
+		return sanitize_text_field( $value );
+	}
+
+	/**
+	 * Sanitize an array.
+	 *
+	 * @param array $value The array to sanitize.
+	 * @return array
+	 */
+	public function sanitize_array( array $value ): array {
+		return array_map( array( $this, 'sanitize_string' ), $value );
+	}
+
+	/**
+	 * Sanitize an email.
+	 *
+	 * @param string $value The email to sanitize.
+	 * @return string
+	 */
+	public function sanitize_email( string $value ): string {
+		return sanitize_email( $value );
+	}
+
+	/**
+	 * Sanitize a URL.
+	 *
+	 * @param string $value The URL to sanitize.
+	 * @return string
+	 */
+	public function sanitize_url( string $value ): string {
+		return esc_url_raw( $value );
+	}
+
+	/**
+	 * Sanitize a file name.
+	 *
+	 * @param string $value The file name to sanitize.
+	 * @return string
+	 */
+	public function sanitize_file_name( string $value ): string {
+		return sanitize_file_name( $value );
+	}
+
+	/**
+	 * Sanitize a class name.
+	 *
+	 * @param string $value The class name to sanitize.
+	 * @return string
+	 */
+	public function sanitize_class_name( string $value ): string {
+		return sanitize_html_class( $value );
+	}
+
+	/**
+	 * Sanitize a key.
+	 *
+	 * @param string $value The key to sanitize.
+	 * @return string
+	 */
+	public function sanitize_key( string $value ): string {
+		return sanitize_key( $value );
+	}
+
+	/**
+	 * Convert a string to camel case.
+	 *
+	 * @param string $input_string The string to convert.
+	 * @param bool   $is_dashed Whether the string is dashed.
+	 * @return string
+	 */
+	public function to_camel_case( string $input_string, bool $is_dashed = false ): string {
+		if ( $is_dashed ) {
+			$input_string = str_replace( '-', '_', $input_string );
+		}
+		return lcfirst( str_replace( ' ', '', ucwords( str_replace( '_', ' ', $input_string ) ) ) );
 	}
 }

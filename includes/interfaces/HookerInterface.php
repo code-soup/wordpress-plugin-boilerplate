@@ -1,33 +1,44 @@
 <?php
+/**
+ * Hooker Interface.
+ *
+ * @package WPPB
+ */
 
 declare(strict_types=1);
 
 namespace WPPB\Interfaces;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Interface for the Hooker class.
+ * Hooker Interface.
  *
- * Defines the methods that must be implemented by any class that handles
- * WordPress hooks (actions and filters).
- *
- * @since 1.0.0
+ * @package WPPB
  */
 interface HookerInterface {
 	/**
-	 * Add a new action to the collection to be registered with WordPress.
+	 * Add a WordPress action.
 	 *
-	 * @since 1.0.0
-	 * @param string $hook             The name of the WordPress action that is being registered.
-	 * @param object $component        A reference to the instance of the object on which the action is defined.
-	 * @param string $callback         The name of the function definition on the $component.
-	 * @param int    $priority         Optional. The priority at which the function should be fired. Default is 10.
-	 * @param int    $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
-	 * @return void
+	 * @param string   $hook          The name of the action to add.
+	 * @param callable $callback      The callback to be executed.
+	 * @param int      $priority      Optional. Used to specify the order in which the functions
+	 *                                associated with a particular action are executed. Default 10.
+	 * @param int      $accepted_args Optional. The number of arguments the function accepts. Default 1.
 	 */
-	public function add_action( string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1 ): void;
+	public function add_action( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void;
+
+	/**
+	 * Add a WordPress filter.
+	 *
+	 * @param string   $hook          The name of the filter to add.
+	 * @param callable $callback      The callback to be executed.
+	 * @param int      $priority      Optional. Used to specify the order in which the functions
+	 *                                associated with a particular action are executed. Default 10.
+	 * @param int      $accepted_args Optional. The number of arguments the function accepts. Default 1.
+	 */
+	public function add_filter( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void;
 
 	/**
 	 * Add array of actions at once
@@ -37,19 +48,6 @@ interface HookerInterface {
 	 * @return void
 	 */
 	public function add_actions( array $actions = array() ): void;
-
-	/**
-	 * Add a new filter to the collection to be registered with WordPress.
-	 *
-	 * @since 1.0.0
-	 * @param string $hook             The name of the WordPress filter that is being registered.
-	 * @param object $component        A reference to the instance of the object on which the filter is defined.
-	 * @param string $callback         The name of the function definition on the $component.
-	 * @param int    $priority         Optional. The priority at which the function should be fired. Default is 10.
-	 * @param int    $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
-	 * @return void
-	 */
-	public function add_filter( string $hook, object $component, string $callback = '', int $priority = 10, int $accepted_args = 1 ): void;
 
 	/**
 	 * Add array of filters at once

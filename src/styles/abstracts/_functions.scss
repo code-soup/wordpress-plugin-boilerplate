@@ -1,13 +1,16 @@
 /**
  * Get breakpoint size from $breakpoints map
  */
+@use "sass:map";
+@use "sass:math";
 
 @function get-bp($key) {
-    @if map-has-key($breakpoints, $key) {
-        @return map-get($breakpoints, $key);
-    }
-    @warn "`# {$key}` not defined in $breakpoints.";
-    @return null;
+	@if map.has-key($breakpoints, $key) {
+		@return map.get($breakpoints, $key);
+	}
+
+	@warn "`# {$key}` not defined in $breakpoints.";
+	@return null;
 }
 
 /**
@@ -15,11 +18,12 @@
  */
 
 @function get-color($key) {
-    @if map-has-key($colors, $key) {
-        @return map-get($colors, $key);
-    }
-    @warn "`# {$key}` not defined in $colors, please add color to styles/_utils/variables";
-    @return null;
+	@if map.has-key($colors, $key) {
+		@return map.get($colors, $key);
+	}
+
+	@warn "`# {$key}` not defined in $colors, please add color to styles/_utils/variables";
+	@return null;
 }
 
 /**
@@ -27,11 +31,12 @@
  */
 
 @function get-font($name) {
-    @if map-has-key($fonts, $name) {
-        @return map-get($fonts, $name);
-    }
-    @warn "`# {$key}` not defined in $fonts, please add color to styles/_utils/variables";
-    @return null;
+	@if map.has-key($fonts, $name) {
+		@return map.get($fonts, $name);
+	}
+
+	@warn "`# {$key}` not defined in $fonts, please add color to styles/_utils/variables";
+	@return null;
 }
 
 /**
@@ -39,11 +44,12 @@
  */
 
 @function get-option($name) {
-    @if map-has-key($grid, $name) {
-        @return map-get($grid, $name);
-    }
-    @warn "`# {$key}` not defined in $grid, please add color to styles/_utils/variables";
-    @return null;
+	@if map.has-key($grid, $name) {
+		@return map.get($grid, $name);
+	}
+
+	@warn "`# {$key}` not defined in $grid, please add color to styles/_utils/variables";
+	@return null;
 }
 
 /**
@@ -55,13 +61,14 @@
  * @return {int}            line-height in %
  */
 
-@function calc-leading($font-size, $leading)
-{
-    $lh: (($leading / 2) + $font-size);
-    @if $lh < 100 {
-        $lh: $lh + 100;
-    }
-    @return (($leading / $font-size) * 100) * 1%;
+@function calc-leading($font-size, $leading) {
+	$lh: (($leading / 2) + $font-size);
+
+	@if $lh < 100 {
+		$lh: $lh + 100;
+	}
+
+	@return (($leading / $font-size) * 100) * 1%;
 }
 
 /**
@@ -73,7 +80,7 @@
  */
 
 @function calc-spacing($spacing) {
-    @return ($spacing / 1000) * 1rem;
+	@return ($spacing / 1000) * 1rem;
 }
 
 /**
@@ -81,7 +88,7 @@
  */
 
 @function calc-rem($pixels, $context: get-font("base-size")) {
-    @return #{$pixels / $context}rem;
+	@return math.div($pixels, $context) * 1rem;
 }
 
 /**
@@ -95,8 +102,9 @@
  */
 
 @function span($span, $grid-columns: get-option("columns")) {
-    $column: 100 / $grid-columns;
-    @return percentage($span * $column) / 100;
+	$column: 100 / $grid-columns;
+
+	@return math.percentage(math.div($span * $column, 100));
 }
 
 /**
@@ -104,9 +112,11 @@
  */
 
 @function gutter($half: false) {
-    $gutter: get-option("gutter");
-    @if $half == true {
-        @return $gutter / 2;
-    }
-    @return $gutter;
+	$gutter: get-option("gutter");
+
+	@if $half == true {
+		@return math.div($gutter, 2);
+	}
+
+	@return $gutter;
 }

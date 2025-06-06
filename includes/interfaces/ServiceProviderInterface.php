@@ -1,44 +1,33 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Service Provider Interface.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Interfaces;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+use WPPB\Core\Container;
 
 /**
- * Service Provider Interface
- *
- * Contract for service providers that register services with the DI container.
- *
- * @since 1.0.0
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
+
+/**
+ * The ServiceProviderInterface interface.
  */
 interface ServiceProviderInterface {
 
 	/**
-	 * Register services with the container
-	 *
-	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @return void
+	 * Register the service provider.
 	 */
-	public function register( \WPPB\Core\Container $container ): void;
+	public function register(): void;
 
 	/**
-	 * Boot services after all providers have been registered
+	 * Get the container.
 	 *
-	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container
-	 * @return void
+	 * @return Container
 	 */
-	public function boot( \WPPB\Core\Container $container ): void;
-
-	/**
-	 * Get the services provided by this provider
-	 *
-	 * @since 1.0.0
-	 * @return array<string> Array of service identifiers
-	 */
-	public function provides(): array;
-} 
+	public function get_container(): Container;
+}

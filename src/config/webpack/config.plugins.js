@@ -52,14 +52,14 @@ module.exports = (config, env) => {
                             title: false,
                         },
                     },
-                })
-            )
+                }),
+            ),
         },
         
         // Manifest plugin - only in production
         {
             condition: env.isProduction,
-            factory: () => new WebpackManifestPlugin()
+            factory: () => new WebpackManifestPlugin(),
         },
         
         // ESLint plugin - only when running lint commands
@@ -70,16 +70,16 @@ module.exports = (config, env) => {
                 emitWarning: !env.isProduction,
                 failOnError: env.isProduction,
                 context: config.paths.src,
-            })
+            }),
         },
         
-        // StyleLint plugin - only when running style lint commands
+        // StyleLint plugin - only when style lint commands
         {
             condition: env.isLintingStyles,
             factory: () => new StyleLintPlugin({
                 failOnError: env.isProduction,
                 syntax: "scss",
-            })
+            }),
         },
         
         // Bundle analyzer - only when analyzing
@@ -91,8 +91,8 @@ module.exports = (config, env) => {
                 openAnalyzer: true,
                 generateStatsFile: !!process.env.CI,
                 statsFilename: 'stats.json',
-            })
-        }
+            }),
+        },
     ]);
     
     // Combine all plugins

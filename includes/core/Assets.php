@@ -1,17 +1,21 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Assets class for managing scripts and styles.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Core;
 
 use WPPB\Interfaces\AssetsInterface;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+/**
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
 
 /**
- * @file
- * Get paths for assets
+ * Get paths for assets.
  *
  * @since 1.0.0
  */
@@ -19,15 +23,19 @@ class Assets implements AssetsInterface {
 
 	use \WPPB\Traits\HelpersTrait;
 
+	/**
+	 * The manifest file path.
+	 *
+	 * @var string
+	 */
+	private $manifest_path;
 
 	/**
-	 * Manifest file object containing list of all hashed assets
+	 * The manifest data.
 	 *
-	 * @var array<string, string>
-	 * @since 1.0.0
+	 * @var array
 	 */
-	private array $manifest = array();
-
+	private $manifest;
 
 	/**
 	 * URI to theme 'dist' folder
@@ -37,82 +45,93 @@ class Assets implements AssetsInterface {
 	 */
 	private string $dist_uri;
 
+	/**
+	 * The assets instance.
+	 *
+	 * @var array
+	 */
+	public array $assets;
 
 	/**
-	 * Initiate
-	 *
-	 * @since 1.0.0
-	 * @throws \RuntimeException If manifest cannot be loaded.
+	 * Assets constructor.
 	 */
 	public function __construct() {
+		$this->assets   = array(
+			'scripts' => array(),
+			'styles'  => array(),
+		);
 		$this->dist_uri = $this->get_plugin_dir_url( 'dist' );
+	}
+
+	/**
+	 * Initialize the assets.
+	 */
+	public function init(): void {
 		$this->load_manifest();
 	}
 
 	/**
-	 * Load the assets manifest with caching
+	 * Load the asset manifest.
 	 *
-	 * @since 1.0.0
-	 * @return void
-	 * @throws \RuntimeException If manifest cannot be loaded.
+	 * @throws \Exception If the manifest file cannot be loaded or decoded.
 	 */
 	private function load_manifest(): void {
-		// Try to get cached manifest first
-		$cache_key       = 'wppb_assets_manifest';
-		$cached_manifest = get_transient( $cache_key );
-
-		if ( false !== $cached_manifest && is_array( $cached_manifest ) ) {
-			$this->manifest = $cached_manifest;
-			return;
+		if ( ! file_exists( $this->manifest_path ) ) {
+			throw new \Exception( 'Asset manifest not found.' );
 		}
 
-		$manifest_path = $this->get_plugin_dir_path( '/dist/manifest.json' );
+		$manifest_json = file_get_contents( $this->manifest_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$manifest      = json_decode( $manifest_json, true );
 
-		// Check if manifest file exists
-		if ( ! file_exists( $manifest_path ) ) {
-			$this->manifest = array();
-			return;
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			throw new \Exception( 'Error decoding asset manifest: ' . esc_html( json_last_error_msg() ) );
 		}
 
-		// Load manifest content
-		$manifest_content = file_get_contents( $manifest_path );
-
-		if ( false === $manifest_content ) {
-			throw new \RuntimeException( 'Failed to read assets manifest file.' );
-		}
-
-		$decoded_manifest = json_decode( $manifest_content, true );
-
-		if ( JSON_ERROR_NONE !== json_last_error() ) {
-			throw new \RuntimeException( 'Invalid JSON in assets manifest: ' . json_last_error_msg() );
-		}
-
-		$this->manifest = is_array( $decoded_manifest ) ? $decoded_manifest : array();
-
-		// Cache the manifest for 1 hour
-		set_transient( $cache_key, $this->manifest, HOUR_IN_SECONDS );
+		$this->manifest = $manifest;
 	}
 
+	/**
+	 * Get the URL of an asset from the manifest.
+	 *
+	 * @param string $asset The name of the asset.
+	 *
+	 * @return string The asset URL.
+	 * @throws \Exception If the asset is not found in the manifest.
+	 */
+	public function get_asset_url( string $asset ): string {
+		if ( ! isset( $this->manifest[ $asset ] ) ) {
+			throw new \Exception( esc_html( "Asset '{$asset}' not found in manifest." ) );
+		}
+		return $this->manifest[ $asset ];
+	}
+
+	/**
+	 * Get the path of an asset from the manifest.
+	 *
+	 * @param string $asset The name of the asset.
+	 *
+	 * @return string The asset path.
+	 */
+	public function get_asset_path( string $asset ): string {
+		return str_replace( home_url(), ABSPATH, $this->get_asset_url( $asset ) );
+	}
 
 	/**
 	 * Get full URI to single asset
 	 *
 	 * @since 1.0.0
-	 * @param  string $filename File name
+	 * @param  string $filename File name.
 	 * @return string           URI to resource
 	 */
 	public function get( string $filename = '' ): string {
-
 		return $this->locate( $filename );
 	}
-
-
 
 	/**
 	 * Fix URL for requested files
 	 *
 	 * @since 1.0.0
-	 * @param  string $filename Requested asset
+	 * @param  string $filename Requested asset.
 	 * @return string           URL to the asset
 	 */
 	private function locate( string $filename = '' ): string {
@@ -133,5 +152,55 @@ class Assets implements AssetsInterface {
 
 		// Return default file location.
 		return $this->join_path( $this->dist_uri, $filename );
+	}
+
+	/**
+	 * Enqueue scripts.
+	 */
+	public function enqueue_scripts(): void {
+		wp_enqueue_script( 'WPPB-admin', WPPB_URL . 'build/admin.js', array(), WPPB_VERSION, true );
+	}
+
+	/**
+	 * Enqueue styles.
+	 */
+	public function enqueue_styles(): void {
+		wp_enqueue_style( 'WPPB-admin', WPPB_URL . 'build/admin.css', array(), WPPB_VERSION );
+	}
+
+	/**
+	 * Get the list of scripts.
+	 *
+	 * @return array
+	 */
+	public function get_scripts(): array {
+		return $this->assets['scripts'];
+	}
+
+	/**
+	 * Get the list of styles.
+	 *
+	 * @return array
+	 */
+	public function get_styles(): array {
+		return $this->assets['styles'];
+	}
+
+	/**
+	 * Set the list of scripts.
+	 *
+	 * @param array $scripts The list of scripts.
+	 */
+	public function set_scripts( array $scripts ): void {
+		$this->assets['scripts'] = $scripts;
+	}
+
+	/**
+	 * Set the list of styles.
+	 *
+	 * @param array $styles The list of styles.
+	 */
+	public function set_styles( array $styles ): void {
+		$this->assets['styles'] = $styles;
 	}
 }

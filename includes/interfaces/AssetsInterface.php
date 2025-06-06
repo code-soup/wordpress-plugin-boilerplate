@@ -1,27 +1,36 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Assets Interface.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB\Interfaces;
 
-// Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+/**
+ * If this file is called directly, abort.
+ */
+defined( 'ABSPATH' ) || die;
 
 /**
- * Interface for the Assets class.
- *
- * Defines the methods that must be implemented by any class that handles
- * plugin assets (JS, CSS, images, etc.).
- *
- * @since 1.0.0
+ * The AssetsInterface interface.
  */
 interface AssetsInterface {
 	/**
-	 * Get full URI to single asset
+	 * Get the URL of an asset.
 	 *
-	 * @since 1.0.0
-	 * @param string $filename File name
-	 * @return string URI to resource
+	 * @param string $asset The name of the asset.
+	 * @return string The URL of the asset.
 	 */
-	public function get( string $filename = '' ): string;
+	public function get_asset_url( string $asset ): string;
+
+	/**
+	 * Enqueue scripts.
+	 */
+	public function enqueue_scripts(): void;
+
+	/**
+	 * Enqueue styles.
+	 */
+	public function enqueue_styles(): void;
 }

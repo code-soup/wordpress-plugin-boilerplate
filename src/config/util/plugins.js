@@ -35,5 +35,5 @@ const lazyLoadPlugin = (pluginModule, configFn) => {
 
 module.exports = {
     conditionalPlugins,
-    lazyLoadPlugin
+    lazyLoadPlugin,
 }; 

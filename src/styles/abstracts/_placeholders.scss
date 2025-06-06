@@ -2,12 +2,12 @@
  * Screen reader text
  */
 %sr-only {
+    position: absolute;
     top: auto;
     left: -10000rem;
-    clip: rect(1px 1px 1px 1px);
-    clip: rect(1px, 1px, 1px, 1px);
     width: 1px;
     height: 1px;
-    position: absolute;
     overflow: hidden;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
 }

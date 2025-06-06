@@ -1,11 +1,8 @@
 /**
  * Asset (images, fonts, etc.) processing configuration
  */
-
-const svgToMiniDataURI = require('mini-svg-data-uri');
-
-module.exports = (config, env) => ({
-    test: /\.(ttf|otf|eot|woff2?|png|jpe?g|svg|gif|ico)$/,
+module.exports = () => ({
+    test: /\.(ttf|otf|eot|woff2?|png|jpe?g|webp|svg|gif|ico)$/,
     type: 'asset',
     parser: {
         dataUrlCondition: {
@@ -13,12 +10,7 @@ module.exports = (config, env) => ({
         },
     },
     generator: {
+        // Define the output filename for assets that are emitted as files.
         filename: 'static/[name].[contenthash][ext]',
-        dataUrl: (content) => {
-            content = content.toString();
-            return content.includes('<svg') 
-                ? svgToMiniDataURI(content)
-                : content;
-        },
     },
 }); 

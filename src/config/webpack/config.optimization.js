@@ -12,21 +12,24 @@ const TerserPlugin = require('terser-webpack-plugin');
 function normalizeName(name) {
     return name
         .replace(/node_modules/g, 'nodemodules')
-        .replace(/[\-_.|]+/g, ' ')
+        .replace(/[-_.|]+/g, ' ')
         .replace(/\b(nodemodules|js|modules|es)\b/g, '')
         .trim()
         .replace(/ +/g, '-');
 }
 
 module.exports = (config, env) => ({
-    // Enable tree shaking
+    // Enable tree shaking and module concatenation in production
     usedExports: true,
-    
-    // Enable module concatenation for more efficient bundling (production only)
     concatenateModules: env.isProduction,
-    
-    // Ensure side effects are properly handled
     sideEffects: true,
+
+    // Set chunk and module IDs to be deterministic in production for long-term caching
+    chunkIds: env.isProduction ? 'deterministic' : 'named',
+    moduleIds: env.isProduction ? 'deterministic' : 'named',
+
+    // Extract webpack runtime into a single chunk for better caching
+    runtimeChunk: 'single',
     
     // Code splitting configuration
     splitChunks: {
@@ -39,12 +42,12 @@ module.exports = (config, env) => ({
                 test: /[\\/]node_modules[\\/]/,
                 priority: -10,
                 reuseExistingChunk: true,
-                name(module, chunks, cacheGroupKey) {
+                name(module) {
                     const moduleFileName = module
                         .identifier()
                         .split('/')
                         .reduceRight((item) => item);
-                    return 'vendor/' + normalizeName(moduleFileName.replace(/[\/]/g, '-'));
+                    return 'vendor/' + normalizeName(moduleFileName.replace(/[/]/g, '-'));
                 },
             },
             commons: {
@@ -57,15 +60,17 @@ module.exports = (config, env) => ({
         },
     },
     
-    // Minification configuration
-    minimize: true,
+    // Minification configuration (production only)
+    minimize: env.isProduction,
     minimizer: [
-        new TerserPlugin({
-            parallel: true,
-            terserOptions: {
-                compress: true,
-                safari10: true,
-            },
-        }),
+        ...(env.isProduction ? [
+            new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                    compress: true,
+                    safari10: true,
+                },
+            }),
+        ] : []),
     ],
 });
