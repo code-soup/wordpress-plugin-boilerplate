@@ -121,6 +121,10 @@ For more detailed information on specific topics, please refer to the documentat
 -   **[SCSS - Custom Fonts](./docs/SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.
 -   **[SCSS - SVG Sprites](./docs/SCSS-Spritemap.md)**: How to use the automated SVG spritemap generator.
 
+## Issues
+
+If you encounter a bug or have a feature request, please [submit an issue on GitHub](https://github.com/code-soup/wordpress-plugin-boilerplate/issues). When creating an issue, provide a clear, descriptive title and include as much detail as possible to help us understand and reproduce the problem.
+
 ## License
 
 This project is licensed under the [GPLv3 License](https://www.gnu.org/licenses/gpl-3.0.txt).
