@@ -50,7 +50,7 @@ function createWebpackConfig(options = {}) {
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [__filename, pathUtils.fromConfig()],
+                config: [__filename],
             },
             cacheDirectory: pathUtils.paths.cache,
             name: `${env.isProduction ? 'prod' : 'dev'}-cache`,

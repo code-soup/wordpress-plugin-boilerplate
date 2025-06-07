@@ -120,6 +120,7 @@ For more detailed information on specific topics, please refer to the documentat
 -   **[SCSS - General Usage](./docs/SCSS-General.md)**: An overview of the Sass setup, including path resolution and available mixins.
 -   **[SCSS - Custom Fonts](./docs/SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.
 -   **[SCSS - SVG Sprites](./docs/SCSS-Spritemap.md)**: How to use the automated SVG spritemap generator.
+-   **[AI Development Rules](./docs/AI-Rules.md)**: Guidelines for AI-assisted development with this boilerplate.
 
 ## Issues
 

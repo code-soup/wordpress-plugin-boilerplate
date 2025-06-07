@@ -58,6 +58,7 @@
         "css-minimizer-webpack-plugin": "^7.0.2",
         "dotenv": "^16.5.0",
         "eslint": "^9.28.0",
+        "eslint-plugin-import": "^2.31.0",
         "eslint-webpack-plugin": "^5.0.1",
         "globals": "^16.2.0",
         "import-glob": "^1.5.0",
