@@ -1,6 +1,19 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [2.0.0] - 2025-06-07
+
+### Added
+- **Dependency Injection Container**: Implemented a DI container to manage service registration and resolution.
+- **Service Provider Architecture**: Added a service provider system to organize and bootstrap plugin functionality.
+
+
+### Changed
+- **PHP Architecture Overhaul**: The plugin's core initialization is now driven by the DI container and service providers, resolving numerous stability issues and memory leaks.
+- **Webpack Configuration Rework**: The webpack configuration (`src/config/`) has been refactored to use ES Modules, and performance has been optimized by caching environment checks and improving file-watching rules.
+
+
 ## [1.0.3] - 2022-04-30
 ### Update
 - Dependencies update to latest versions
