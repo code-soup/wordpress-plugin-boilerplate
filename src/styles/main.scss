@@ -1,1 +1,12 @@
-@import '_utils/_require-dev-build';
+/**
+ * Main Stylesheet
+ * 
+ * This is the main entry point for the public-facing styles.
+ */
+
+// Abstract imports (variables, functions, mixins)
+@use '@/styles/abstracts' as *;
+
+// Core imports
+@use '@/styles/core' as *;
+@use '@/styles/vendor/sprites' as *;

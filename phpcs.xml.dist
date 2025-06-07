@@ -21,7 +21,7 @@
 	<arg value="ps"/>
 
     <!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
-    <arg name="cache" value=".cache/phpcs.json"/>
+    <arg name="cache" value=".phpcs.cache"/>
 
     <!-- Set the memory limit to 256M.
         For most standard PHP configurations, this means the memory limit will temporarily be raised.
@@ -57,6 +57,8 @@
 
 	<rule ref="WordPress">
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed"/>
 	</rule>
 
 	<!--
@@ -69,7 +71,9 @@
 		 Multiple valid text domains can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="WPPB"/>
+			<property name="text_domain" type="array">
+				<element value="__PLUGIN_TEXTDOMAIN__"/>
+			</property>
 		</properties>
 	</rule>
 
@@ -93,7 +97,9 @@
 		 Multiple valid prefixes can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
-			<property name="prefixes" type="array" value="WPPB" />
+			<property name="prefixes" type="array">
+				<element value="WPPB"/>
+			</property>
 		</properties>
 	</rule>
 
@@ -103,7 +109,7 @@
 	#############################################################################
 	-->
 
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="8.1-"/>
 	<rule ref="PHPCompatibilityWP"/>
 
 </ruleset>

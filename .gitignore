@@ -19,6 +19,8 @@ Thumbs.db
 .project
 .settings
 .tmproj
+.vscode
+.cursor
 *.esproj
 ._*
 .Spotlight-V100
@@ -48,6 +50,9 @@ bower_components
 node_modules
 _test-src
 dist
+_local
+_remote
+.cursor
 
 # Logs
 logs
@@ -108,4 +113,12 @@ package-lock.json
 
 # dotenv environment variables file
 .env
+.env.*
 .env.local
+
+# PHP CodeSniffer cache
+.phpcs.cache
+
+# Distribution archives
+*.zip
+*.tgz

@@ -1,33 +1,46 @@
 <?php
+/**
+ * Plugin main file.
+ *
+ * @package WPPB
+ */
 
 namespace WPPB;
 
 // If this file is called directly, abort.
-defined('WPINC') || die;
+defined( 'ABSPATH' ) || die;
 
-// Autoload all classes via composer.
-require "vendor/autoload.php";
+// Load composer autoloader for dependencies.
+require 'vendor/autoload.php';
+
+use WPPB\Core\Plugin;
 
 /**
- * Make main plugin class available via global function call.
+ * Begins execution of the plugin.
  *
- * @since    1.0.0
+ * @return Plugin
  */
-function plugin_instance() {
+function plugin(): Plugin {
+	static $instance = null;
 
-    return \WPPB\Init::get_instance();
+	if ( is_null( $instance ) ) {
+		$config = array(
+			'MIN_WP_VERSION_SUPPORT_TERMS' => '__PLUGIN_MIN_WP_VERSION__',
+			'MIN_WP_VERSION'               => '__PLUGIN_MIN_WP_VERSION__',
+			'MIN_PHP_VERSION'              => '__PLUGIN_MIN_PHP_VERSION__',
+			'MIN_MYSQL_VERSION'            => '__PLUGIN_MIN_MYSQL_VERSION__',
+			'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
+			'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
+			'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
+			'PLUGIN_TEXTDOMAIN'            => '__PLUGIN_TEXTDOMAIN__',
+		);
+
+		// Pass the main plugin file path and config to the instance method.
+		$instance = Plugin::instance( __FILE__, $config );
+	}
+
+	return $instance;
 }
 
-// Init plugin
-$plugin = plugin_instance();
-$plugin->set_constants([
-    'MIN_WP_VERSION_SUPPORT_TERMS' => '__PLUGIN_MIN_WP_VERSION__',
-    'MIN_WP_VERSION'               => '__PLUGIN_MIN_WP_VERSION__',
-    'MIN_PHP_VERSION'              => '__PLUGIN_MIN_PHP_VERSION__',
-    'MIN_MYSQL_VERSION'            => '__PLUGIN_MIN_MYSQL_VERSION__',
-    'PLUGIN_PREFIX'                => '__PLUGIN_PREFIX__',
-    'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
-    'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
-]);
-
-$plugin->init();
+// Get the plugin running.
+plugin();

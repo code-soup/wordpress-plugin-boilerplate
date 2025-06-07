@@ -1,28 +1,50 @@
-const TerserPlugin = require('terser-webpack-plugin');
+/**
+ * Webpack optimization configuration
+ */
 
-function normalizeName(name) {
-    return name
-        .replace(/node_modules/g, 'nodemodules')
-        .replace(/[\-_.|]+/g, ' ')
-        .replace(/\b(nodemodules|js|modules|es)\b/g, '')
-        .trim()
-        .replace(/ +/g, '-');
-}
+import TerserPlugin from 'terser-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
-module.exports = {
+export default (config, env) => ({
+    // Enable tree shaking and module concatenation in production
+    usedExports: true,
+    concatenateModules: env.isProduction,
+    sideEffects: true,
+
+    // Set chunk and module IDs to be deterministic in production for long-term caching
+    chunkIds: env.isProduction ? 'deterministic' : 'named',
+    moduleIds: env.isProduction ? 'deterministic' : 'named',
+
+    // Extract webpack runtime into a single chunk for better caching
+    runtimeChunk: 'single',
+    
+    // Code splitting configuration
     splitChunks: {
-        chunks: 'async',
-        name(module, chunks, cacheGroupKey) {
-            const moduleFileName = module
-                .identifier()
-                .split('/')
-                .reduceRight((item) => item);
-            return (
-                'vendor/' + normalizeName(moduleFileName.replace(/[\/]/g, '-'))
-            );
+        chunks: 'all',
+        maxInitialRequests: 5,
+        maxAsyncRequests: 20,
+        minSize: 20000,
+        cacheGroups: {
+            default: false,
+            vendors: false,
+            defaultVendors: {
+                test: /[\\/]node_modules[\\/]/,
+                priority: -10,
+                reuseExistingChunk: true,
+                name: 'vendor-libs',
+            },
+            commons: {
+                name: 'commons',
+                minChunks: 2,
+                priority: -20,
+                reuseExistingChunk: true,
+                enforce: true,
+            },
         },
     },
-    minimize: true,
+    
+    // Minification configuration (production only)
+    minimize: env.isProduction,
     minimizer: [
         new TerserPlugin({
             parallel: true,
@@ -31,5 +53,6 @@ module.exports = {
                 safari10: true,
             },
         }),
+        new CssMinimizerPlugin(),
     ],
-};
+});

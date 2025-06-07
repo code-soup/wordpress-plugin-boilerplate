@@ -49,7 +49,7 @@ activation_hook_content="\n
 register_activation_hook( __FILE__, function() {
 
     // On activate do this
-    \\$php_namespace\Activator::activate();
+    \\$php_namespace\Core\Activator::activate();
 });"
 
 printf "%b" "$activation_hook_content" >>index.php
@@ -60,7 +60,7 @@ deactivation_hook_content="\n
 register_deactivation_hook( __FILE__, function () {
     
     // On deactivate do that
-    \\$php_namespace\Deactivator::deactivate();
+    \\$php_namespace\Core\Deactivator::deactivate();
 });"
 
 printf "%b" "$deactivation_hook_content" >>index.php

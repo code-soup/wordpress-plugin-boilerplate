@@ -1,35 +1,44 @@
-const path = require('path');
-const dotenv = require('dotenv');
-const rootPath = process.cwd();
-const isProduction = -1 === process.argv.indexOf('development');
-const pluginDirName = path.basename(path.join(__dirname, '../..'));
+/**
+ * Base configuration for webpack
+ * Provides essential configuration values
+ */
 
+import path from 'path';
+import dotenv from 'dotenv';
+import * as pathUtils from './util/paths.js';
+import * as env from './util/env.js';
+
+// Plugin directory name detection for WordPress
+const pluginDirName = path.basename(path.join(pathUtils.paths.config, '../..'));
+
+// Load environment variables from .env.local file
 dotenv.config({
-    path: path.join(rootPath, '.env.local'),
+    path: pathUtils.fromRoot('.env.local'),
 });
 
 /**
- * Auto-set publich path or read from .env
+ * Auto-set public path or read from .env
  */
 const publicPath =
     'undefined' === typeof process.env.WP_PUBLIC_PATH
-        ? `${process.env.WP_CONTENT_PATH}/${pluginDirName}/dist/`
+        ? `${process.env.WP_CONTENT_PATH || '/wp-content/plugins'}/${pluginDirName}/dist/`
         : process.env.WP_PUBLIC_PATH;
 
 /**
- * Base config
+ * Base configuration object
  */
-module.exports = {
-    mode: isProduction ? 'production' : 'development',
-    paths: {
-        root: rootPath,
-        src: path.join(rootPath, 'src'),
-        dist: path.join(rootPath, 'dist'),
-        publicPath: publicPath,
-    },
-    enabled: {
-        watcher: -1 !== process.argv.indexOf('serve'),
-        production: isProduction,
-    },
-    fileName: isProduction ? "[name]-[fullhash]" : "[name]",
+const config = {
+    // Environment mode
+    mode: env.isProduction ? 'production' : 'development',
+    
+    // Path configuration (using path utility)
+    paths: pathUtils.paths,
+    
+    // File naming pattern for cache busting
+    fileName: env.isProduction ? '[name].[contenthash]' : '[name]',
+    
+    // Public path for assets
+    publicPath: publicPath,
 };
+
+export default config;
