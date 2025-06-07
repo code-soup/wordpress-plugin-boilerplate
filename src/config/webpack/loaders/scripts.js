@@ -2,7 +2,7 @@
  * JavaScript processing configuration
  */
 
-module.exports = () => ({
+export default () => ({
     test: /\.js$/,
     exclude: [/node_modules/],
     use: [

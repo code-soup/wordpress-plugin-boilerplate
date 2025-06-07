@@ -20,26 +20,6 @@ defined( 'ABSPATH' ) || exit;
 trait HelpersTrait {
 
 	/**
-	 * The instance.
-	 *
-	 * @var self
-	 */
-	protected static $instance;
-
-	/**
-	 * Get the instance.
-	 *
-	 * @return self
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
-
-	/**
 	 * Get the plugin name.
 	 *
 	 * @return string
@@ -143,76 +123,6 @@ trait HelpersTrait {
 		$url  = implode( $separator, $url );
 
 		return untrailingslashit( $url );
-	}
-
-	/**
-	 * Sanitize a string.
-	 *
-	 * @param string $value The string to sanitize.
-	 * @return string
-	 */
-	public function sanitize_string( string $value ): string {
-		return sanitize_text_field( $value );
-	}
-
-	/**
-	 * Sanitize an array.
-	 *
-	 * @param array $value The array to sanitize.
-	 * @return array
-	 */
-	public function sanitize_array( array $value ): array {
-		return array_map( array( $this, 'sanitize_string' ), $value );
-	}
-
-	/**
-	 * Sanitize an email.
-	 *
-	 * @param string $value The email to sanitize.
-	 * @return string
-	 */
-	public function sanitize_email( string $value ): string {
-		return sanitize_email( $value );
-	}
-
-	/**
-	 * Sanitize a URL.
-	 *
-	 * @param string $value The URL to sanitize.
-	 * @return string
-	 */
-	public function sanitize_url( string $value ): string {
-		return esc_url_raw( $value );
-	}
-
-	/**
-	 * Sanitize a file name.
-	 *
-	 * @param string $value The file name to sanitize.
-	 * @return string
-	 */
-	public function sanitize_file_name( string $value ): string {
-		return sanitize_file_name( $value );
-	}
-
-	/**
-	 * Sanitize a class name.
-	 *
-	 * @param string $value The class name to sanitize.
-	 * @return string
-	 */
-	public function sanitize_class_name( string $value ): string {
-		return sanitize_html_class( $value );
-	}
-
-	/**
-	 * Sanitize a key.
-	 *
-	 * @param string $value The key to sanitize.
-	 * @return string
-	 */
-	public function sanitize_key( string $value ): string {
-		return sanitize_key( $value );
 	}
 
 	/**

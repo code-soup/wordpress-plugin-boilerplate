@@ -34,7 +34,7 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 	 * Register the service provider.
 	 */
 	public function register(): void {
-		$this->register_service(
+		$this->container->singleton(
 			'frontend',
 			function () {
 				return new Frontend();
@@ -47,7 +47,7 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 	 */
 	public function boot(): void {
 		if ( ! is_admin() ) {
-			$this->container->set( 'frontend_init', new \WPPB\Frontend\Init() );
+			$this->container->singleton( 'frontend_init', \WPPB\Frontend\Init::class );
 		}
 	}
 }

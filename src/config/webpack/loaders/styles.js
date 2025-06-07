@@ -2,13 +2,13 @@
  * Styles (CSS/SASS) processing configuration
  */
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = (config, env) => ({
+export default (config, env) => ({
     test: /\.s?[ca]ss$/,
     include: config.paths.src,
     use: [
-        process.env.WEBPACK_SERVE
+        env.isWatching
             ? 'style-loader'
             : {
                   loader: MiniCssExtractPlugin.loader,
@@ -35,16 +35,7 @@ module.exports = (config, env) => ({
                                 'nesting-rules': true,
                             },
                         }],
-                        // Add cssnano for CSS minification in production mode
-                        env.isProduction ? ['cssnano', {
-                            preset: ['default', {
-                                discardComments: {
-                                    removeAll: true,
-                                },
-                                normalizeWhitespace: true,
-                            }],
-                        }] : false,
-                    ].filter(Boolean),
+                    ],
                 },
                 sourceMap: true,
             },

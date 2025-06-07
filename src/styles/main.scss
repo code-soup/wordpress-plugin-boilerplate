@@ -5,8 +5,8 @@
  */
 
 // Abstract imports (variables, functions, mixins)
-@use '@styles/abstracts' as *;
+@use '@/styles/abstracts' as *;
 
 // Core imports
-@use '@styles/core' as *;
-@use '@styles/vendor/sprites' as *;
+@use '@/styles/core' as *;
+@use '@/styles/vendor/sprites' as *;

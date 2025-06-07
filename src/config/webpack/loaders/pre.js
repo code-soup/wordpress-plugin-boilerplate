@@ -2,7 +2,7 @@
  * Pre-loaders configuration (executed before other loaders)
  */
 
-module.exports = (config) => ({
+export default (config) => ({
     enforce: 'pre',
     test: /\.(js|s?[ca]ss)$/,
     include: config.paths.src,

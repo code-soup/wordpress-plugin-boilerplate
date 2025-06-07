@@ -7,6 +7,8 @@
 
 namespace WPPB\Frontend;
 
+use function WPPB\plugin;
+
 /**
  * If this file is called directly, abort.
  */
@@ -31,7 +33,7 @@ class Init {
 	 * Add the frontend hooks.
 	 */
 	private function add_hooks(): void {
-		$hooker = wppb_plugin()->get( 'hooker' );
+		$hooker = plugin()->get( 'hooker' );
 
 		$hooker->add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		$hooker->add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -42,10 +44,10 @@ class Init {
 	 */
 	public function enqueue_styles(): void {
 		wp_enqueue_style(
-			wppb_plugin()->get_plugin_id( 'frontend' ),
-			wppb_plugin()->get( 'assets' )->get( 'frontend.css' ),
+			plugin()->get_plugin_id( 'frontend' ),
+			plugin()->get( 'assets' )->get( 'frontend.css' ),
 			array(),
-			wppb_plugin()->get_version()
+			plugin()->get_version()
 		);
 	}
 
@@ -54,10 +56,10 @@ class Init {
 	 */
 	public function enqueue_scripts(): void {
 		wp_enqueue_script(
-			wppb_plugin()->get_plugin_id( 'frontend' ),
-			wppb_plugin()->get( 'assets' )->get( 'frontend.js' ),
+			plugin()->get_plugin_id( 'frontend' ),
+			plugin()->get( 'assets' )->get( 'frontend.js' ),
 			array(),
-			wppb_plugin()->get_version(),
+			plugin()->get_version(),
 			true
 		);
 	}

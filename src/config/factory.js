@@ -3,11 +3,20 @@
  * Centralizes creation of webpack configurations
  */
 
-const { merge } = require('webpack-merge');
+import { fileURLToPath } from 'url';
+import { merge } from 'webpack-merge';
 
 // Import utilities
-const env = require('./util/env');
-const pathUtils = require('./util/paths');
+import * as env from './util/env.js';
+import * as pathUtils from './util/paths.js';
+import baseWebpackConfig from './config.js'; // Default import
+import entryConfig from './entry.js';
+import moduleConfig from './webpack/config.module.js';
+import pluginsConfig from './webpack/config.plugins.js';
+import optimizationConfig from './webpack/config.optimization.js';
+import watchConfig from './webpack/config.watch.js';
+
+const __filename = fileURLToPath(import.meta.url);
 
 /**
  * Creates a webpack configuration based on environment and options
@@ -17,11 +26,11 @@ const pathUtils = require('./util/paths');
  */
 function createWebpackConfig(options = {}) {
     // Use provided config or the default one
-    const config = options.config || require('./config');
+    const config = options.config || baseWebpackConfig;
     
     // Build the base webpack configuration
     const baseConfig = {
-        entry: require('./util/dynamic-entry')(),
+        entry: entryConfig,
         context: config.paths.src,
         output: {
             path: config.paths.dist,
@@ -41,24 +50,20 @@ function createWebpackConfig(options = {}) {
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [__filename],
+                config: [__filename, pathUtils.fromConfig()],
             },
             cacheDirectory: pathUtils.paths.cache,
             name: `${env.isProduction ? 'prod' : 'dev'}-cache`,
         },
         target: ['web', 'es5'],
         devtool: env.getEnvSpecific('source-map', 'eval-source-map'),
-        module: require('./webpack/config.module')(config, env),
+        module: moduleConfig(config, env),
         resolve: {
             modules: [config.paths.src, 'node_modules'],
-            extensions: ['*', '.js'],
+            extensions: ['.js', '.json'],
             enforceExtension: false,
             alias: {
-                '@utils': pathUtils.fromSrc('scripts/util'),
-                '@styles': pathUtils.fromSrc('styles'),
-                '@scripts': pathUtils.fromSrc('scripts'),
-                '@icons': pathUtils.fromSrc('icons'),
-                '@images': pathUtils.fromSrc('images'),
+                '@': config.paths.src,
             },
         },
         externals: {
@@ -69,19 +74,19 @@ function createWebpackConfig(options = {}) {
             maxEntrypointSize: 1000000,
             maxAssetSize: 1000000,
         },
-        plugins: require('./webpack/config.plugins')(config, env),
-        optimization: require('./webpack/config.optimization')(config, env),
+        plugins: pluginsConfig(config, env),
+        optimization: optimizationConfig(config, env),
     };
     
     // Add watch configuration in watch mode
-    const watchConfig = env.isWatching ? require('./webpack/config.watch')(config, env) : {};
+    const devServerConfig = env.isWatching ? watchConfig(config, env) : {};
     
     // Merge all configurations
     return merge(
         baseConfig,
-        watchConfig,
+        devServerConfig,
         options.overrides || {}
     );
 }
 
-module.exports = createWebpackConfig; 
+export default createWebpackConfig; 

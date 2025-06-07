@@ -1,39 +1,30 @@
 /**
  * Plugin utilities for webpack configuration
- * Helps manage conditional plugin loading and configuration
+ * Helps manage conditional plugin loading and configuration.
  */
 
 /**
- * Loads plugins based on conditions
- * Each item should have a condition (boolean) and factory (function that returns a plugin instance)
- * 
- * @param {Array<{condition: boolean, factory: Function}>} pluginConfigs - Array of plugin configurations
- * @return {Array} Array of instantiated plugins
+ * Filters and instantiates plugins based on a condition.
+ *
+ * @param {Array<{condition: boolean, factory: Function}>} pluginConfigs - Array of plugin configurations.
+ * @return {Array} Array of instantiated plugins that meet the condition.
  */
-const conditionalPlugins = (pluginConfigs) => {
+export const conditionalPlugins = (pluginConfigs) => {
     return pluginConfigs
-        .filter(({ condition }) => condition)
+        .filter(({ condition }) => !!condition)
         .map(({ factory }) => factory());
 };
 
 /**
- * Lazy-loads a plugin only when needed
- * This helps reduce initial memory usage and improves startup time
- * 
- * @param {string} pluginModule - The module name to require
- * @param {Function} configFn - Function that receives the plugin constructor and returns an instance
- * @return {Object} The instantiated plugin
+ * A wrapper to configure a plugin.
+ * This is primarily used to keep plugin-specific logic clean in the main config.
+ *
+ * @param {Object} Plugin - The imported plugin constructor.
+ * @param {Function} configFn - A function that receives the plugin constructor and returns a configured plugin instance.
+ * @return {Object} The configured plugin instance.
  */
-const lazyLoadPlugin = (pluginModule, configFn) => {
-    const Plugin = require(pluginModule);
-    
+export const configurePlugin = (Plugin, configFn) => {
     // Handle both direct exports and named exports
     const Constructor = Plugin.default || Plugin;
-    
     return configFn(Constructor);
 };
-
-module.exports = {
-    conditionalPlugins,
-    lazyLoadPlugin,
-}; 

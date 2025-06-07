@@ -3,17 +3,17 @@
  * Centralizes all path operations and constants
  */
 
-const path = require('path');
+import path from 'path';
+
 const rootPath = process.cwd();
 
 // Main paths that are used throughout the configuration
-const paths = {
+export const paths = {
     root: rootPath,
     src: path.join(rootPath, 'src'),
     dist: path.join(rootPath, 'dist'),
     nodeModules: path.join(rootPath, 'node_modules'),
     cache: path.join(rootPath, 'node_modules/.cache/webpack'),
-    entry: path.join(rootPath, 'src/entry'),
     icons: path.join(rootPath, 'src/icons'),
     scripts: path.join(rootPath, 'src/scripts'),
     styles: path.join(rootPath, 'src/styles'),
@@ -26,22 +26,18 @@ const paths = {
 /**
  * Enhanced path resolution utility
  */
-module.exports = {
-    // Main path constants
-    paths,
 
-    // Path resolution helpers
-    fromRoot: (...segments) => path.join(rootPath, ...segments),
-    fromSrc: (...segments) => path.join(paths.src, ...segments),
-    fromDist: (...segments) => path.join(paths.dist, ...segments),
-    fromConfig: (...segments) => path.join(paths.config, ...segments),
-    
-    // Relative path from one location to another
-    relative: (from, to) => path.relative(from, to),
-    
-    // Asset path helpers
-    getAssetPath: (type, filename) => `${type}/${filename}`,
-    getScriptPath: (filename) => `scripts/${filename}`,
-    getStylePath: (filename) => `styles/${filename}`,
-    getImagePath: (filename) => `images/${filename}`,
-}; 
+// Path resolution helpers
+export const fromRoot = (...segments) => path.join(rootPath, ...segments);
+export const fromSrc = (...segments) => path.join(paths.src, ...segments);
+export const fromDist = (...segments) => path.join(paths.dist, ...segments);
+export const fromConfig = (...segments) => path.join(paths.config, ...segments);
+
+// Relative path from one location to another
+export const relative = (from, to) => path.relative(from, to);
+
+// Asset path helpers
+export const getAssetPath = (type, filename) => `${type}/${filename}`;
+export const getScriptPath = (filename) => `scripts/${filename}`;
+export const getStylePath = (filename) => `styles/${filename}`;
+export const getImagePath = (filename) => `images/${filename}`; 

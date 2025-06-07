@@ -1,7 +1,7 @@
 /**
  * Asset (images, fonts, etc.) processing configuration
  */
-module.exports = () => ({
+export default () => ({
     test: /\.(ttf|otf|eot|woff2?|png|jpe?g|webp|svg|gif|ico)$/,
     type: 'asset',
     parser: {

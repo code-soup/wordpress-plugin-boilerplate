@@ -4,7 +4,7 @@
  */
 
 // Import factory function
-const createWebpackConfig = require('./factory');
+import createWebpackConfig from './factory.js';
 
 // Create and export the webpack configuration
-module.exports = createWebpackConfig();
+export default createWebpackConfig();

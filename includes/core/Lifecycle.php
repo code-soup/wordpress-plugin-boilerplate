@@ -7,8 +7,6 @@
 
 namespace WPPB\Core;
 
-use WPPB\Plugin;
-
 /**
  * If this file is called directly, abort.
  */
@@ -43,7 +41,7 @@ class Lifecycle {
 			$this->deactivate_plugin(
 				sprintf(
 					// translators: 1. Minimum WordPress version, 2. Current WordPress version.
-					esc_html__( 'Minimum WordPress version required: %1$s. You are running version: %2$s.', 'WPPB' ),
+					esc_html__( 'Minimum WordPress version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
 					$this->plugin->config['MIN_WP_VERSION'],
 					get_bloginfo( 'version' )
 				)
@@ -54,7 +52,7 @@ class Lifecycle {
 			$this->deactivate_plugin(
 				sprintf(
 					// translators: 1. Minimum PHP version, 2. Current PHP version.
-					esc_html__( 'Minimum PHP version required: %1$s. You are running version: %2$s.', 'WPPB' ),
+					esc_html__( 'Minimum PHP version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
 					$this->plugin->config['MIN_PHP_VERSION'],
 					phpversion()
 				)

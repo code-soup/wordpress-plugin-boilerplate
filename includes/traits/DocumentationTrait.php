@@ -34,7 +34,7 @@ trait DocumentationTrait {
 			'version'      => $this->get_plugin_version(),
 			'description'  => 'WordPress Plugin Boilerplate with modern architecture',
 			'author'       => 'Plugin Author',
-			'text_domain'  => strtolower( str_replace( '_', '-', $this->get_plugin_name() ) ),
+			'text_domain'  => '__PLUGIN_TEXTDOMAIN__',
 			'domain_path'  => '/languages',
 			'requires_wp'  => '5.0',
 			'requires_php' => '8.0',
@@ -270,6 +270,6 @@ trait DocumentationTrait {
 	 * @return string
 	 */
 	public function get_documentation_url(): string {
-		return 'https://wordpress.org/plugins/wppb/';
+		return 'https://github.com/code-soup/wordpress-plugin-boilerplate';
 	}
 }

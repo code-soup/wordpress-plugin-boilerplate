@@ -3,13 +3,13 @@
  * Provides essential configuration values
  */
 
-const path = require('path');
-const dotenv = require('dotenv');
-const pathUtils = require('./util/paths');
-const env = require('./util/env');
+import path from 'path';
+import dotenv from 'dotenv';
+import * as pathUtils from './util/paths.js';
+import * as env from './util/env.js';
 
 // Plugin directory name detection for WordPress
-const pluginDirName = path.basename(path.join(__dirname, '../..'));
+const pluginDirName = path.basename(path.join(pathUtils.paths.config, '../..'));
 
 // Load environment variables from .env.local file
 dotenv.config({
@@ -21,13 +21,13 @@ dotenv.config({
  */
 const publicPath =
     'undefined' === typeof process.env.WP_PUBLIC_PATH
-        ? `${process.env.WP_CONTENT_PATH}/${pluginDirName}/dist/`
+        ? `${process.env.WP_CONTENT_PATH || '/wp-content/plugins'}/${pluginDirName}/dist/`
         : process.env.WP_PUBLIC_PATH;
 
 /**
  * Base configuration object
  */
-module.exports = {
+const config = {
     // Environment mode
     mode: env.isProduction ? 'production' : 'development',
     
@@ -35,8 +35,10 @@ module.exports = {
     paths: pathUtils.paths,
     
     // File naming pattern for cache busting
-    fileName: env.isProduction ? "[name].[contenthash]" : "[name]",
+    fileName: env.isProduction ? '[name].[contenthash]' : '[name]',
     
     // Public path for assets
     publicPath: publicPath,
 };
+
+export default config;

@@ -1,8 +1,7 @@
 /**
  * Webpack development server configuration
  */
-
-// Note: `require('url')` is no longer needed.
+import { URL } from 'url';
 
 // Determine if the target WordPress dev URL is HTTPS using the modern URL API
 let targetIsHttps = false;
@@ -23,9 +22,9 @@ if (process.env.WP_DEV_URL) {
 const devServerHost = 'localhost';
 const devServerPort = process.env.DEV_PROXY_PORT || 8080;
 
-module.exports = (config, env) => {
+export default (config, env) => {
     // Handle self-signed certificate for the PROXY TARGET if it's HTTPS
-    if (targetIsHttps && env.isDev) {
+    if (targetIsHttps && env.isDevelopment) {
         console.warn('\x1b[33m%s\x1b[0m', '[Webpack DevServer] Proxying to an HTTPS target. Allowing self-signed certificates.');
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     }
@@ -39,9 +38,8 @@ module.exports = (config, env) => {
             allowedHosts: 'all',
             watchFiles: {
                 paths: [
-                    `${config.paths.root}/templates/**/*.php`, 
-                    `${config.paths.root}/includes/**/*`, 
-                    `${config.paths.src}/**/*`,
+                    `${config.paths.root}/templates/**/*.php`,
+                    `${config.paths.root}/includes/**/*.php`,
                 ],
                 options: {
                     usePolling: false,
@@ -60,7 +58,7 @@ module.exports = (config, env) => {
             },
             static: {
                 directory: config.paths.dist,
-                publicPath: config.paths.publicPath,
+                publicPath: config.publicPath,
                 serveIndex: false,
                 watch: false,
             },
@@ -69,10 +67,10 @@ module.exports = (config, env) => {
                 target: process.env.WP_DEV_URL,
                 changeOrigin: true,
                 autoRewrite: true,
-                secure: !env.isDev,
+                secure: !env.isProduction,
             }] : undefined,
             devMiddleware: {
-                publicPath: config.paths.publicPath,
+                publicPath: config.publicPath,
                 serverSideRender: false,
                 writeToDisk: true,
             },

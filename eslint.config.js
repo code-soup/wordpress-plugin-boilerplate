@@ -1,71 +1,29 @@
 // @ts-nocheck
 import globals from 'globals';
 import js from '@eslint/js';
-import pluginImport from 'eslint-plugin-import';
 
 export default [
-	// Global ignores
+	// Apply recommended defaults
+	js.configs.recommended,
+	
+	// Your custom configuration
 	{
-		ignores: [
-			'node_modules/**',
-			'vendor/**',
-			'dist/**',
-			'build/**',
-		],
-	},
-
-	// Main configuration for Browser/ESM source code
-	{
-		files: ['src/entry/**/*.js', 'src/scripts/**/*.js'],
-		plugins: {
-			import: pluginImport,
-		},
+		files: ['**/*.js'],
 		languageOptions: {
+			// Specify that we are using modern ECMAScript features
 			ecmaVersion: 'latest',
+			// CRITICAL: This tells ESLint to parse the files as ES Modules
 			sourceType: 'module',
+			// Define global variables available in the environment
 			globals: {
 				...globals.browser,
-				...globals.jquery,
-				// Custom Globals
-				wp: true,
-				cs: true,
-				google: true,
-			},
-		},
-		rules: {
-			...js.configs.recommended.rules,
-			'comma-dangle': [
-				'error',
-				{
-					arrays: 'always-multiline',
-					objects: 'always-multiline',
-					imports: 'always-multiline',
-					exports: 'always-multiline',
-					functions: 'ignore',
-				},
-			],
-			'no-unused-vars': [
-				'error',
-				{
-					varsIgnorePattern: '^_',
-					argsIgnorePattern: '^_',
-					caughtErrorsIgnorePattern: '^_',
-				},
-			],
-		},
-	},
-
-	// Separate configuration for Webpack/Node.js (CommonJS) config files
-	{
-		files: ['src/config/**/*.js'],
-		languageOptions: {
-			sourceType: 'commonjs',
-			globals: {
 				...globals.node,
 			},
 		},
 		rules: {
-			...js.configs.recommended.rules,
+			// Customize your rules here
+			'no-unused-vars': 'warn',
+			'no-console': 'off',
 		},
 	},
 ];

@@ -122,7 +122,7 @@ class Container implements ContainerInterface {
 		// Resolve alias if exists.
 		$id = $this->aliases[ $id ] ?? $id;
 
-		// Return existing singleton instance.
+		// If it's a singleton and we already have an instance, return it.
 		if ( isset( $this->instances[ $id ] ) ) {
 			return $this->instances[ $id ];
 		}
@@ -130,19 +130,21 @@ class Container implements ContainerInterface {
 		// Check if service is registered.
 		if ( ! isset( $this->services[ $id ] ) ) {
 			throw new \RuntimeException(
-				sprintf(
-					/* translators: %s: Service identifier */
-					esc_html__( 'Service "%s" not found in container.', 'WPPB' ),
-					esc_html( $id )
+				esc_html(
+					sprintf(
+						/* translators: %s: Service identifier */
+						__( 'Service "%s" not found in container.', '__PLUGIN_TEXTDOMAIN__' ),
+						esc_html( $id )
+					)
 				)
 			);
 		}
 
-		$service  = $this->services[ $id ];
-		$instance = $this->resolve( $service['concrete'] );
+		// Resolve the service (this might create a new object).
+		$instance = $this->resolve( $id );
 
-		// Store singleton instance.
-		if ( $service['singleton'] ) {
+		// If it's a singleton, store the new instance that we just created.
+		if ( isset( $this->services[ $id ] ) && $this->services[ $id ]['singleton'] ) {
 			$this->instances[ $id ] = $instance;
 		}
 
@@ -175,30 +177,48 @@ class Container implements ContainerInterface {
 	}
 
 	/**
-	 * Resolve a concrete implementation
+	 * Resolve the service from the container
 	 *
-	 * @since 1.0.0
-	 * @param callable|string $concrete Service implementation.
+	 * @param string $id Service identifier.
 	 * @return mixed
-	 * @throws \RuntimeException If concrete cannot be resolved.
+	 * @throws \RuntimeException If the service is not found or cannot be resolved.
 	 */
-	private function resolve( $concrete ) {
-		// If it's a callable, execute it.
-		if ( is_callable( $concrete ) ) {
-			return $concrete( $this );
+	private function resolve( string $id ) {
+		if ( ! isset( $this->services[ $id ] ) ) {
+			throw new \RuntimeException(
+				esc_html(
+					sprintf(
+						/* translators: %s: Service ID. */
+						__( 'Service "%s" not found in container.', '__PLUGIN_TEXTDOMAIN__' ),
+						$id
+					)
+				)
+			);
 		}
 
-		// If it's a class name, instantiate it.
-		if ( is_string( $concrete ) && class_exists( $concrete ) ) {
-			return new $concrete();
+		$service = $this->services[ $id ];
+
+		// If the concrete implementation is a callable (a factory), just call it.
+		if ( is_callable( $service['concrete'] ) ) {
+			return $service['concrete']( $this );
 		}
 
-		// If it's already an object, return it.
-		if ( is_object( $concrete ) ) {
-			return $concrete;
+		// Otherwise, assume it's a class name and try to instantiate it.
+		// This will only work for classes with no constructor dependencies.
+		$concrete = $service['concrete'];
+		if ( ! class_exists( $concrete ) ) {
+			throw new \RuntimeException(
+				esc_html(
+					sprintf(
+						/* translators: %s: Concrete class name. */
+						__( 'Cannot resolve concrete class: %s.', '__PLUGIN_TEXTDOMAIN__' ),
+						$concrete
+					)
+				)
+			);
 		}
 
-		throw new \RuntimeException( esc_html__( 'Cannot resolve concrete.', 'WPPB' ) );
+		return new $concrete();
 	}
 
 	/**
@@ -230,22 +250,7 @@ class Container implements ContainerInterface {
 	 * @param mixed  $value The service instance or value.
 	 */
 	public function set( string $id, $value ): void {
-		$this->services[ $id ] = $value;
-	}
-
-	/**
-	 * Add a service to the container.
-	 *
-	 * @param string $id The service ID.
-	 * @param mixed  $service The service instance or callable.
-	 * @param bool   $shared Whether the service should be shared.
-	 */
-	public function add( string $id, $service, bool $shared = false ): void {
-		$this->services[ $id ] = $service;
-
-		if ( $shared ) {
-			$this->shared[ $id ] = true;
-		}
+		$this->register( $id, $value, true );
 	}
 
 	/**
@@ -262,7 +267,7 @@ class Container implements ContainerInterface {
 			throw new \Exception(
 				sprintf(
 					/* translators: %s: Service identifier */
-					esc_html__( 'Service "%s" not found in container.', 'WPPB' ),
+					esc_html__( 'Service "%s" not found in container.', '__PLUGIN_TEXTDOMAIN__' ),
 					esc_html( $id )
 				)
 			);

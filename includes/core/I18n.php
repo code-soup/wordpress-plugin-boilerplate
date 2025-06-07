@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WPPB\Core;
 
+use function WPPB\plugin;
+
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
@@ -44,9 +46,7 @@ class I18n {
 	 * @return void
 	 */
 	private function register_hooks(): void {
-		// Get the main plugin instance and hooker.
-		$instance = \WPPB\wppb_plugin();
-		$hooker   = $instance->get( 'hooker' );
+		$hooker = plugin()->get( 'hooker' );
 
 		// Register the textdomain loading hook.
 		$hooker->add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
@@ -59,7 +59,7 @@ class I18n {
 		load_plugin_textdomain(
 			'__PLUGIN_TEXTDOMAIN__',
 			false,
-			wppb_plugin()->get_basename() . '/languages/'
+			plugin()->get_basename() . '/languages/'
 		);
 	}
 }

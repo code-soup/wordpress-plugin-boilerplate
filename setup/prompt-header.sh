@@ -65,11 +65,11 @@ requires_wordpress=${requires_wordpress:-6.0}
 requires_wordpress=$(echo "$requires_wordpress" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
 echo -e "${RED}Debug: Requires Wordpress is [$requires_wordpress]${NC}"
 
-# Prompt the user to enter Requires PHP with a default value of 7.4
-read -rp "$(echo -e "${GREEN}Requires PHP (The minimum required PHP version) [default: 7.4]:${NC} ")" requires_php
+# Prompt the user to enter Requires PHP with a default value of 8.1
+read -rp "$(echo -e "${GREEN}Requires PHP (The minimum required PHP version) [default: 8.1]:${NC} ")" requires_php
 
 # Default Value
-requires_php=${requires_php:-7.4}
+requires_php=${requires_php:-8.1}
 
 # Sanitize user input
 requires_php=$(echo "$requires_php" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
@@ -80,7 +80,7 @@ read -rp "Author (The name of the plugin author. Leave blank if not applicable):
 
 # Sanitize user input
 plugin_author=$(echo "$plugin_author" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
-echo -e "${RED}Debug: Requires PHP is [$plugin_author]${NC}"
+echo -e "${RED}Debug: Plugin author is [$plugin_author]${NC}"
 
 # Prompt the user to enter Author URI (optional)
 read -rp "Author URI (The author’s website or profile on another website. Leave blank if not applicable): " plugin_author_uri

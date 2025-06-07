@@ -26,13 +26,6 @@ defined( 'ABSPATH' ) || exit;
 final class Init {
 
 	/**
-	 * Plugin instance.
-	 *
-	 * @var Init
-	 */
-	private static $instance = null;
-
-	/**
 	 * The dependency injection container
 	 *
 	 * @since 1.0.0
@@ -70,44 +63,12 @@ final class Init {
 
 	/**
 	 * Class constructor.
-	 */
-	private function __construct() {
-		$this->container = new Container();
-		$this->hooker    = new Hooker();
-	}
-
-	/**
-	 * Get the plugin instance.
 	 *
-	 * @return Init
+	 * @param Container $container The dependency injection container.
 	 */
-	public static function get_instance(): Init {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-	/**
-	 * Singletons should not be cloneable.
-	 *
-	 * @since 1.0.0
-	 * @throws \Exception If clone is attempted.
-	 * @return void
-	 */
-	private function __clone() {
-		throw new \Exception( 'Cannot clone ' . __CLASS__ );
-	}
-
-	/**
-	 * Singletons should not be restorable from strings.
-	 *
-	 * @since 1.0.0
-	 * @throws \Exception If unserialize is attempted.
-	 * @return void
-	 */
-	public function __wakeup() {
-		throw new \Exception( 'Cannot unserialize ' . __CLASS__ );
+	public function __construct( Container $container ) {
+		$this->container = $container;
+		$this->hooker    = $this->container->get( 'hooker' );
 	}
 
 	/**
@@ -120,29 +81,18 @@ final class Init {
 			return;
 		}
 
-		$this->register_providers();
-		$this->boot_providers();
+		$this->run_providers();
+		$this->hooker->run();
 	}
 
 	/**
-	 * Register the service providers.
+	 * Instantiate and run the service providers.
 	 */
-	private function register_providers(): void {
+	private function run_providers(): void {
 		foreach ( $this->providers as $provider_class ) {
 			$provider = new $provider_class( $this->container );
 			$provider->register();
-		}
-	}
-
-	/**
-	 * Boot the service providers.
-	 */
-	private function boot_providers(): void {
-		foreach ( $this->providers as $provider_class ) {
-			$provider = $this->container->get( $provider_class );
-			if ( $provider ) {
-				$provider->boot();
-			}
+			$provider->boot();
 		}
 	}
 

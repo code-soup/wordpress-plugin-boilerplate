@@ -27,7 +27,7 @@ class AdminServiceProvider extends AbstractServiceProvider {
 	 */
 	public function boot(): void {
 		if ( is_admin() ) {
-			$this->container->set( 'admin_init', new AdminInit() );
+			$this->container->singleton( 'admin_init', \WPPB\Admin\Init::class );
 		}
 	}
 }

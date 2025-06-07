@@ -2,20 +2,18 @@
  * Webpack module rules configuration
  * Uses modular loader configurations from loaders directory
  */
+import preLoaders from './loaders/pre.js';
+import scriptLoaders from './loaders/scripts.js';
+import styleLoaders from './loaders/styles.js';
+import assetLoaders from './loaders/assets.js';
 
-module.exports = (config, env) => {
-    // Import all loader configurations
-    const preLoaders = require('./loaders/pre')(config, env);
-    const scriptLoaders = require('./loaders/scripts')(config, env);
-    const styleLoaders = require('./loaders/styles')(config, env);
-    const assetLoaders = require('./loaders/assets')(config, env);
-    
+export default (config, env) => {
     return {
         rules: [
-            preLoaders,
-            scriptLoaders,
-            styleLoaders,
-            assetLoaders,
+            preLoaders(config, env),
+            scriptLoaders(config, env),
+            styleLoaders(config, env),
+            assetLoaders(config, env),
         ],
     };
 };

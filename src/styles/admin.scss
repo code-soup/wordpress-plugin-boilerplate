@@ -5,10 +5,10 @@
  */
 
 // Abstract imports (variables, functions, mixins)
-@use 'abstracts' as *;
+@use '@/styles/abstracts/index' as *;
 
 // Core imports
-@use './core/admin/index' as *;
+@use '@/styles/core/admin/index' as *;
 
 // Vendor/Third-party
-@use 'vendor/sprites' as *;
+// @use '@/styles/vendor/sprites' as *;

@@ -88,50 +88,6 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	}
 
 	/**
-	 * Register a service.
-	 *
-	 * @param string $id The service ID.
-	 * @param mixed  $service The service instance or callable.
-	 * @param bool   $shared Whether the service should be shared.
-	 */
-	public function register_service( string $id, $service, bool $shared = false ): void {
-		$this->container->add( $id, $service, $shared );
-	}
-
-	/**
-	 * Get a service.
-	 *
-	 * @param string $id The service ID.
-	 *
-	 * @return mixed
-	 */
-	public function get_service( string $id ) {
-		return $this->container->get( $id );
-	}
-
-	/**
-	 * Get a new instance of a service.
-	 *
-	 * @param string $id The service ID.
-	 *
-	 * @return mixed
-	 */
-	public function get_new_service( string $id ) {
-		return $this->container->get_new( $id );
-	}
-
-	/**
-	 * Check if a service exists.
-	 *
-	 * @param string $id The service ID.
-	 *
-	 * @return bool
-	 */
-	public function has_service( string $id ): bool {
-		return $this->container->has( $id );
-	}
-
-	/**
 	 * Register the service provider.
 	 */
 	public function register(): void {
