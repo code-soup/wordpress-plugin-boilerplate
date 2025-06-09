@@ -7,6 +7,8 @@
 
 namespace WPPB\Core;
 
+use function WPPB\plugin;
+
 /**
  * If this file is called directly, abort.
  */
@@ -107,7 +109,7 @@ class Lifecycle {
 		$options = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( wppb_plugin()->config['PLUGIN_PREFIX'] ) . '%'
+				$wpdb->esc_like( plugin()->config['PLUGIN_PREFIX'] ) . '%'
 			)
 		);
 
@@ -126,7 +128,7 @@ class Lifecycle {
 		$tables = $wpdb->get_col(
 			$wpdb->prepare(
 				'SELECT table_name FROM information_schema.tables WHERE table_name LIKE %s',
-				$wpdb->esc_like( wppb_plugin()->config['PLUGIN_PREFIX'] ) . '%'
+				$wpdb->esc_like( plugin()->config['PLUGIN_PREFIX'] ) . '%'
 			)
 		);
 
