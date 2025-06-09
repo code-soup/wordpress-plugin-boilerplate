@@ -36,61 +36,6 @@ class Lifecycle {
 	}
 
 	/**
-	 * Check if the minimum requirements are met.
-	 */
-	public function check_requirements(): void {
-		if ( ! $this->is_wp_version_ok() ) {
-			$this->deactivate_plugin(
-				sprintf(
-					// translators: 1. Minimum WordPress version, 2. Current WordPress version.
-					esc_html__( 'Minimum WordPress version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
-					$this->plugin->config['MIN_WP_VERSION'],
-					get_bloginfo( 'version' )
-				)
-			);
-		}
-
-		if ( ! $this->is_php_version_ok() ) {
-			$this->deactivate_plugin(
-				sprintf(
-					// translators: 1. Minimum PHP version, 2. Current PHP version.
-					esc_html__( 'Minimum PHP version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
-					$this->plugin->config['MIN_PHP_VERSION'],
-					phpversion()
-				)
-			);
-		}
-	}
-
-	/**
-	 * Check if the WordPress version is ok.
-	 *
-	 * @return bool
-	 */
-	protected function is_wp_version_ok(): bool {
-		return version_compare( get_bloginfo( 'version' ), $this->plugin->config['MIN_WP_VERSION'], '>=' );
-	}
-
-	/**
-	 * Check if the PHP version is ok.
-	 *
-	 * @return bool
-	 */
-	protected function is_php_version_ok(): bool {
-		return version_compare( phpversion(), $this->plugin->config['MIN_PHP_VERSION'], '>=' );
-	}
-
-	/**
-	 * Deactivate the plugin.
-	 *
-	 * @param string $message The message to display.
-	 */
-	protected function deactivate_plugin( string $message ): void {
-		deactivate_plugins( $this->plugin->config['PLUGIN_BASENAME'] );
-		wp_die( esc_html( $message ) );
-	}
-
-	/**
 	 * The code that runs during plugin uninstallation.
 	 */
 	public static function uninstall(): void {

@@ -115,8 +115,7 @@ final class Plugin {
 		$this->register_services();
 		$this->boot_providers();
 
-		$this->core = $this->container->get( Init::class );
-		$this->core->init();
+		$this->container->get( 'hooker' )->run();
 	}
 
 	/**
@@ -131,13 +130,11 @@ final class Plugin {
 	}
 
 	/**
-	 * Boot the service providers.
-	 *
-	 * This method registers, resolves, and boots each service provider.
+	 * Boot all registered service providers.
 	 */
 	private function boot_providers(): void {
 		foreach ( $this->providers as $provider_class ) {
-			$provider = $this->container->get( $provider_class );
+			$provider = new $provider_class( $this->container );
 			$provider->register();
 			$provider->boot();
 		}

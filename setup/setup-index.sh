@@ -6,6 +6,11 @@ if [[ -f "index.php" ]]; then
 fi
 
 header_content="<?php
+/**
+ * Plugin main file.
+ *
+ * @package $php_namespace
+ */
 
 defined('WPINC') || die;
 
@@ -48,7 +53,7 @@ printf "%b" "$header_content" >index.php
 activation_hook_content="\n
 register_activation_hook( __FILE__, function() {
 
-    // On activate do this
+    // On activate do this.
     \\$php_namespace\Core\Activator::activate();
 });"
 
@@ -59,7 +64,7 @@ printf "%b" "$activation_hook_content" >>index.php
 deactivation_hook_content="\n
 register_deactivation_hook( __FILE__, function () {
     
-    // On deactivate do that
+    // On deactivate do that.
     \\$php_namespace\Core\Deactivator::deactivate();
 });"
 

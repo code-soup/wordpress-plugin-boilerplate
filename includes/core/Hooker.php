@@ -7,19 +7,16 @@
 
 namespace WPPB\Core;
 
-use WPPB\Core\Core;
-
 /**
  * If this file is called directly, abort.
  */
 defined( 'ABSPATH' ) || die;
 
 /**
- * Register all actions and filters for the plugin.
+ * A class that collects and registers WordPress hooks (actions and filters).
  *
- * Maintain a list of all hooks that are registered throughout
- * the plugin, and register them with the WordPress API. Call the
- * run function to execute the list of actions and filters.
+ * This class allows for adding hooks throughout the application and then running
+ * them all at once at a specific point in the bootstrap process.
  *
  * @since 1.0.0
  */
@@ -28,123 +25,68 @@ class Hooker {
 	/**
 	 * The array of actions registered with WordPress.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array<int, array> The actions registered with WordPress to fire when the plugin loads.
+	 * @var array<int, array>
 	 */
 	protected array $actions = array();
 
 	/**
 	 * The array of filters registered with WordPress.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array<int, array> The filters registered with WordPress to fire when the plugin loads.
+	 * @var array<int, array>
 	 */
 	protected array $filters = array();
 
 	/**
-	 * Initialize the collections used to maintain the actions and filters.
-	 *
-	 * @since 1.0.0
-	 */
-	public function __construct() {
-		// Arrays are already initialized with typed properties.
-	}
-
-	/**
-	 * Add a WordPress action.
+	 * Add a WordPress action to the collection.
 	 *
 	 * @param string   $hook          The name of the action to add.
 	 * @param callable $callback      The callback to be executed.
 	 * @param int      $priority      Optional. Used to specify the order in which the functions
 	 *                                associated with a particular action are executed. Default 10.
 	 * @param int      $accepted_args Optional. The number of arguments the function accepts. Default 1.
+	 * @return self
 	 */
-	public function add_action( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void {
-		add_action( $hook, $callback, $priority, $accepted_args );
+	public function add_action( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): self {
+		$this->actions[] = array(
+			'hook'          => $hook,
+			'callback'      => $callback,
+			'priority'      => $priority,
+			'accepted_args' => $accepted_args,
+		);
+		return $this;
 	}
 
 	/**
-	 * Add array of actions at once
-	 *
-	 * @since 1.0.0
-	 * @param array<int, array> $actions Array of actions to add.
-	 * @return void
-	 */
-	public function add_actions( array $actions = array() ): void {
-		foreach ( $actions as $action ) {
-			$hook          = isset( $action[0] ) ? $action[0] : '';
-			$component     = isset( $action[1] ) ? $action[1] : '';
-			$callback      = isset( $action[2] ) ? $action[2] : '';
-			$priority      = isset( $action[3] ) ? $action[3] : 10;
-			$accepted_args = isset( $action[4] ) ? $action[4] : 1;
-
-			$this->add_action( $hook, $component, $priority, $accepted_args );
-		}
-	}
-
-	/**
-	 * Add a WordPress filter.
+	 * Add a WordPress filter to the collection.
 	 *
 	 * @param string   $hook          The name of the filter to add.
 	 * @param callable $callback      The callback to be executed.
 	 * @param int      $priority      Optional. Used to specify the order in which the functions
 	 *                                associated with a particular action are executed. Default 10.
 	 * @param int      $accepted_args Optional. The number of arguments the function accepts. Default 1.
+	 * @return self
 	 */
-	public function add_filter( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void {
-		add_filter( $hook, $callback, $priority, $accepted_args );
+	public function add_filter( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): self {
+		$this->filters[] = array(
+			'hook'          => $hook,
+			'callback'      => $callback,
+			'priority'      => $priority,
+			'accepted_args' => $accepted_args,
+		);
+		return $this;
 	}
 
 	/**
-	 * Add array of filters at once
+	 * Register all collected filters and actions with WordPress.
 	 *
-	 * @since 1.0.0
-	 * @param array<int, array> $filters Array of filters to add.
-	 * @return void
-	 */
-	public function add_filters( array $filters = array() ): void {
-		foreach ( $filters as $filter ) {
-			$hook          = isset( $filter[0] ) ? $filter[0] : '';
-			$component     = isset( $filter[1] ) ? $filter[1] : '';
-			$callback      = isset( $filter[2] ) ? $filter[2] : '';
-			$priority      = isset( $filter[3] ) ? $filter[3] : 10;
-			$accepted_args = isset( $filter[4] ) ? $filter[4] : 1;
-
-			$this->add_filter( $hook, $component, $priority, $accepted_args );
-		}
-	}
-
-	/**
-	 * Register the filters and actions with WordPress.
-	 *
-	 * @since 1.0.0
 	 * @return void
 	 */
 	public function run(): void {
-		foreach ( $this->filters as $hook ) {
-			add_filter(
-				$hook['hook'],
-				array(
-					$hook['component'],
-					$hook['callback'],
-				),
-				$hook['priority'],
-				$hook['accepted_args']
-			);
+		foreach ( $this->filters as $filter ) {
+			add_filter( $filter['hook'], $filter['callback'], $filter['priority'], $filter['accepted_args'] );
 		}
-
-		foreach ( $this->actions as $hook ) {
-			add_action(
-				$hook['hook'],
-				array(
-					$hook['component'],
-					$hook['callback'],
-				),
-				$hook['priority'],
-				$hook['accepted_args']
-			);
+		foreach ( $this->actions as $action ) {
+			add_action( $action['hook'], $action['callback'], $action['priority'], $action['accepted_args'] );
 		}
 	}
 }

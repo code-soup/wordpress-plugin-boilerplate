@@ -37,8 +37,8 @@ class Init {
 	private function add_hooks(): void {
 		$hooker = plugin()->get( 'hooker' );
 
-		$hooker->add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-		$hooker->add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
 
 	/**
@@ -46,10 +46,16 @@ class Init {
 	 */
 	public function enqueue_styles(): void {
 		wp_enqueue_style(
-			plugin()->get_plugin_id( 'admin' ),
-			plugin()->get( 'assets' )->get( 'admin.css' ),
+			'wppb-common',
+			plugin()->get( 'assets' )->get_asset_url( 'common.css' ),
 			array(),
-			plugin()->get_version()
+			plugin()->config['PLUGIN_VERSION']
+		);
+		wp_enqueue_style(
+			'wppb-admin-common',
+			plugin()->get( 'assets' )->get_asset_url( 'admin-common.css' ),
+			array( 'wppb-common' ),
+			plugin()->config['PLUGIN_VERSION']
 		);
 	}
 
@@ -58,10 +64,17 @@ class Init {
 	 */
 	public function enqueue_scripts(): void {
 		wp_enqueue_script(
-			plugin()->get_plugin_id( 'admin' ),
-			plugin()->get( 'assets' )->get( 'admin.js' ),
+			'wppb-common',
+			plugin()->get( 'assets' )->get_asset_url( 'common.js' ),
 			array(),
-			plugin()->get_version(),
+			plugin()->config['PLUGIN_VERSION'],
+			true
+		);
+		wp_enqueue_script(
+			'wppb-admin-common',
+			plugin()->get( 'assets' )->get_asset_url( 'admin-common.js' ),
+			array( 'wppb-common' ),
+			plugin()->config['PLUGIN_VERSION'],
 			true
 		);
 	}

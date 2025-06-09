@@ -1,9 +1,11 @@
 <?php
 /**
- * Assets class for managing scripts and styles.
+ * Assets class.
  *
  * @package WPPB
  */
+
+declare(strict_types=1);
 
 namespace WPPB\Core;
 
@@ -13,120 +15,75 @@ namespace WPPB\Core;
 defined( 'ABSPATH' ) || die;
 
 /**
- * Get paths for assets.
- *
- * @since 1.0.0
+ * Handles the registration and enqueueing of plugin assets.
  */
-class Assets {
-
-	use \WPPB\Traits\HelpersTrait;
+final class Assets {
 
 	/**
-	 * The manifest file path.
+	 * The plugin instance.
 	 *
-	 * @var string
+	 * @var Plugin
 	 */
-	private $manifest_path;
+	private Plugin $plugin;
 
 	/**
-	 * The manifest data.
+	 * The cached webpack manifest data.
 	 *
-	 * @var array
+	 * @var array<string, mixed>|null
 	 */
-	private $manifest;
+	private ?array $manifest = null;
 
 	/**
-	 * URI to theme 'dist' folder
+	 * Constructor.
 	 *
-	 * @var string
-	 * @since 1.0.0
+	 * @param Plugin $plugin The main plugin instance.
 	 */
-	private string $dist_uri;
-
-	/**
-	 * Assets constructor.
-	 */
-	public function __construct() {
-		$this->dist_uri = $this->get_plugin_dir_url( 'dist' );
+	public function __construct( Plugin $plugin ) {
+		$this->plugin = $plugin;
 	}
 
 	/**
-	 * Initialize the assets.
+	 * Get the full URL for a given asset.
+	 *
+	 * This method handles mapping the asset name to its final, hashed URL
+	 * using the webpack manifest file in production.
+	 *
+	 * @param string $asset_key The manifest key of the asset (e.g., 'common.js').
+	 * @return string The full URL to the asset.
 	 */
-	public function init(): void {
-		$this->load_manifest();
+	public function get_asset_url( string $asset_key ): string {
+		// In development, the asset key is the filename.
+		$path = $asset_key;
+
+		// In production, get the hashed filename from the manifest.
+		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+			$manifest = $this->get_manifest();
+			$path     = $manifest[ $asset_key ] ?? $asset_key;
+		}
+
+		return $this->plugin->config['PLUGIN_URL'] . 'dist/' . $path;
 	}
 
 	/**
-	 * Load the asset manifest.
+	 * Get the manifest data, caching it for subsequent calls.
 	 *
-	 * @throws \Exception If the manifest file cannot be loaded or decoded.
+	 * @return array<string, mixed>
 	 */
-	private function load_manifest(): void {
-		if ( ! file_exists( $this->manifest_path ) ) {
-			throw new \Exception( 'Asset manifest not found.' );
+	private function get_manifest(): array {
+		if ( ! is_null( $this->manifest ) ) {
+			return $this->manifest;
 		}
 
-		$manifest_json = file_get_contents( $this->manifest_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$manifest      = json_decode( $manifest_json, true );
+		$manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
 
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			throw new \Exception( 'Error decoding asset manifest: ' . esc_html( json_last_error_msg() ) );
+		if ( ! file_exists( $manifest_path ) ) {
+			$this->manifest = array();
+			return array();
 		}
 
-		$this->manifest = $manifest;
-	}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$this->manifest = json_decode( file_get_contents( $manifest_path ), true );
 
-	/**
-	 * Get the URL of an asset from the manifest.
-	 *
-	 * @param string $asset The name of the asset.
-	 *
-	 * @return string The asset URL.
-	 * @throws \Exception If the asset is not found in the manifest.
-	 */
-	public function get_asset_url( string $asset ): string {
-		if ( ! isset( $this->manifest[ $asset ] ) ) {
-			throw new \Exception( esc_html( "Asset '{$asset}' not found in manifest." ) );
-		}
-		return $this->manifest[ $asset ];
-	}
-
-	/**
-	 * Get full URI to single asset
-	 *
-	 * @since 1.0.0
-	 * @param  string $filename File name.
-	 * @return string           URI to resource
-	 */
-	public function get( string $filename = '' ): string {
-		return $this->locate( $filename );
-	}
-
-	/**
-	 * Fix URL for requested files
-	 *
-	 * @since 1.0.0
-	 * @param  string $filename Requested asset.
-	 * @return string           URL to the asset
-	 */
-	private function locate( string $filename = '' ): string {
-		// Return URL to requested file from manifest.
-		if ( array_key_exists( $filename, $this->manifest ) ) {
-			return $this->join_path( $this->dist_uri, $this->manifest[ $filename ] );
-		}
-
-		switch ( pathinfo( $filename, PATHINFO_EXTENSION ) ) {
-			case 'js':
-				$filename = $this->join_path( 'scripts', $filename );
-				break;
-
-			case 'css':
-				$filename = $this->join_path( 'styles', $filename );
-				break;
-		}
-
-		// Return default file location.
-		return $this->join_path( $this->dist_uri, $filename );
+		return $this->manifest;
 	}
 }
