@@ -31,21 +31,21 @@ class Container implements ContainerInterface {
 	 *
 	 * @var array<string, array{concrete: callable|string, shared: bool}>
 	 */
-	private array $bindings = [];
+	private array $bindings = array();
 
 	/**
 	 * The container's shared instances.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private array $instances = [];
+	private array $instances = array();
 
 	/**
 	 * The container's aliases.
 	 *
 	 * @var array<string, string>
 	 */
-	private array $aliases = [];
+	private array $aliases = array();
 
 	/**
 	 * Bind a new service into the container.
@@ -56,8 +56,7 @@ class Container implements ContainerInterface {
 	 *
 	 * @return void
 	 */
-	public function bind( string $id, $concrete, bool $shared = false ): void
-	{
+	public function bind( string $id, $concrete, bool $shared = false ): void {
 		$this->bindings[ $id ] = compact( 'concrete', 'shared' );
 	}
 
@@ -69,8 +68,7 @@ class Container implements ContainerInterface {
 	 *
 	 * @return void
 	 */
-	public function singleton( string $id, $concrete ): void
-	{
+	public function singleton( string $id, $concrete ): void {
 		$this->bind( $id, $concrete, true );
 	}
 
@@ -82,8 +80,7 @@ class Container implements ContainerInterface {
 	 *
 	 * @return void
 	 */
-	public function instance( string $id, $instance ): void
-	{
+	public function instance( string $id, $instance ): void {
 		$this->instances[ $id ] = $instance;
 	}
 
@@ -95,8 +92,7 @@ class Container implements ContainerInterface {
 	 *
 	 * @return void
 	 */
-	public function alias( string $id, string $alias ): void
-	{
+	public function alias( string $id, string $alias ): void {
 		$this->aliases[ $alias ] = $id;
 	}
 
@@ -108,8 +104,7 @@ class Container implements ContainerInterface {
 	 * @return mixed The entry.
 	 * @throws \Exception If the entry is not found.
 	 */
-	public function get( string $id )
-	{
+	public function get( string $id ) {
 		$id = $this->aliases[ $id ] ?? $id;
 
 		if ( isset( $this->instances[ $id ] ) ) {
@@ -142,8 +137,7 @@ class Container implements ContainerInterface {
 	 *
 	 * @return bool
 	 */
-	public function has( string $id ): bool
-	{
+	public function has( string $id ): bool {
 		$id = $this->aliases[ $id ] ?? $id;
 
 		return isset( $this->bindings[ $id ] ) || isset( $this->instances[ $id ] );
@@ -157,8 +151,7 @@ class Container implements ContainerInterface {
 	 * @return mixed
 	 * @throws \Exception If the service cannot be resolved.
 	 */
-	private function resolve( $concrete )
-	{
+	private function resolve( $concrete ) {
 		if ( is_callable( $concrete ) ) {
 			return $concrete( $this );
 		}

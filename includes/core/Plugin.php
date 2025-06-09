@@ -75,8 +75,7 @@ final class Plugin {
 	 *
 	 * @return Plugin
 	 */
-	public static function instance( string $plugin_file, array $config ): Plugin
-	{
+	public static function instance( string $plugin_file, array $config ): Plugin {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self( $plugin_file, $config );
 		}
@@ -87,16 +86,14 @@ final class Plugin {
 	/**
 	 * Cloning is forbidden.
 	 */
-	public function __clone()
-	{
+	public function __clone() {
 		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', '__PLUGIN_TEXTDOMAIN__' ), '1.0.0' );
 	}
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
-	public function __wakeup()
-	{
+	public function __wakeup() {
 		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', '__PLUGIN_TEXTDOMAIN__' ), '1.0.0' );
 	}
 
@@ -106,8 +103,7 @@ final class Plugin {
 	 * @param string               $plugin_file Main plugin file path.
 	 * @param array<string, mixed> $config The plugin configuration.
 	 */
-	private function __construct( string $plugin_file, array $config )
-	{
+	private function __construct( string $plugin_file, array $config ) {
 		$this->plugin_file = $plugin_file;
 		$this->setup_config( $config );
 
@@ -126,8 +122,7 @@ final class Plugin {
 	/**
 	 * Register the essential services for the plugin.
 	 */
-	private function register_services(): void
-	{
+	private function register_services(): void {
 		$this->container->singleton( 'hooker', Hooker::class );
 		$this->container->singleton( 'lifecycle', Lifecycle::class );
 		$this->container->singleton( 'assets', Assets::class );
@@ -140,8 +135,7 @@ final class Plugin {
 	 *
 	 * This method registers, resolves, and boots each service provider.
 	 */
-	private function boot_providers(): void
-	{
+	private function boot_providers(): void {
 		foreach ( $this->providers as $provider_class ) {
 			$provider = $this->container->get( $provider_class );
 			$provider->register();
@@ -154,8 +148,7 @@ final class Plugin {
 	 *
 	 * @param array<string, mixed> $config The plugin configuration.
 	 */
-	private function setup_config( array $config ): void
-	{
+	private function setup_config( array $config ): void {
 		$this->config = array_merge(
 			$config,
 			array(

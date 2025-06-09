@@ -40,8 +40,7 @@ final class Init {
 	 * @param Hooker    $hooker    The dependency injection container.
 	 * @param Lifecycle $lifecycle The plugin lifecycle manager.
 	 */
-	public function __construct( Hooker $hooker, Lifecycle $lifecycle )
-	{
+	public function __construct( Hooker $hooker, Lifecycle $lifecycle ) {
 		$this->hooker    = $hooker;
 		$this->lifecycle = $lifecycle;
 	}
@@ -51,8 +50,7 @@ final class Init {
 	 *
 	 * @throws \Exception If the plugin is not compatible.
 	 */
-	public function init(): void
-	{
+	public function init(): void {
 		if ( ! $this->is_compatible() ) {
 			return;
 		}
@@ -66,8 +64,7 @@ final class Init {
 	 * @return bool
 	 * @throws \Exception If a compatibility check fails.
 	 */
-	private function is_compatible(): bool
-	{
+	private function is_compatible(): bool {
 		try {
 			$this->lifecycle->check_requirements();
 
