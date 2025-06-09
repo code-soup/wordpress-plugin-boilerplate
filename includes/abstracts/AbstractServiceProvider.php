@@ -115,40 +115,41 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * Register a singleton service
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container.
-	 * @param string               $id Service identifier.
-	 * @param callable|string      $concrete Service implementation.
+	 *
+	 * @param string          $id       Service identifier.
+	 * @param callable|string $concrete Service implementation.
+	 *
 	 * @return void
 	 */
-	protected function singleton( \WPPB\Core\Container $container, string $id, $concrete ): void {
-		$container->singleton( $id, $concrete );
-		$this->provides[] = $id;
+	protected function singleton( string $id, $concrete ): void {
+		$this->container->singleton( $id, $concrete );
 	}
 
 	/**
 	 * Register a factory service
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container.
-	 * @param string               $id Service identifier.
-	 * @param callable|string      $concrete Service implementation.
+	 *
+	 * @param string          $id       Service identifier.
+	 * @param callable|string $concrete Service implementation.
+	 *
 	 * @return void
 	 */
-	protected function factory( \WPPB\Core\Container $container, string $id, $concrete ): void {
-		$container->factory( $id, $concrete );
-		$this->provides[] = $id;
+	protected function factory( string $id, $concrete ): void {
+		$this->container->bind( $id, $concrete );
 	}
 
 	/**
 	 * Register an alias
 	 *
 	 * @since 1.0.0
-	 * @param \WPPB\Core\Container $container The DI container.
-	 * @param string               $alias Alias name.
-	 * @param string               $id Original service identifier.
+	 *
+	 * @param string $id    Original service identifier.
+	 * @param string $alias Alias name.
+	 *
 	 * @return void
 	 */
-	protected function alias( \WPPB\Core\Container $container, string $alias, string $id ): void {
-		$container->alias( $alias, $id );
+	protected function alias( string $id, string $alias ): void {
+		$this->container->alias( $id, $alias );
 	}
 }
