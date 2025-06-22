@@ -23,7 +23,7 @@ You can get the main plugin instance using the global `plugin()` function, which
 
 ```php
 // Get the main plugin instance
-$plugin = \LinkPanther\plugin();
+$plugin = \WPPB\plugin();
 
 // Get the hooker service from the container
 $hooker = $plugin->container->get('hooker');
@@ -41,21 +41,22 @@ This example shows how to register a hook from within a class that is managed by
 
 ```php
 // In some class, e.g., includes/frontend/Display.php
-namespace LinkPanther\Frontend;
+namespace WPPB\Frontend;
 
-use LinkPanther\Core\Hooker;
+use WPPB\Core\Hooker;
 
 class Display {
     private Hooker $hooker;
 
-    public function __construct(Hooker $hooker) {
-        $this->hooker = $hooker;
+    public function __construct() {
+        $this->hooker = plugin()->get('hooker');
     }
 
     public function init(): void {
         $this->hooker->add_action(
             'wp_footer',      // The hook name
-            [$this, 'render'], // The callable: this object, 'render' method
+            $this,
+            'render',         // The callable: this object, 'render' method
             10,               // Priority
             1                 // Number of accepted arguments
         );
@@ -71,7 +72,7 @@ You would then need to register and initialize this `Display` class within a ser
 
 ```php
 // In a service provider's boot() method:
-$display = new \LinkPanther\Frontend\Display($this->container->get('hooker'));
+$display = new \WPPB\Frontend\Display();
 $display->init();
 ```
 
@@ -83,12 +84,13 @@ Adding filters works exactly the same way as adding actions, but using the `add_
 
 ```php
 // Get the hooker service
-$hooker = \LinkPanther\plugin()->container->get('hooker');
+$hooker = \WPPB\plugin()->get('hooker');
 $my_class = new MyClass();
 
 $hooker->add_filter(
     'the_title',              // The hook name
-    [$my_class, 'modify_title'], // The callable
+    $my_class,
+    'modify_title',           // The callable
     10,                       // Priority
     2                         // Number of accepted arguments
 );

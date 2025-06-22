@@ -48,11 +48,7 @@ Before you begin, please ensure you have the following installed:
 2.  **Run the Setup Script**:
     This script will ask for your plugin's details and configure the boilerplate files for you.
     ```bash
-    # First, make the script executable
-    chmod u+x setup.sh
-
-    # Then, run the script
-    sh setup.sh
+    yarn setup
     ```
 
 3.  **Install Dependencies**:
@@ -83,6 +79,7 @@ This boilerplate comes with a set of pre-configured scripts for development task
 
 ### JavaScript/Asset Scripts (via Yarn/NPM)
 
+-   **`yarn setup`**: Initial plugin setup
 -   **`yarn dev`**: Starts the webpack dev server with Hot Module Replacement.
 -   **`yarn build`**: Compiles and optimizes all assets for a production environment.
 -   **`yarn build:dev`**: Compiles assets for development without optimization.
@@ -110,17 +107,17 @@ This boilerplate comes with a set of pre-configured scripts for development task
 
 For more detailed information on specific topics, please refer to the documentation in the `/docs` directory.
 
--   **[About](./docs/About.md)**: A general overview of the project's purpose and features.
--   **[Installation](./docs/Installation.md)**: Step-by-step guide to setting up the boilerplate.
--   **[Project Structure](./docs/ProjectSructure.md)**: An explanation of the project's directory layout.
--   **[Configuration](./docs/Configuration.md)**: How to configure the plugin and add new webpack entry points.
--   **[Using the Hooker](./docs/Hooker.md)**: How to use the `Hooker` service to add actions and filters.
--   **[Using Traits](./docs/Traits.md)**: How to use and create reusable traits.
--   **[Plugin Activation/Deactivation](./docs/Activation.md)**: How to run code on the plugin activation and deactivation.
--   **[SCSS - General Usage](./docs/SCSS-General.md)**: An overview of the Sass setup, including path resolution and available mixins.
--   **[SCSS - Custom Fonts](./docs/SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.
--   **[SCSS - SVG Sprites](./docs/SCSS-Spritemap.md)**: How to use the automated SVG spritemap generator.
--   **[AI Development Rules](./docs/AI-Rules.md)**: Guidelines for AI-assisted development with this boilerplate.
+-   **[About](./docs/000-About.md)**: A general overview of the project's purpose and features.
+-   **[Project Structure](./docs/001-ProjectSructure.md)**: An explanation of the project's directory layout.
+-   **[Configuration](./docs/002-Configuration.md)**: How to configure the plugin and add new webpack entry points.
+-   **[Installation](./docs/003-Installation.md)**: Step-by-step guide to setting up the boilerplate.
+-   **[Plugin Activation/Deactivation](./docs/004-Activation.md)**: How to run code on the plugin activation and deactivation.
+-   **[Using the Hooker](./docs/005-Hooker.md)**: How to use the `Hooker` service to add actions and filters.
+-   **[Using Traits](./docs/006-Traits.md)**: How to use and create reusable traits.
+-   **[SCSS - General Usage](./docs/007-SCSS-General.md)**: An overview of the Sass setup, including path resolution and available mixins.
+-   **[SCSS - Custom Fonts](./docs/008-SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.
+-   **[SCSS - SVG Sprites](./docs/009-SCSS-Spritemap.md)**: How to use the automated SVG spritemap generator.
+-   **[AI Development Rules](./docs/010-AI-Rules.md)**: Guidelines for AI-assisted development with this boilerplate.
 
 ## Issues
 
