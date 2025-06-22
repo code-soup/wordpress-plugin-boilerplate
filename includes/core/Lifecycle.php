@@ -7,6 +7,7 @@
 
 namespace WPPB\Core;
 
+use WPPB\Traits\RequirementChecksTrait;
 use function WPPB\plugin;
 
 /**
@@ -18,6 +19,7 @@ defined( 'ABSPATH' ) || die;
  * The Lifecycle class.
  */
 class Lifecycle {
+	use RequirementChecksTrait;
 
 	/**
 	 * The plugin instance.
@@ -33,6 +35,13 @@ class Lifecycle {
 	 */
 	public function __construct( Plugin $plugin ) {
 		$this->plugin = $plugin;
+	}
+
+	/**
+	 * Check plugin requirements.
+	 */
+	public function check_requirements(): void {
+		self::run_requirement_checks( $this->plugin->config );
 	}
 
 	/**

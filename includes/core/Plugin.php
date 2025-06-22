@@ -115,7 +115,18 @@ final class Plugin {
 		$this->register_services();
 		$this->boot_providers();
 
-		$this->container->get( 'hooker' )->run();
+		$this->get( 'hooker' )->run();
+	}
+
+	/**
+	 * Get a service from the container.
+	 *
+	 * @param string $service The service name to retrieve.
+	 *
+	 * @return mixed
+	 */
+	public function get( string $service ) {
+		return $this->container->get( $service );
 	}
 
 	/**

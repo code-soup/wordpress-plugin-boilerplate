@@ -8,6 +8,7 @@
 namespace WPPB\Core;
 
 use WPPB\Traits\RequirementChecksTrait;
+use function WPPB\plugin;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -25,10 +26,9 @@ class Activator {
 
 	/**
 	 * The code that runs during plugin activation.
-	 *
-	 * @param Plugin $plugin The main plugin instance.
 	 */
-	public static function activate( Plugin $plugin ): void {
+	public static function activate(): void {
+		$plugin = plugin();
 		self::run_requirement_checks( $plugin->config );
 	}
 }

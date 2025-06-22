@@ -23,7 +23,7 @@ You can get the main plugin instance using the global `plugin()` function, which
 
 ```php
 // Get the main plugin instance
-$plugin = \WPPB\plugin();
+$plugin = \LinkPanther\plugin();
 
 // Get the hooker service from the container
 $hooker = $plugin->container->get('hooker');
@@ -41,9 +41,9 @@ This example shows how to register a hook from within a class that is managed by
 
 ```php
 // In some class, e.g., includes/frontend/Display.php
-namespace WPPB\Frontend;
+namespace LinkPanther\Frontend;
 
-use WPPB\Core\Hooker;
+use LinkPanther\Core\Hooker;
 
 class Display {
     private Hooker $hooker;
@@ -71,7 +71,7 @@ You would then need to register and initialize this `Display` class within a ser
 
 ```php
 // In a service provider's boot() method:
-$display = new \WPPB\Frontend\Display($this->container->get('hooker'));
+$display = new \LinkPanther\Frontend\Display($this->container->get('hooker'));
 $display->init();
 ```
 
@@ -83,7 +83,7 @@ Adding filters works exactly the same way as adding actions, but using the `add_
 
 ```php
 // Get the hooker service
-$hooker = \WPPB\plugin()->container->get('hooker');
+$hooker = \LinkPanther\plugin()->container->get('hooker');
 $my_class = new MyClass();
 
 $hooker->add_filter(

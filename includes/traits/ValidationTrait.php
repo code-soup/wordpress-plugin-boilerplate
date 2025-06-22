@@ -21,35 +21,12 @@ trait ValidationTrait {
 
 
 	/**
-	 * The validator instance.
-	 *
-	 * @var v
-	 */
-	protected v $validator;
-
-	/**
-	 * ValidationTrait constructor.
-	 */
-	public function __construct() {
-		$this->validator = new v();
-	}
-
-	/**
-	 * Get the validator instance.
+	 * Get the validator instance (lazy initialization).
 	 *
 	 * @return v
 	 */
-	public function get_validator(): v {
-		return $this->validator;
-	}
-
-	/**
-	 * Set the validator instance.
-	 *
-	 * @param v $validator The validator instance.
-	 */
-	public function set_validator( v $validator ): void {
-		$this->validator = $validator;
+	protected function get_validator(): v {
+		return v::class;
 	}
 
 	/**
@@ -61,7 +38,11 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function validate( $value, string $rule ): bool {
-		return $this->validator->is( $rule, $value );
+		try {
+			return v::$rule()->validate( $value );
+		} catch ( \Exception $e ) {
+			return false;
+		}
 	}
 
 	/**
@@ -90,7 +71,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_not_empty( $value ): bool {
-		return $this->validate( $value, 'notEmpty' );
+		return v::notEmpty()->validate( $value );
 	}
 
 	/**
@@ -101,7 +82,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_string( $value ): bool {
-		return $this->validate( $value, 'stringType' );
+		return v::stringType()->validate( $value );
 	}
 
 	/**
@@ -112,7 +93,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_int( $value ): bool {
-		return $this->validate( $value, 'intType' );
+		return v::intType()->validate( $value );
 	}
 
 	/**
@@ -123,7 +104,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_float( $value ): bool {
-		return $this->validate( $value, 'floatType' );
+		return v::floatType()->validate( $value );
 	}
 
 	/**
@@ -134,7 +115,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_bool( $value ): bool {
-		return $this->validate( $value, 'boolType' );
+		return v::boolType()->validate( $value );
 	}
 
 	/**
@@ -145,7 +126,7 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_array( $value ): bool {
-		return $this->validate( $value, 'arrayType' );
+		return v::arrayType()->validate( $value );
 	}
 
 	/**
@@ -156,6 +137,6 @@ trait ValidationTrait {
 	 * @return bool
 	 */
 	public function is_object( $value ): bool {
-		return $this->validate( $value, 'objectType' );
+		return v::objectType()->validate( $value );
 	}
 }

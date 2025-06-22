@@ -56,7 +56,7 @@ final class Assets {
 		$path = $asset_key;
 
 		// In production, get the hashed filename from the manifest.
-		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+		if ( 'production' === $this->plugin->config['ENVIRONMENT'] ) {
 			$manifest = $this->get_manifest();
 			$path     = $manifest[ $asset_key ] ?? $asset_key;
 		}
@@ -74,15 +74,35 @@ final class Assets {
 			return $this->manifest;
 		}
 
-		$manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
+		$is_production = 'production' === $this->plugin->config['ENVIRONMENT'];
+		$transient_key = $this->plugin->config['PLUGIN_PREFIX'] . '_asset_manifest';
 
-		if ( ! file_exists( $manifest_path ) ) {
-			$this->manifest = array();
-			return array();
+		if ( $is_production ) {
+			$cached_manifest = get_transient( $transient_key );
+			if ( false !== $cached_manifest && is_array( $cached_manifest ) ) {
+				$this->manifest = $cached_manifest;
+				return $this->manifest;
+			}
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$this->manifest = json_decode( file_get_contents( $manifest_path ), true );
+		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			\WP_Filesystem();
+		}
+
+		$manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
+
+		if ( ! $wp_filesystem->exists( $manifest_path ) ) {
+			$this->manifest = array();
+		} else {
+			$manifest_contents = $wp_filesystem->get_contents( $manifest_path );
+			$this->manifest    = json_decode( $manifest_contents, true ) ?? array();
+		}
+
+		if ( $is_production ) {
+			set_transient( $transient_key, $this->manifest, YEAR_IN_SECONDS );
+		}
 
 		return $this->manifest;
 	}

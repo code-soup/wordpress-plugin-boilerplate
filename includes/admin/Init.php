@@ -37,7 +37,7 @@ class Init {
 	private function add_hooks(): void {
 		$hooker = plugin()->get( 'hooker' );
 
-		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
 		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
 

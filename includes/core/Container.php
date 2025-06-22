@@ -215,97 +215,11 @@ class Container implements ContainerInterface {
 	}
 
 	/**
-	 * Set a service in the container
-	 *
-	 * @param string $id    The service ID.
-	 * @param mixed  $value The service instance or value.
-	 */
-	public function set( string $id, $value ): void {
-		$this->bind( $id, $value, true );
-	}
-
-	/**
-	 * Get a new instance of a service from the container.
-	 *
-	 * @param string $id The service ID.
-	 *
-	 * @return mixed
-	 * @throws \Exception If the service is not found.
-	 */
-	public function get_new( string $id ) {
-		if ( ! $this->has( $id ) ) {
-			// translators: %s is the service ID.
-			throw new \Exception(
-				sprintf(
-					/* translators: %s: Service identifier */
-					esc_html__( 'Service "%s" not found in container.', '__PLUGIN_TEXTDOMAIN__' ),
-					esc_html( $id )
-				)
-			);
-		}
-
-		if ( is_callable( $this->bindings[ $id ]['concrete'] ) ) {
-			return $this->bindings[ $id ]['concrete']( $this );
-		}
-
-		return $this->bindings[ $id ]['concrete'];
-	}
-
-	/**
 	 * Remove a service from the container.
 	 *
 	 * @param string $id The service ID.
 	 */
 	public function remove( string $id ): void {
-		unset( $this->bindings[ $id ], $this->instances[ $id ] );
-	}
-
-	/**
-	 * Get all services from the container.
-	 *
-	 * @return array
-	 */
-	public function get_services(): array {
-		return $this->bindings;
-	}
-
-	/**
-	 * Get all shared services from the container.
-	 *
-	 * @return array
-	 */
-	public function get_shared_services(): array {
-		return array_filter(
-			$this->bindings,
-			function ( $binding ) {
-				return $binding['shared'];
-			}
-		);
-	}
-
-	/**
-	 * Set all services in the container.
-	 *
-	 * @param array $services The services to set.
-	 */
-	public function set_services( array $services ): void {
-		$this->bindings = $services;
-	}
-
-	/**
-	 * Set all shared services in the container.
-	 *
-	 * @param array $shared The shared services to set.
-	 */
-	public function set_shared_services( array $shared ): void {
-		$this->bindings = array_merge(
-			$this->bindings,
-			array_filter(
-				$shared,
-				function ( $binding ) {
-					return $binding['shared'];
-				}
-			)
-		);
+		unset( $this->bindings[ $id ], $this->instances[ $id ], $this->aliases[ $id ] );
 	}
 }

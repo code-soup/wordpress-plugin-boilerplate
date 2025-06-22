@@ -24,10 +24,10 @@ If you want to use the `HelpersTrait` in a class other than `Plugin`, you must e
 ```php
 <?php
 
-namespace WPPB\Admin;
+namespace LinkPanther\Admin;
 
-use WPPB\Core\Plugin;
-use WPPB\Traits\HelpersTrait;
+use LinkPanther\Core\Plugin;
+use LinkPanther\Traits\HelpersTrait;
 
 class MyAdminPage {
 
@@ -75,7 +75,7 @@ You can create your own traits to group functions for a specific purpose.
 ```php
 <?php
 
-namespace WPPB\Traits;
+namespace LinkPanther\Traits;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -95,7 +95,7 @@ trait MyCustomTrait {
 You can then use this new trait in any class just like the existing ones.
 
 ```php
-use WPPB\Traits\MyCustomTrait;
+use LinkPanther\Traits\MyCustomTrait;
 
 class MyExampleClass {
     use MyCustomTrait;
