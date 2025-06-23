@@ -44,4 +44,4 @@ function plugin(): Plugin {
 }
 
 // Get the plugin running.
-plugin();
+plugin()->run();

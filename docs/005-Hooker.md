@@ -95,3 +95,44 @@ $hooker->add_filter(
     2                         // Number of accepted arguments
 );
 ```
+
+### Example: Calling WordPress built in functions
+
+You can also call WordPress default return functions by simply passing them as second argument
+
+```php
+$hooker->add_filter([ 'the_title', '__return_false' ]);
+```
+
+## Adding Multiple Actions or Filters at Once
+
+The `Hooker` service also provides `add_actions()` and `add_filters()` methods to register multiple hooks in a single call. Each item in the array should be an array of arguments as you would pass to `add_action()` or `add_filter()`.
+
+### Example: Adding multiple actions
+
+```php
+// Register multiple actions at once
+$hooker->add_actions([
+    [ 'wp_enqueue_scripts', $this ],
+    [ 'admin_init', $this, 'on_admin_init', 20 ],
+]);
+```
+
+### Example: Adding multiple filters
+
+```php
+// Register multiple filters at once
+$hooker->add_filters([
+    [ 'the_content', $this, 'filter_content' ],
+    [ 'the_title', $this ], // method name matches hook name, so can be omitted
+]);
+```
+
+### Omitting the method argument
+
+If the method name is the same as the hook name, you can omit the method argument. The `Hooker` service will automatically use the hook name as the method to call on the object. This works for both single and multiple hook registration methods.
+
+```php
+// Equivalent to [ 'the_title', $this, 'the_title' ]
+$hooker->add_filter([ 'the_title', $this ]);
+```

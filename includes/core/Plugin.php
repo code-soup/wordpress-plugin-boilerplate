@@ -5,7 +5,7 @@
  * @package WPPB
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace WPPB\Core;
 
@@ -113,8 +113,15 @@ final class Plugin {
 		$this->container->instance( self::class, $this );
 
 		$this->register_services();
-		$this->boot_providers();
+		$this->register_providers();
+	}
 
+	/**
+	 * Boots providers and fires all registered hooks.
+	 * This is the main entry point for the plugin logic.
+	 */
+	public function run(): void {
+		$this->boot_providers();
 		$this->get( 'hooker' )->run();
 	}
 
@@ -138,6 +145,15 @@ final class Plugin {
 		$this->container->singleton( 'assets', Assets::class );
 		$this->container->singleton( 'i18n', I18n::class );
 		$this->container->singleton( Init::class, Init::class );
+	}
+
+	/**
+	 * Register service providers with the container.
+	 */
+	private function register_providers(): void {
+		foreach ( $this->providers as $provider_class ) {
+			$this->container->singleton( $provider_class, $provider_class );
+		}
 	}
 
 	/**

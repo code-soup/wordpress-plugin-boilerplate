@@ -136,7 +136,7 @@ while [[ -z "$php_namespace" ]]; do
 done
 
 # Prompt the user for input plugin prefix
-read -rp "$(echo -e "${YELLOW}Enter Plugin Prefix (required): ${NC} ")" plugin_prefix
+read -rp "$(echo -e "${YELLOW}Enter Plugin Prefix, don't add dash or underscore at the end (required): ${NC} ")" plugin_prefix
 
 # Default Value
 plugin_prefix=$(printf '%q\n' "$plugin_prefix")
