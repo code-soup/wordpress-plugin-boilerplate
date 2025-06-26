@@ -34,9 +34,11 @@ class Init {
 	 */
 	private function add_hooks(): void {
 		$hooker = plugin()->get( 'hooker' );
-		$hooker->add_actions( [
-			[ 'admin_enqueue_scripts', $this ]
-		] );
+		$hooker->add_actions(
+			array(
+				array( 'admin_enqueue_scripts', $this ),
+			)
+		);
 	}
 
 	/**

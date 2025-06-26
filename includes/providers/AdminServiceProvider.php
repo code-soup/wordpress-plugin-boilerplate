@@ -19,7 +19,7 @@ class AdminServiceProvider extends AbstractServiceProvider {
 	 * Register the service provider.
 	 */
 	public function register(): void {
-		// Intentionally empty.
+		$this->container->singleton( 'admin', \WPPB\Admin\Init::class );
 	}
 
 	/**
@@ -27,7 +27,7 @@ class AdminServiceProvider extends AbstractServiceProvider {
 	 */
 	public function boot(): void {
 		if ( is_admin() ) {
-			$this->container->singleton( 'admin_init', \WPPB\Admin\Init::class );
+			$this->container->get( 'admin' );
 		}
 	}
 }

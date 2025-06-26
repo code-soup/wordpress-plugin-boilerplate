@@ -9,9 +9,7 @@ namespace WPPB\Providers;
 
 use WPPB\Abstracts\AbstractServiceProvider;
 
-/**
- * If this file is called directly, abort.
- */
+/** If this file is called directly, abort. */
 defined( 'ABSPATH' ) || die;
 
 /**
@@ -23,7 +21,7 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 	 * Register the service provider.
 	 */
 	public function register(): void {
-		// Intentionally empty.
+		$this->container->singleton( 'frontend', \WPPB\Frontend\Init::class );
 	}
 
 	/**
@@ -31,7 +29,7 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 	 */
 	public function boot(): void {
 		if ( ! is_admin() ) {
-			$this->container->singleton( 'frontend_init', \WPPB\Frontend\Init::class );
+			$this->container->get( 'frontend' );
 		}
 	}
 }

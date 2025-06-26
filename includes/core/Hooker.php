@@ -43,17 +43,17 @@ class Hooker {
 	 *
 	 * If $component is an object and $method is omitted or null, the hook name will be used as the method name.
 	 *
-	 * @param string         $hook          The name of the action to add.
+	 * @param string          $hook          The name of the action to add.
 	 * @param callable|object $component    The callback or object instance.
-	 * @param string|null    $method        The method name if using object, or null if using callable or to fallback to hook name.
-	 * @param int            $priority      The priority for the action. Default 10.
-	 * @param int            $accepted_args The number of accepted arguments. Default 1.
+	 * @param string|null     $method        The method name if using object, or null if using callable or to fallback to hook name.
+	 * @param int             $priority      The priority for the action. Default 10.
+	 * @param int             $accepted_args The number of accepted arguments. Default 1.
 	 * @return self
 	 */
 	public function add_action( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
 		$callback = is_object( $component )
-			? [ $component, $method ?? $hook ]
+			? array( $component, $method ?? $hook )
 			: $component;
 
 		$this->actions[] = array(
@@ -75,17 +75,17 @@ class Hooker {
 	 *
 	 * If $component is an object and $method is omitted or null, the hook name will be used as the method name.
 	 *
-	 * @param string         $hook          The name of the filter to add.
+	 * @param string          $hook          The name of the filter to add.
 	 * @param callable|object $component    The callback or object instance.
-	 * @param string|null    $method        The method name if using object, or null if using callable or to fallback to hook name.
-	 * @param int            $priority      The priority for the filter. Default 10.
-	 * @param int            $accepted_args The number of accepted arguments. Default 1.
+	 * @param string|null     $method        The method name if using object, or null if using callable or to fallback to hook name.
+	 * @param int             $priority      The priority for the filter. Default 10.
+	 * @param int             $accepted_args The number of accepted arguments. Default 1.
 	 * @return self
 	 */
 	public function add_filter( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
 		$callback = is_object( $component )
-			? [ $component, $method ?? $hook ]
+			? array( $component, $method ?? $hook )
 			: $component;
 
 		$this->filters[] = array(
@@ -120,7 +120,12 @@ class Hooker {
 	 * Each item should be an array: [hook, callback|object, method (optional), priority (optional), accepted_args (optional)]
 	 * If method is omitted and the second argument is an object, the hook name will be used as the method name (see add_action()).
 	 *
-	 * @param array<int, array> $actions
+	 * @param array<int, array> $actions Array of action configurations. Each item should be an array containing:
+	 *                                   - string $hook The action hook name.
+	 *                                   - callable|object $component The callback or object instance.
+	 *                                   - string|null $method (optional) The method name if using object.
+	 *                                   - int $priority (optional) Hook priority, defaults to 10.
+	 *                                   - int $accepted_args (optional) Number of arguments, defaults to 1.
 	 * @return self
 	 */
 	public function add_actions( array $actions ): self {
@@ -144,7 +149,12 @@ class Hooker {
 	 * Each item should be an array: [hook, callback|object, method (optional), priority (optional), accepted_args (optional)]
 	 * If method is omitted and the second argument is an object, the hook name will be used as the method name (see add_filter()).
 	 *
-	 * @param array<int, array> $filters
+	 * @param array<int, array> $filters Array of filter configurations. Each item should be an array containing:
+	 *                                   - string $hook The filter hook name.
+	 *                                   - callable|object $component The callback or object instance.
+	 *                                   - string|null $method (optional) The method name if using object.
+	 *                                   - int $priority (optional) Hook priority, defaults to 10.
+	 *                                   - int $accepted_args (optional) Number of arguments, defaults to 1.
 	 * @return self
 	 */
 	public function add_filters( array $filters ): self {

@@ -4,7 +4,7 @@ These are instructions for an AI assistant to follow when developing with the Wo
 
 ## Table of Contents
 
-0.  [Core Principles](#communication-preferences)
+0.  [Communication Preferences](#communication-preferences)
 1.  [Core Principles](#core-principles)
 2.  [PHP Development](#php-development)
     - [File Structure & Autoloading](#file-structure--autoloading)
@@ -47,6 +47,12 @@ Strictly follow these principles when interacting with user
 
 - Always wait for user confirmation before generating any code
 - Strictly follow the development patterns defined in this boilerplate
+- Generate minimal, bare-bones code and work in small incremental steps.
+- Idea is to add functionality after the test and not everything at once, it's too much code to review for me we and must go step by step in smaller steps because it's easier for team to follow
+- Don't cover all possible scenarios I will make these decisions
+- Only say you 'Done' once all is done, don't generate long response
+- Once you are done with something ask me to verify, don't run multiple verifications on your own
+
 
 ## Core Principles
 

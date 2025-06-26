@@ -2,12 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2024-06-23
+
+### Added
+- Uninstaller class
+- Service Provider pattern documentation with examples
+
+### Removed
+- Lifecycle Class
+- Core Provider
+- Documentation Trait
+
+### Changed
+- Container optimizations and bug fixes
+- Plugin class bug fixes
+- Various minor bug fixes
+- AI rules update
+- Documentation updates
+
+
 ## [2.0.1] - 2024-06-22
 
 ### Changed
 
 - Improved and simplified webpack build script
-- Container optimizations and bugfixes
+- Container optimizations and bug fixes
 - Improved AI rules
 - Bug fixes
 - Documentation updates

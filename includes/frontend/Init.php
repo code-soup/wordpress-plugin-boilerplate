@@ -29,9 +29,11 @@ class Init {
 	 */
 	private function add_hooks(): void {
 		$hooker = plugin()->get( 'hooker' );
-		$hooker->add_actions( [
-			[ 'wp_enqueue_scripts', $this ]
-		] );
+		$hooker->add_actions(
+			array(
+				array( 'wp_enqueue_scripts', $this ),
+			)
+		);
 	}
 
 	/**
