@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.2] - 2024-06-23
+## [2.0.2] - 2024-06-26
 
 ### Added
 - Uninstaller class
@@ -14,11 +14,13 @@ All notable changes to this project will be documented in this file.
 - Documentation Trait
 
 ### Changed
+- Webpack HMR update
 - Container optimizations and bug fixes
 - Plugin class bug fixes
 - Various minor bug fixes
 - AI rules update
 - Documentation updates
+- Setup script updates
 
 
 ## [2.0.1] - 2024-06-22
