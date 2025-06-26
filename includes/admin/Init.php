@@ -46,18 +46,41 @@ class Init {
 	 */
 	public function admin_enqueue_scripts(): void {
 
+		$assets_handler = plugin()->get( 'assets' );
+		$plugin_version = plugin()->config['PLUGIN_VERSION'];
+
+		// Enqueue the main admin stylesheet.
 		wp_enqueue_style(
-			'wppb-admin-common',
-			plugin()->get( 'assets' )->get_asset_url( 'admin-common.css' ),
-			array( 'wppb-common' ),
-			plugin()->config['PLUGIN_VERSION']
+			'__PLUGIN_PREFIX__-admin',
+			$assets_handler->get_asset_url( 'admin-common.css' ),
+			array(),
+			$plugin_version
 		);
 
+		// Enqueue the webpack runtime script.
 		wp_enqueue_script(
-			'wppb-admin-common',
-			plugin()->get( 'assets' )->get_asset_url( 'admin-common.js' ),
-			array( 'wppb-common' ),
-			plugin()->config['PLUGIN_VERSION'],
+			'__PLUGIN_PREFIX__-runtime',
+			$assets_handler->get_asset_url( 'runtime.js' ),
+			array(),
+			$plugin_version,
+			true
+		);
+
+		// Enqueue the vendor libs script, dependent on the runtime.
+		wp_enqueue_script(
+			'__PLUGIN_PREFIX__-vendor',
+			$assets_handler->get_asset_url( 'vendor-libs.js' ),
+			array( '__PLUGIN_PREFIX__-runtime' ),
+			$plugin_version,
+			true
+		);
+
+		// Enqueue the main admin script, dependent on runtime and vendors.
+		wp_enqueue_script(
+			'__PLUGIN_PREFIX__-admin-common',
+			$assets_handler->get_asset_url( 'admin-common.js' ),
+			array( '__PLUGIN_PREFIX__-runtime', '__PLUGIN_PREFIX__-vendor' ),
+			$plugin_version,
 			true
 		);
 	}
