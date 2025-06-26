@@ -14,20 +14,21 @@ import watchConfig from './webpack/config.watch.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
-const createWebpackConfig = (options = {}) => {
-	const config = options.config || userConfig;
+const createWebpackConfig = (envArgs, argv) => {
+	const isProduction = argv.mode === 'production';
+	const fileName = isProduction ? '[name].[contenthash]' : '[name]';
 
 	const baseConfig = {
-		entry: config.entry,
-		context: config.paths.src,
+		entry: userConfig.entry,
+		context: userConfig.paths.src,
 		output: {
-			path: config.paths.dist,
-			publicPath: config.publicPath,
-			filename: `scripts/${config.fileName}.js`,
+			path: userConfig.paths.dist,
+			publicPath: userConfig.publicPath,
+			filename: `scripts/${fileName}.js`,
 			clean: true,
-			chunkFilename: `scripts/${config.fileName}.[contenthash].chunk.js`,
+			chunkFilename: `scripts/${isProduction ? '[id].[contenthash]' : '[id]'}.chunk.js`,
 		},
-		mode: config.mode,
+		mode: argv.mode,
 		stats: {
 			assets: true,
 			colors: true,
@@ -41,34 +42,65 @@ const createWebpackConfig = (options = {}) => {
 				config: [__filename],
 			},
 			cacheDirectory: pathUtils.paths.cache,
-			name: `${env.isProduction ? 'prod' : 'dev'}-cache`,
+			name: `${isProduction ? 'prod' : 'dev'}-cache`,
 		},
 		target: ['web', 'es5'],
-		devtool: env.getEnvSpecific('source-map', 'eval-source-map'),
-		module: moduleConfig(config, env),
+		devtool: env.getEnvSpecific(isProduction, 'source-map', 'cheap-module-source-map'),
+		module: moduleConfig(userConfig, { isProduction }),
 		resolve: {
-			modules: [config.paths.src, 'node_modules'],
-			extensions: ['.js', '.json'],
+			modules: [userConfig.paths.src, 'node_modules'],
+			extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
 			enforceExtension: false,
 			alias: {
-				'@': config.paths.src,
+				'@': userConfig.paths.src,
 			},
+			fallback: {
+				"path": false,
+				"fs": false,
+				"os": false,
+				"crypto": false,
+				"stream": false,
+				"buffer": false,
+				"util": false
+			}
 		},
 		externals: {
 			jquery: 'jQuery',
 		},
 		performance: {
-			hints: env.getEnvSpecific('warning', false),
+			hints: env.getEnvSpecific(isProduction, 'warning', false),
 			maxEntrypointSize: 1000000,
 			maxAssetSize: 1000000,
 		},
-		plugins: pluginsConfig(config, env),
-		optimization: optimizationConfig(config, env),
+		plugins: pluginsConfig(userConfig, { ...env, isProduction }, fileName),
+		optimization: optimizationConfig(userConfig, { isProduction }),
 	};
 
-	const devServerConfig = env.isWatching ? watchConfig(config, env) : {};
+	// ------------------------------------------------------------------
+	// Inject HMR bootstrap helper into every entry when running via
+	// `webpack serve` (watch mode). This guarantees the helper is NEVER
+	// bundled in a normal `webpack --mode development` or production build.
+	// ------------------------------------------------------------------
+	if ( env.isWatching ) {
+		const hmrHelper = pathUtils.fromConfig( 'util/hmr-helper.js' );
 
-	return merge(baseConfig, devServerConfig, options.overrides || {});
+		// Support both object and function forms of `entry`.
+		const originalEntries =
+			typeof baseConfig.entry === 'function'
+				? baseConfig.entry()
+				: { ...baseConfig.entry };
+
+		Object.keys( originalEntries ).forEach( ( key ) => {
+			const value = originalEntries[ key ];
+			originalEntries[ key ] = Array.isArray( value ) ? [ hmrHelper, ...value ] : [ hmrHelper, value ];
+		} );
+
+		baseConfig.entry = originalEntries;
+	}
+
+	const devServerConfig = isProduction ? {} : watchConfig(userConfig, { isProduction });
+
+	return merge(baseConfig, devServerConfig);
 };
 
-export default createWebpackConfig();
+export default createWebpackConfig;

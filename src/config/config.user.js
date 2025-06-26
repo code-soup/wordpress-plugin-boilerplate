@@ -3,26 +3,31 @@
  * Includes base configuration and entry points.
  */
 
-import path from 'path';
-import dotenv from 'dotenv';
-import * as pathUtils from './util/paths.js';
-import * as env from './util/env.js';
+import path from "path";
+import dotenv from "dotenv";
+import * as pathUtils from "./util/paths.js";
 
 // Plugin directory name detection for WordPress
-const pluginDirName = path.basename(path.join(pathUtils.paths.config, '../..'));
+const pluginDirName = path.basename(path.join(pathUtils.paths.config, "../.."));
 
 // Load environment variables from .env.local file
 dotenv.config({
-	path: pathUtils.fromRoot('.env.local'),
+	path: pathUtils.fromRoot(".env.local"),
 });
 
-/**
- * Auto-set public path or read from .env
- */
+// ---------------------------------------------------------------------------
+// Public path logic
+// ---------------------------------------------------------------------------
+// 1. If you pass WP_PUBLIC_PATH it always wins (CI / production builds).
+// 2. While running the local dev-server (webpack-serve / yarn dev) we want a
+//    hard-coded path that points to the HMR server on localhost:8080 so the
+//    runtime can fetch hot-update files without any extra env vars.
+// 3. In every other case fall back to the default WP plugin path.
+
+// Public path:  use env-var if present, otherwise default to WP plugin dir
 const publicPath =
-	'undefined' === typeof process.env.WP_PUBLIC_PATH
-		? `${process.env.WP_CONTENT_PATH || '/wp-content/plugins'}/${pluginDirName}/dist/`
-		: process.env.WP_PUBLIC_PATH;
+	process.env.WP_PUBLIC_PATH ??
+	`${process.env.WP_CONTENT_PATH || '/wp-content/plugins'}/${pluginDirName}/dist/`;
 
 /**
  * Base configuration object
@@ -42,18 +47,12 @@ const config = {
 	 * }
 	 */
 	entry: {
-		'admin-common': ['./scripts/admin.js', './styles/admin.scss'],
-		common: ['./scripts/main.js', './styles/main.scss'],
+		"admin-common": ["./scripts/admin.js", "./styles/admin.scss"],
+		"ziploy-common": ["./scripts/main.js", "./styles/main.scss"],
 	},
-
-	// Environment mode: 'production' or 'development'
-	mode: env.isProduction ? 'production' : 'development',
 
 	// Path configuration (using path utility)
 	paths: pathUtils.paths,
-
-	// File naming pattern for cache busting in production
-	fileName: env.isProduction ? '[name].[contenthash]' : '[name]',
 
 	// Public path for assets, detected automatically or from .env
 	publicPath: publicPath,

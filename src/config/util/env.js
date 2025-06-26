@@ -6,8 +6,6 @@ import fs from 'fs';
 import { paths } from './paths.js';
 
 // Environment constants - evaluated once and cached.
-export const isProduction = process.env.NODE_ENV === 'production';
-export const isDevelopment = process.env.NODE_ENV === 'development';
 export const isWatching = !!process.env.WEBPACK_SERVE;
 export const isAnalyzing = !!process.env.ANALYZE;
 export const isLintingScripts = !!process.env.LINT_SCRIPTS;
@@ -19,7 +17,7 @@ export const isLintingStyles = !!process.env.LINT_STYLES;
  * @param {*} devValue - Value for development.
  * @return {*} The environment-specific value.
  */
-export const getEnvSpecific = (prodValue, devValue) =>
+export const getEnvSpecific = (isProduction, prodValue, devValue) =>
     isProduction ? prodValue : devValue;
 
 /**

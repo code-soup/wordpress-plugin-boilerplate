@@ -113,6 +113,7 @@ For more detailed information on specific topics, please refer to the documentat
 -   **[Installation](./docs/003-Installation.md)**: Step-by-step guide to setting up the boilerplate.
 -   **[Plugin Activation/Deactivation](./docs/004-Activation.md)**: How to run code on the plugin activation and deactivation.
 -   **[Using the Hooker](./docs/005-Hooker.md)**: How to use the `Hooker` service to add actions and filters.
+-   **[Service Providers](./docs/011-Service-Providers.md)**: How to create and register service providers with and without interfaces.
 -   **[Using Traits](./docs/006-Traits.md)**: How to use and create reusable traits.
 -   **[SCSS - General Usage](./docs/007-SCSS-General.md)**: An overview of the Sass setup, including path resolution and available mixins.
 -   **[SCSS - Custom Fonts](./docs/008-SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.

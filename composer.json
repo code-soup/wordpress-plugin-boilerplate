@@ -1,5 +1,6 @@
 {
 	"name": "codesoup/wppb",
+    "version": "1.0.0",
 	"description": "WordPress Plugin Boilerplate",
 	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
 	"type": "wordpress-plugin",

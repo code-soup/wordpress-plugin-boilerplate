@@ -33,7 +33,7 @@ function plugin(): Plugin {
 			'PLUGIN_NAME'                  => '__PLUGIN_NAME__',
 			'PLUGIN_VERSION'               => '__PLUGIN_VERSION__',
 			'PLUGIN_TEXTDOMAIN'            => '__PLUGIN_TEXTDOMAIN__',
-			'ENVIRONMENT'                  => wp_get_environment_type(),
+			'ENVIRONMENT'                  => \wp_get_environment_type(),
 		);
 
 		// Pass the main plugin file path and config to the instance method.
@@ -44,4 +44,4 @@ function plugin(): Plugin {
 }
 
 // Get the plugin running.
-plugin();
+plugin()->run();

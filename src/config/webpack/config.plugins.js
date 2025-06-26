@@ -14,12 +14,12 @@ import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 // Import utilities
 import { conditionalPlugins, configurePlugin } from '../util/plugins.js';
 
-export default (config, env) => {
+export default (config, env, fileName) => {
     // Base plugins that are always included
     const basePlugins = [
         new MiniCssExtractPlugin({
-            filename: `styles/${config.fileName}.css`,
-            chunkFilename: `styles/[id].${config.fileName}.css`,
+            filename: `styles/${fileName}.css`,
+            chunkFilename: `styles/${env.isProduction ? '[id].[contenthash]' : '[id]'}.chunk.css`,
         }),
         new webpack.ProvidePlugin({
             $: 'jquery',
@@ -52,10 +52,14 @@ export default (config, env) => {
                 ),
         },
         
-        // Manifest plugin - only in production
+        // Manifest plugin - always generate manifest for asset mapping
         {
-            condition: env.isProduction,
-            factory: () => new WebpackManifestPlugin(),
+            condition: true, // Always generate manifest
+            factory: () => new WebpackManifestPlugin({
+                fileName: 'manifest.json',
+                publicPath: '',
+                writeToFileEmit: true
+            }),
         },
         
         // ESLint plugin - only when running lint commands

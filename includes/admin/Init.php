@@ -5,15 +5,13 @@
  * @package WPPB
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace WPPB\Admin;
 
 use function WPPB\plugin;
 
-/**
- * If this file is called directly, abort.
- */
+/** If this file is called directly, abort. */
 defined( 'ABSPATH' ) || die;
 
 /**
@@ -36,45 +34,53 @@ class Init {
 	 */
 	private function add_hooks(): void {
 		$hooker = plugin()->get( 'hooker' );
-
-		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
-		$hooker->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+		$hooker->add_actions(
+			array(
+				array( 'admin_enqueue_scripts', $this ),
+			)
+		);
 	}
 
 	/**
 	 * Enqueue the admin styles.
 	 */
-	public function enqueue_styles(): void {
-		wp_enqueue_style(
-			'wppb-common',
-			plugin()->get( 'assets' )->get_asset_url( 'common.css' ),
-			array(),
-			plugin()->config['PLUGIN_VERSION']
-		);
-		wp_enqueue_style(
-			'wppb-admin-common',
-			plugin()->get( 'assets' )->get_asset_url( 'admin-common.css' ),
-			array( 'wppb-common' ),
-			plugin()->config['PLUGIN_VERSION']
-		);
-	}
+	public function admin_enqueue_scripts(): void {
 
-	/**
-	 * Enqueue the admin scripts.
-	 */
-	public function enqueue_scripts(): void {
-		wp_enqueue_script(
-			'wppb-common',
-			plugin()->get( 'assets' )->get_asset_url( 'common.js' ),
+		$assets_handler = plugin()->get( 'assets' );
+		$plugin_version = plugin()->config['PLUGIN_VERSION'];
+
+		// Enqueue the main admin stylesheet.
+		wp_enqueue_style(
+			'wppb-admin',
+			$assets_handler->get_asset_url( 'admin-common.css' ),
 			array(),
-			plugin()->config['PLUGIN_VERSION'],
+			$plugin_version
+		);
+
+		// Enqueue the webpack runtime script.
+		wp_enqueue_script(
+			'wppb-runtime',
+			$assets_handler->get_asset_url( 'runtime.js' ),
+			array(),
+			$plugin_version,
 			true
 		);
+
+		// Enqueue the vendor libs script, dependent on the runtime.
+		wp_enqueue_script(
+			'wppb-vendor',
+			$assets_handler->get_asset_url( 'vendor-libs.js' ),
+			array( 'wppb-runtime' ),
+			$plugin_version,
+			true
+		);
+
+		// Enqueue the main admin script, dependent on runtime and vendors.
 		wp_enqueue_script(
 			'wppb-admin-common',
-			plugin()->get( 'assets' )->get_asset_url( 'admin-common.js' ),
-			array( 'wppb-common' ),
-			plugin()->config['PLUGIN_VERSION'],
+			$assets_handler->get_asset_url( 'admin-common.js' ),
+			array( 'wppb-runtime', 'wppb-vendor' ),
+			$plugin_version,
 			true
 		);
 	}

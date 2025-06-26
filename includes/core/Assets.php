@@ -5,13 +5,11 @@
  * @package WPPB
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace WPPB\Core;
 
-/**
- * If this file is called directly, abort.
- */
+/** If this file is called directly, abort. */
 defined( 'ABSPATH' ) || die;
 
 /**
@@ -27,6 +25,27 @@ final class Assets {
 	private Plugin $plugin;
 
 	/**
+	 * A flag indicating if the environment is production.
+	 *
+	 * @var bool
+	 */
+	private bool $is_production;
+
+	/**
+	 * The transient key for the asset manifest.
+	 *
+	 * @var string
+	 */
+	private string $transient_key;
+
+	/**
+	 * The path to the manifest file.
+	 *
+	 * @var string
+	 */
+	private string $manifest_path;
+
+	/**
 	 * The cached webpack manifest data.
 	 *
 	 * @var array<string, mixed>|null
@@ -39,7 +58,12 @@ final class Assets {
 	 * @param Plugin $plugin The main plugin instance.
 	 */
 	public function __construct( Plugin $plugin ) {
-		$this->plugin = $plugin;
+		$this->plugin        = $plugin;
+		$this->is_production = 'production' === $this->plugin->config['ENVIRONMENT'];
+		$this->manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
+		$this->transient_key = sprintf( '%s_asset_manifest_%s',
+			$this->plugin->config['PLUGIN_PREFIX'],
+			$this->plugin->config['PLUGIN_VERSION'] );
 	}
 
 	/**
@@ -56,7 +80,7 @@ final class Assets {
 		$path = $asset_key;
 
 		// In production, get the hashed filename from the manifest.
-		if ( 'production' === $this->plugin->config['ENVIRONMENT'] ) {
+		if ( $this->is_production ) {
 			$manifest = $this->get_manifest();
 			$path     = $manifest[ $asset_key ] ?? $asset_key;
 		}
@@ -74,11 +98,8 @@ final class Assets {
 			return $this->manifest;
 		}
 
-		$is_production = 'production' === $this->plugin->config['ENVIRONMENT'];
-		$transient_key = $this->plugin->config['PLUGIN_PREFIX'] . '_asset_manifest';
-
-		if ( $is_production ) {
-			$cached_manifest = get_transient( $transient_key );
+		if ( $this->is_production ) {
+			$cached_manifest = get_transient( $this->transient_key );
 			if ( false !== $cached_manifest && is_array( $cached_manifest ) ) {
 				$this->manifest = $cached_manifest;
 				return $this->manifest;
@@ -91,17 +112,15 @@ final class Assets {
 			\WP_Filesystem();
 		}
 
-		$manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
-
-		if ( ! $wp_filesystem->exists( $manifest_path ) ) {
+		if ( ! $wp_filesystem->exists( $this->manifest_path ) ) {
 			$this->manifest = array();
 		} else {
-			$manifest_contents = $wp_filesystem->get_contents( $manifest_path );
+			$manifest_contents = $wp_filesystem->get_contents( $this->manifest_path );
 			$this->manifest    = json_decode( $manifest_contents, true ) ?? array();
 		}
 
-		if ( $is_production ) {
-			set_transient( $transient_key, $this->manifest, YEAR_IN_SECONDS );
+		if ( $this->is_production ) {
+			set_transient( $this->transient_key, $this->manifest, WEEK_IN_SECONDS );
 		}
 
 		return $this->manifest;

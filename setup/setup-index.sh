@@ -1,79 +1,69 @@
 #!/bin/bash
 
-# Delete index.php file if it exists
-if [[ -f "index.php" ]]; then
-    rm index.php
-fi
+# This script updates the default plugin header in index.php with user-provided values.
+# It's intended to be run after prompt-header.sh, which sets the required environment variables.
 
-header_content="<?php
-/**
- * Plugin main file.
- *
- * @package $php_namespace
- */
+# Use a temporary file to avoid issues with in-place editing.
+TMP_FILE=$(mktemp)
 
-defined('WPINC') || die;
+# Read index.php line by line and write the updated content to the temporary file.
+while IFS= read -r line; do
+    case "$line" in
+        *\**" @package "*)
+            echo " * @package $php_namespace" >>"$TMP_FILE"
+            ;;
+        "namespace "*)
+            echo "namespace $php_namespace;" >>"$TMP_FILE"
+            ;;
+        *"Plugin Name:"*)
+            echo " * Plugin Name:       $plugin_name" >>"$TMP_FILE"
+            ;;
+        *"Plugin URI:"*)
+            if [[ -n "$plugin_uri" ]]; then
+                echo " * Plugin URI:        $plugin_uri" >>"$TMP_FILE"
+            fi
+            ;;
+        *"Description:"*)
+            echo " * Description:       $plugin_description" >>"$TMP_FILE"
+            ;;
+        *"Version:"*)
+            echo " * Version:           $plugin_version" >>"$TMP_FILE"
+            ;;
+        *"Requires at least:"*)
+            echo " * Requires at least: $requires_wordpress" >>"$TMP_FILE"
+            ;;
+        *"Requires PHP:"*)
+            echo " * Requires PHP:      $requires_php" >>"$TMP_FILE"
+            ;;
+        *"Author:"*)
+            if [[ -n "$plugin_author" ]]; then
+                echo " * Author:            $plugin_author" >>"$TMP_FILE"
+            fi
+            ;;
+        *"Author URI:"*)
+            if [[ -n "$plugin_author_uri" ]]; then
+                echo " * Author URI:        $plugin_author_uri" >>"$TMP_FILE"
+            fi
+            ;;
+        *"License:"*)
+            echo " * License:           $plugin_license" >>"$TMP_FILE"
+            ;;
+        *"License URI:"*)
+            if [[ -n "$license_uri" ]]; then
+                echo " * License URI:       $license_uri" >>"$TMP_FILE"
+            fi
+            ;;
+        *"Text Domain:"*)
+            echo " * Text Domain:       $plugin_textdomain" >>"$TMP_FILE"
+            ;;
+        *)
+            # If the line doesn't match any of the headers, write it to the file as-is.
+            echo "$line" >>"$TMP_FILE"
+            ;;
+    esac
+done <index.php
 
-/**
- * Plugin Name: $plugin_name"
+# Overwrite the original file with the updated content and clean up.
+mv "$TMP_FILE" index.php
 
-if [[ -n "$plugin_uri" ]]; then
-    header_content+="\n * Plugin URI: $plugin_uri"
-fi
-
-header_content+="\n * Description: $plugin_description
- * Version: $plugin_version
- * Requires at least: $requires_wordpress
- * Requires PHP: $requires_php"
-
-if [[ -n "$plugin_author" ]]; then
-    header_content+="\n * Author: $plugin_author"
-fi
-
-if [[ -n "$plugin_author_uri" ]]; then
-    header_content+="\n * Author URI: $plugin_author_uri"
-fi
-
-header_content+="\n * License: $plugin_license"
-
-if [[ -n "$license_uri" ]]; then
-    header_content+="\n * License URI: $license_uri"
-fi
-
-header_content+="\n * Text Domain: $plugin_textdomain
- */"
-
-printf "%b" "$header_content" >index.php
-
-# NOTE: Activation hooks need to be inside index.php file or it might not work properly
-# It can fail without error, WordPress is silently failing in case of error
-
-# The code that runs during plugin activation.
-# - includes/Activator.php
-activation_hook_content="\n
-register_activation_hook( __FILE__, function() {
-
-    // On activate do this.
-    \\$php_namespace\Core\Activator::activate();
-});"
-
-printf "%b" "$activation_hook_content" >>index.php
-
-# The code that runs during plugin deactivation.
-# - includes/Deactivator.php
-deactivation_hook_content="\n
-register_deactivation_hook( __FILE__, function () {
-    
-    // On deactivate do that.
-    \\$php_namespace\Core\Deactivator::deactivate();
-});"
-
-printf "%b" "$deactivation_hook_content" >>index.php
-
-# Run plugin, run
-run_content="\n
-include \"run.php\";"
-
-printf "%b" "$run_content" >>index.php
-
-echo "index.php setup completed."
+echo "Plugin header setup completed. index.php has been updated."

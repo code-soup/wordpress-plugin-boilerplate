@@ -16,5 +16,6 @@ source ./setup/setup-files.sh
 source ./setup/setup-git.sh
 
 # Display a message to indicate that the setup is completed
-echo "Please run composer install manually before trying to activate plugin"
+
 echo "Plugin setup completed."
+echo "Important: Please run 'composer install' before trying to activate plugin in WP admin"
