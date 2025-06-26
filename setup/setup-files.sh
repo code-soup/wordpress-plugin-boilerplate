@@ -17,11 +17,13 @@ for dir in "${directories[@]}"; do
       # For macOS, use sed with the '-i' option, but provide an empty string for backup
       sed -i '' "s/WPPB/$php_namespace/g" "$filename"
       sed -i '' "s/wppb/$plugin_prefix/g" "$filename"
+      sed -i '' "s/__PLUGIN_TEXTDOMAIN__/$plugin_textdomain/g" "$filename"
     else
       # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
       dos2unix "$filename" >/dev/null 2>&1
       sed "s/WPPB/$php_namespace/g" "$filename" >"$filename.tmp" && mv "$filename.tmp" "$filename"
       sed "s/wppb/$plugin_prefix/g" "$filename" >"$filename.tmp" && mv "$filename.tmp" "$filename"
+      sed "s/__PLUGIN_TEXTDOMAIN__/$plugin_textdomain/g" "$filename" >"$filename.tmp" && mv "$filename.tmp" "$filename"
     fi
   done
 done
