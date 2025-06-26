@@ -30,12 +30,14 @@ done
 if [[ "$OS" == "Darwin" ]]; then
   # For macOS, use sed with the '-i' option, but provide an empty string for backup
   sed -i '' "s/WPPB/$php_namespace/g" "run.php"
+  sed -i '' "s/WPPB/$php_namespace/g" "index.php"
   sed -i '' "s/WPPB/$php_namespace/g" "uninstall.php"
   sed -i '' "s/WPPB/$php_namespace/g" "composer.json"
 else
   # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
   dos2unix "run.php" >/dev/null 2>&1
   sed "s/WPPB/$php_namespace/g" "run.php" >"run.php.tmp" && mv "run.php.tmp" "run.php"
+  sed "s/WPPB/$php_namespace/g" "index.php" >"index.php.tmp" && mv "index.php.tmp" "index.php"
   sed "s/WPPB/$php_namespace/g" "uninstall.php" >"uninstall.php.tmp" && mv "uninstall.php.tmp" "uninstall.php"
   sed "s/WPPB/$php_namespace/g" "composer.json" >"composer.json.tmp" && mv "composer.json.tmp" "composer.json"
 fi

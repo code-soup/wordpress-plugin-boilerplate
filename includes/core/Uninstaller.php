@@ -28,7 +28,6 @@ class Uninstaller {
 	 * The code that runs during plugin deinstallation.
 	 */
 	public static function run(): void {
-		$plugin = plugin();
-		self::run_requirement_checks( $plugin->config );
+		// Do something on uninstall.
 	}
 }
