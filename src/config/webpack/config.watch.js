@@ -89,6 +89,7 @@ export default (config, env) => {
 				: undefined,
 			devMiddleware: {
 				publicPath: config.publicPath,
+                writeToDisk: true,
 				serverSideRender: false,
 			},
 		},
