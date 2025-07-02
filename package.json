@@ -48,7 +48,7 @@
         "lint:styles": "stylelint \"src/styles/**/*.{css,sass,scss}\"",
         "reinit": "rimraf dist && rimraf node_modules && yarn",
         "clean": "rimraf dist",
-        "setup": "chmod u+x ./setup.sh && ./setup.sh"
+        "setup": "chmod u+x ./setup/setup.sh && ./setup/setup.sh"
     },
     "devDependencies": {
         "@babel/core": "^7.27.4",
