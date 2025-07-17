@@ -61,9 +61,11 @@ final class Assets {
 		$this->plugin        = $plugin;
 		$this->is_production = 'production' === $this->plugin->config['ENVIRONMENT'];
 		$this->manifest_path = $this->plugin->config['PLUGIN_BASE_PATH'] . 'dist/manifest.json';
-		$this->transient_key = sprintf( '%s_asset_manifest_%s',
+		$this->transient_key = sprintf(
+			'%s_asset_manifest_%s',
 			$this->plugin->config['PLUGIN_PREFIX'],
-			$this->plugin->config['PLUGIN_VERSION'] );
+			$this->plugin->config['PLUGIN_VERSION']
+		);
 	}
 
 	/**
