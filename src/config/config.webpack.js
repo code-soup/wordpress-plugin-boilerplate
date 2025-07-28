@@ -61,8 +61,8 @@ const createWebpackConfig = (envArgs, argv) => {
 				"crypto": false,
 				"stream": false,
 				"buffer": false,
-				"util": false
-			}
+				"util": false,
+			},
 		},
 		externals: {
 			jquery: 'jQuery',
