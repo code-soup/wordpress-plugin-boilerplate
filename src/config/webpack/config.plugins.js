@@ -58,7 +58,7 @@ export default (config, env, fileName) => {
             factory: () => new WebpackManifestPlugin({
                 fileName: 'manifest.json',
                 publicPath: '',
-                writeToFileEmit: true
+                writeToFileEmit: true,
             }),
         },
         
