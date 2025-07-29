@@ -48,7 +48,7 @@ const config = {
 	 */
 	entry: {
 		"admin-common": ["./scripts/admin.js", "./styles/admin.scss"],
-		"ziploy-common": ["./scripts/main.js", "./styles/main.scss"],
+		"main-common": ["./scripts/main.js", "./styles/main.scss"],
 	},
 
 	// Path configuration (using path utility)
