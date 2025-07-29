@@ -3,15 +3,6 @@
  */
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-// Import the module itself, which is an object
-import purgecssModule from '@fullhuman/postcss-purgecss';
-
-// Create a new, corrected wrapper function
-const purgeCssPlugin = (opts) => {
-    // The actual function is on the .default property of the imported module
-    const purgecss = purgecssModule.default || purgecssModule;
-    return purgecss(opts);
-};
 
 export default (config, { isProduction, isWatching }) => ({
     test: /\.s?[ca]ss$/,
@@ -44,21 +35,6 @@ export default (config, { isProduction, isWatching }) => ({
                                 'nesting-rules': true,
                             },
                         }],
-                        ...(isProduction
-                            ? [purgeCssPlugin({
-                                content: [
-                                    './**/*.php',
-                                    './src/**/*.js',
-                                    './src/**/*.jsx',
-                                    './src/**/*.ts',
-                                    './src/**/*.tsx',
-                                ],
-                                safelist: {
-                                    standard: [/^wp-/, /^admin-/, /^icon-/, /^is-/, /^has-/], // adjust as needed
-                                },
-                                defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-                            })]
-                            : []),
                     ],
                 },
                 sourceMap: true,
