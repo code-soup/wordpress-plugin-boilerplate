@@ -30,20 +30,20 @@ This configuration will generate `dist/scripts/custom.js` and `dist/styles/custo
 
 The following scripts are available for building assets:
 
--   `yarn dev`: Starts the webpack development server with live reloading.
--   `yarn build`: Creates a production build with optimized and minified assets.
--   `yarn build:dev`: Creates a development build without optimizations.
+-   `npm run dev`: Starts the webpack development server with live reloading.
+-   `npm run build`: Creates a production build with optimized and minified assets.
+-   `npm run build:dev`: Creates a development build without optimizations.
 
 ### Additional commands
 
 **Code Quality**
--   `yarn lint`: Runs all JavaScript and style linters.
--   `yarn lint:scripts`: Lints JavaScript files with ESLint.
--   `yarn lint:styles`: Lints SCSS files with Stylelint.
+-   `npm run lint`: Runs all JavaScript and style linters.
+-   `npm run lint:scripts`: Lints JavaScript files with ESLint.
+-   `npm run lint:styles`: Lints SCSS files with Stylelint.
 -   `composer lint`: Lints PHP files for syntax errors.
 -   `composer wpcs`: Checks PHP files against WordPress Coding Standards.
 -   `composer cbf`: Attempts to automatically fix `phpcs` errors.
 
 **Maintenance**
--   `yarn clean`: Removes the `dist` directory and the webpack cache.
--   `yarn reinit`: Removes `dist` and `node_modules`, then re-installs dependencies.
+-   `npm run clean`: Removes the `dist` directory and the webpack cache.
+-   `npm run reinit`: Removes `dist` and `node_modules`, then re-installs dependencies.

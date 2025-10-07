@@ -58,7 +58,7 @@ All notable changes to this project will be documented in this file.
 
 ### Update
 
-- Renamed `yarn start` to `yarn dev`
+- Renamed `npm start` to `npm run dev`
 - Dependencies update to latest versions
 - Minimum node version required is now 16.16.0
 

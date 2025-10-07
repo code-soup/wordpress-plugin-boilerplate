@@ -8,7 +8,7 @@ Before you begin, please ensure you have the following installed on your local m
 
 -   PHP >= 8.1
 -   Node.js >= 22.0
--   Yarn (v1)
+-   npm (comes with Node.js)
 -   Composer
 
 ### 1. Clone the Repository
@@ -43,8 +43,8 @@ With the initial setup complete, you can now install the necessary PHP and Node.
 # Install PHP dependencies via Composer
 composer install
 
-# Install Node.js dependencies via Yarn
-yarn install
+# Install Node.js dependencies via npm
+npm install
 ```
 
 ### 4. Start Development
@@ -52,7 +52,7 @@ yarn install
 Your environment is now fully configured. To start the development server, which provides live-reloading and asset compilation, run the following command:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 You can now begin developing your plugin.
