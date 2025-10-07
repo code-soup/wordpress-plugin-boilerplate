@@ -19,7 +19,7 @@ dotenv.config({
 // Public path logic
 // ---------------------------------------------------------------------------
 // 1. If you pass WP_PUBLIC_PATH it always wins (CI / production builds).
-// 2. While running the local dev-server (webpack-serve / yarn dev) we want a
+// 2. While running the local dev-server (webpack-serve / npm run dev) we want a
 //    hard-coded path that points to the HMR server on localhost:8080 so the
 //    runtime can fetch hot-update files without any extra env vars.
 // 3. In every other case fall back to the default WP plugin path.

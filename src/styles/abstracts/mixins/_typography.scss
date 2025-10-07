@@ -1,0 +1,96 @@
+@use 'sass:math';
+
+/**
+ * Font sizing shortend
+ *
+ * @param {number} $font-size - Font size in px (will be converted to rem)
+ * @param {number|null} $line-height - Line height in px (will be converted to rem, or null to skip)
+ * @param {number|null} $font-weight - Font weight (400, 500, 700, etc., or null to skip)
+ *
+ * @example
+ *   @include font-size(16, 24, 500);
+ *   Output:
+ *   font-size: 1rem;
+ *   line-height: 1.5rem;
+ *   font-weight: 500;
+ *
+ * @example
+ *   @include font-size(18);
+ *   Output:
+ *   font-size: 1.125rem;
+ */
+@mixin font-size($font-size: 16, $line-height: null, $font-weight: null) {
+    // Convert px to rem (assuming 16px base)
+    font-size: #{math.div($font-size, 16)}rem;
+
+    // Generate line-height in rem if provided
+    @if $line-height {
+        line-height: #{math.div($line-height, 16)}rem;
+    }
+
+    // Set font weight if provided
+    @if $font-weight {
+        font-weight: $font-weight;
+    }
+}
+
+
+
+/**
+ * Links styling
+ *
+ * @param {string} $default - Default link color name (will be used as --color-{name})
+ * @param {string|null} $hover - Hover/focus/active color name (defaults to $default if not specified)
+ *
+ * @example
+ *   a {
+ *       @include link-colors(primary, secondary);
+ *   }
+ *   Output:
+ *   a:link,
+ *   a:visited {
+ *       color: var(--color-primary);
+ *   }
+ *   a:hover,
+ *   a:focus,
+ *   a:focus-visible,
+ *   a:active {
+ *       color: var(--color-secondary);
+ *   }
+ *
+ * @example
+ *   a {
+ *       @include link-colors(blue);
+ *   }
+ *   Output:
+ *   a:link,
+ *   a:visited {
+ *       color: var(--color-blue);
+ *   }
+ *   a:hover,
+ *   a:focus,
+ *   a:focus-visible,
+ *   a:active {
+ *       color: var(--color-blue);
+ *   }
+ */
+
+@mixin link-colors($default, $hover: null) {
+    @if not $hover {
+        $hover: $default;
+    }
+
+    color: var(--color-#{$default});
+
+    &:link,
+    &:visited {
+        color: var(--color-#{$default});
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+        color: var(--color-#{$hover});
+    }
+}

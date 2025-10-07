@@ -34,7 +34,7 @@ Before you begin, please ensure you have the following installed:
 
 -   PHP >= 8.1
 -   Node.js >= 22.0
--   Yarn (v1)
+-   npm (comes with Node.js)
 -   Composer
 
 ## Quick Start
@@ -48,7 +48,7 @@ Before you begin, please ensure you have the following installed:
 2.  **Run the Setup Script**:
     This script will ask for your plugin's details and configure the boilerplate files for you.
     ```bash
-    yarn setup
+    npm run setup
     ```
 
 3.  **Install Dependencies**:
@@ -58,13 +58,13 @@ Before you begin, please ensure you have the following installed:
     composer install
 
     # Install Node.js dependencies
-    yarn install
+    npm install
     ```
 
 4.  **Run the Development Server**:
     For live-reloading and automatic recompilation of assets during development.
     ```bash
-    yarn dev
+    npm run dev
     ```
 
 ## Available Scripts
@@ -77,16 +77,16 @@ This boilerplate comes with a set of pre-configured scripts for development task
 -   **`composer wpcs`**: Checks PHP files against the WordPress Coding Standards.
 -   **`composer cbf`**: Automatically fixes many `phpcs` errors.
 
-### JavaScript/Asset Scripts (via Yarn/NPM)
+### JavaScript/Asset Scripts (via npm)
 
--   **`yarn setup`**: Initial plugin setup
--   **`yarn dev`**: Starts the webpack dev server with Hot Module Replacement.
--   **`yarn build`**: Compiles and optimizes all assets for a production environment.
--   **`yarn build:dev`**: Compiles assets for development without optimization.
--   **`yarn lint`**: Runs both the script and style linters.
-    -   **`yarn lint:scripts`**: Lints JavaScript files with ESLint.
-    -   **`yarn lint:styles`**: Lints SCSS files with Stylelint.
--   **`yarn clean`**: Deletes the `dist` folder and the webpack cache.
+-   **`npm run setup`**: Initial plugin setup
+-   **`npm run dev`**: Starts the webpack dev server with Hot Module Replacement.
+-   **`npm run build`**: Compiles and optimizes all assets for a production environment.
+-   **`npm run build:dev`**: Compiles assets for development without optimization.
+-   **`npm run lint`**: Runs both the script and style linters.
+    -   **`npm run lint:scripts`**: Lints JavaScript files with ESLint.
+    -   **`npm run lint:styles`**: Lints SCSS files with Stylelint.
+-   **`npm run clean`**: Deletes the `dist` folder and the webpack cache.
 
 ## Project Structure
 

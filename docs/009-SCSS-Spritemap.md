@@ -2,7 +2,7 @@
 
 The boilerplate uses the `svg-spritemap-webpack-plugin` to automatically combine all SVG icons from the `src/icons/` directory into a single SVG spritemap file.
 
-This process runs automatically during any build (`yarn dev` or `yarn build`) if SVG files are present in the `src/icons/` directory.
+This process runs automatically during any build (`npm run dev` or `npm run build`) if SVG files are present in the `src/icons/` directory.
 
 The final spritemap is generated at `dist/images/spritemap.[contenthash].svg`. The `[contenthash]` part is a unique hash that changes only when the icons themselves change, allowing for long-term browser caching.
 

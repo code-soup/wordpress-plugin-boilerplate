@@ -14,3 +14,17 @@
         @content;
     }
 }
+
+/**
+ * Simple breakpoint mixin - min-width only
+ *
+ * Usage:
+ * @include breakpoint(768px) {
+ *     .my-rule { display: block; }
+ * }
+ */
+@mixin breakpoint($min-width) {
+    @media (min-width: $min-width) {
+        @content;
+    }
+}

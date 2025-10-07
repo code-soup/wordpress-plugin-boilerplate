@@ -3,7 +3,6 @@
  * Uses utilities for conditional plugin loading
  */
 
-import webpack from 'webpack';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
@@ -21,11 +20,7 @@ export default (config, env, fileName) => {
             filename: `styles/${fileName}.css`,
             chunkFilename: `styles/${env.isProduction ? '[id].[contenthash]' : '[id]'}.chunk.css`,
         }),
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-        }),
+
     ];
     
     // Conditional plugins based on build context
@@ -40,7 +35,7 @@ export default (config, env, fileName) => {
                         new Plugin(`${config.paths.icons}/**/*.svg`, {
                             output: {
                                 filename: `images/spritemap.[contenthash].svg`,
-                                svg4everybody: true,
+                                svg4everybody: false,
                             },
                             sprite: {
                                 prefix: 'icon-',

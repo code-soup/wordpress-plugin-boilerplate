@@ -151,7 +151,7 @@ The boilerplate provides several core services. Access them from the container w
 - The main JavaScript entry point is `src/scripts/main.js`. Import all other JavaScript modules into this file.
 - Write modern ESNext JavaScript. It will be transpiled by Babel.
 - **Avoid using jQuery**. Write vanilla JavaScript or use a modern, lightweight library if necessary.
-- Follow the rules defined in `.eslintrc.js`. Run `yarn lint:scripts` to check your code.
+- Follow the rules defined in `.eslintrc.js`. Run `npm run lint:scripts` to check your code.
 
 ### SCSS
 
@@ -159,7 +159,7 @@ The boilerplate provides several core services. Access them from the container w
 - Use the `@` alias to resolve paths to the `src` directory from within SCSS files.
   - **Example**: `background-image: url('@/images/my-image.png');`
 - Reusable mixins and variables are located in `src/styles/abstracts`.
-- Follow the rules defined in `stylelint.config.js`. Run `yarn lint:styles` to check your code.
+- Follow the rules defined in `stylelint.config.js`. Run `npm run lint:styles` to check your code.
 
 ### SVG Sprites
 
@@ -171,14 +171,14 @@ The boilerplate provides several core services. Access them from the container w
 
 ## Development Workflow
 
-1.  Run `yarn dev` to start the webpack development server with Hot Module Replacement (HMR). This will watch for changes to frontend assets and automatically reload the browser.
+1.  Run `npm run dev` to start the webpack development server with Hot Module Replacement (HMR). This will watch for changes to frontend assets and automatically reload the browser.
 2.  Write your PHP and frontend code, following all the rules above.
 3.  Before committing, always run the linting and code sniffing tools:
     - `composer lint` (fast PHP syntax check)
     - `composer wpcs` (check against WordPress Coding Standards)
     - `composer cbf` (auto-fix many `wpcs` issues)
-    - `yarn lint` (run ESLint and Stylelint)
-4.  To create a final production build, run `yarn build`.
+    - `npm run lint` (run ESLint and Stylelint)
+4.  To create a final production build, run `npm run build`.
 
 ---
 
