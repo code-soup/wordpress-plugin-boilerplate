@@ -28,8 +28,52 @@ for dir in "${directories[@]}"; do
   done
 done
 
-# Update Namespace in run.php and composer.json
-namespace_files=("run.php" "index.php" "uninstall.php" "composer.json" "phpcs.xml.dist")
+
+# Update Namespace in composer.json
+# Escape backslashes for JSON format - "MyName\Space" should be "MyName\\Space"
+namespace_composer=("composer.json")
+
+# Create escaped version of namespace for JSON (double backslashes)
+php_namespace_escaped=$(echo "$php_namespace" | sed 's/\\/\\\\/g')
+
+# Create sanitized plugin name for composer.json (lowercase, spaces to dashes)
+plugin_name_sanitized=$(echo "$plugin_name" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
+
+for file in "${namespace_composer[@]}"; do
+  if [[ "$OS" == "Darwin" ]]; then
+    # For macOS, use sed with the '-i' option, but provide an empty string for backup
+    sed -i '' "s/WPPB/$php_namespace_escaped/g" "$file"
+    sed -i '' "s/codesoup\/wppb/codesoup\/$plugin_name_sanitized/g" "$file"
+
+    # Replace description if provided
+    if [[ -n "$plugin_description" ]]; then
+      sed -i '' "s/\"description\": \"WordPress Plugin Boilerplate\"/\"description\": \"$plugin_description\"/g" "$file"
+    fi
+
+    # Replace homepage if provided
+    if [[ -n "$plugin_uri" ]]; then
+      sed -i '' "s|\"homepage\": \"https://github.com/code-soup/wordpress-plugin-boilerplate\"|\"homepage\": \"$plugin_uri\"|g" "$file"
+    fi
+  else
+    # For Linux and Windows (including Git Bash), use dos2unix to convert line endings and then use sed without the '-i' option
+    dos2unix "$file" >/dev/null 2>&1
+    sed "s/WPPB/$php_namespace_escaped/g" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+    sed "s/codesoup\/wppb/codesoup\/$plugin_name_sanitized/g" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+
+    # Replace description if provided
+    if [[ -n "$plugin_description" ]]; then
+      sed "s/\"description\": \"WordPress Plugin Boilerplate\"/\"description\": \"$plugin_description\"/g" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+    fi
+
+    # Replace homepage if provided
+    if [[ -n "$plugin_uri" ]]; then
+      sed "s|\"homepage\": \"https://github.com/code-soup/wordpress-plugin-boilerplate\"|\"homepage\": \"$plugin_uri\"|g" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+    fi
+  fi
+done
+
+# Update Namespace in other files (excluding index.php and composer.json)
+namespace_files=("run.php" "uninstall.php" "phpcs.xml.dist")
 
 for file in "${namespace_files[@]}"; do
   if [[ "$OS" == "Darwin" ]]; then

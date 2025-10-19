@@ -104,6 +104,12 @@ read -rp "License URI (A link to the full text of the license. Leave blank if no
 
 # Sanitize user input
 license_uri=$(echo "$license_uri" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
+
+# Set default license URI for GPL-3.0+ or gpl-3 if user didn't provide one
+if [[ -z "$license_uri" && ( "$plugin_license" == "GPL-3.0+" || "$plugin_license" == "gpl-3" ) ]]; then
+    license_uri="https://www.gnu.org/licenses/gpl-3.0.en.html"
+fi
+
 echo -e "${CYAN}License URI is set to: [$license_uri]${NC}"
 
 # Prompt the user to enter Text Domain (required)

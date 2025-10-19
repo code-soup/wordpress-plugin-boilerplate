@@ -10,10 +10,14 @@ TMP_FILE=$(mktemp)
 while IFS= read -r line; do
     case "$line" in
         *\**" @package "*)
-            echo " * @package $php_namespace" >>"$TMP_FILE"
+            # Ensure single backslashes for PHP namespace - should always be "MyName\Space"
+            php_namespace_clean=$(echo "$php_namespace" | sed 's/\\\\/\\/g')
+            echo " * @package $php_namespace_clean" >>"$TMP_FILE"
             ;;
         "namespace "*)
-            echo "namespace $php_namespace;" >>"$TMP_FILE"
+            # Ensure single backslashes for PHP namespace - should always be "MyName\Space"
+            php_namespace_clean=$(echo "$php_namespace" | sed 's/\\\\/\\/g')
+            echo "namespace $php_namespace_clean;" >>"$TMP_FILE"
             ;;
         *"Plugin Name:"*)
             echo " * Plugin Name:       $plugin_name" >>"$TMP_FILE"
@@ -57,8 +61,14 @@ while IFS= read -r line; do
             echo " * Text Domain:       $plugin_textdomain" >>"$TMP_FILE"
             ;;
         *)
-            # If the line doesn't match any of the headers, write it to the file as-is.
-            echo "$line" >>"$TMP_FILE"
+            # Replace any occurrence of WPPB with namespace
+            # Use printf to properly handle backslashes in replacement
+            if [[ "$line" == *"WPPB"* ]]; then
+                updated_line=$(printf '%s\n' "$line" | sed "s/WPPB/$php_namespace/g")
+                echo "$updated_line" >>"$TMP_FILE"
+            else
+                echo "$line" >>"$TMP_FILE"
+            fi
             ;;
     esac
 done <index.php
