@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.11] - 2024-12-24
+- NPM dependency upgrades
+
 ## [2.0.2] - 2024-06-26
 
 ### Added
