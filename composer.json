@@ -1,6 +1,6 @@
 {
 	"name": "codesoup/wppb",
-    "version": "1.0.0",
+	"version": "1.0.0",
 	"description": "WordPress Plugin Boilerplate",
 	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
 	"type": "wordpress-plugin",
@@ -9,11 +9,6 @@
 		"issues": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
 	},
 	"authors": [
-		{
-			"name": "Vlado Bosnjak",
-			"email": "vb@bobz.co",
-			"homepage": "https://www.bobz.co"
-		},
 		{
 			"name": "Code Soup",
 			"email": "hi@codesoup.co",
