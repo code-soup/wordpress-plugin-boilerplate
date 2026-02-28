@@ -13,7 +13,7 @@ The `hooker` service is available from the main plugin container. There are two 
 In any service provider that extends `AbstractServiceProvider`, the container is available via `$this->container`.
 
 ```php
-// In a service provider, e.g., includes/providers/FrontendServiceProvider.php
+// In a service provider, e.g., includes/providers/class-frontend-service-provider.php
 $hooker = $this->container->get('hooker');
 ```
 
@@ -40,7 +40,7 @@ The `callable` argument is typically an array containing an object instance and 
 This example shows how to register a hook from within a class that is managed by the container.
 
 ```php
-// In some class, e.g., includes/frontend/Display.php
+// In some class, e.g., includes/frontend/class-display.php
 namespace WPPB\Frontend;
 
 use WPPB\Core\Hooker;

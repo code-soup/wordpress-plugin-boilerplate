@@ -16,6 +16,8 @@ An overview of the project's folder structure.
         -   `frontend/`: Code specific to the public-facing parts of the website.
         -   `interfaces/`: PHP interfaces.
         -   `providers/`: Service providers for registering features into the DI container.
+        -   `traits/`: Reusable traits for common functionality.
+        -   `autoloader.php`: Custom autoloader for WordPress-style filenames.
 
 -   `languages/`
     -   Contains the translation files for internationalization (`.pot`, `.po`, `.mo`).

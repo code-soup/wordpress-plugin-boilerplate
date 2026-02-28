@@ -29,6 +29,8 @@ First, create the class that contains your actual functionality:
 /**
  * Email Service.
  *
+ * File: includes/services/class-email-service.php
+ *
  * @package WPPB
  */
 
@@ -112,6 +114,8 @@ Create a service provider that extends `AbstractServiceProvider`:
 /**
  * Email Service Provider.
  *
+ * File: includes/providers/class-email-service-provider.php
+ *
  * @package WPPB
  */
 
@@ -159,7 +163,7 @@ class EmailServiceProvider extends AbstractServiceProvider {
 Add your service provider to the `$providers` array in the main plugin class:
 
 ```php
-// In includes/core/Plugin.php, add to the $providers array:
+// In includes/core/class-plugin.php, add to the $providers array:
 protected array $providers = array(
 	AdminServiceProvider::class,
 	FrontendServiceProvider::class,
@@ -179,6 +183,8 @@ If you prefer to implement the interface directly, you can do so:
 <?php
 /**
  * Custom Service Provider.
+ *
+ * File: includes/providers/class-custom-service-provider.php
  *
  * @package WPPB
  */
@@ -252,6 +258,8 @@ class CustomServiceProvider implements ServiceProviderInterface {
 /**
  * Integration Service Provider.
  *
+ * File: includes/providers/class-integration-service-provider.php
+ *
  * @package WPPB
  */
 
@@ -307,6 +315,8 @@ class IntegrationServiceProvider extends AbstractServiceProvider {
 <?php
 /**
  * Admin Enhancement Service Provider.
+ *
+ * File: includes/providers/class-admin-enhancement-service-provider.php
  *
  * @package WPPB
  */

@@ -9,7 +9,7 @@ This approach is preferred over maintaining a large, procedural `helpers.php` fi
 -   `HelpersTrait`: Provides helper methods for accessing plugin configuration values (like name, version, path) and performing common string manipulations.
 -   `LoggingTrait`: Contains methods for logging debug information.
 -   `ValidationTrait`: Provides methods for data validation.
--   `DocumentationTrait`: Helper methods for generating documentation.
+-   `RequirementChecksTrait`: Helper methods for checking WordPress and PHP version requirements.
 
 ## Using an Existing Trait
 
@@ -67,10 +67,10 @@ class MyAdminPage {
 
 You can create your own traits to group functions for a specific purpose.
 
-1.  Create a new file in the `includes/traits/` directory (e.g., `MyCustomTrait.php`).
+1.  Create a new file in the `includes/traits/` directory following WordPress naming conventions (e.g., `trait-my-custom.php`).
 2.  Define the trait and its methods.
 
-### Example: `MyCustomTrait.php`
+### Example: `trait-my-custom.php`
 
 ```php
 <?php
@@ -103,24 +103,6 @@ class MyExampleClass {
     public function some_method() {
         echo $this->say_hello('World');
     }
-}
-```
-
-```php
-namespace MyBookShelf\Library;
-
-class Book {
-
-	// Declare which trait you want to use
-	use \MyBookShelf\Traits\HelpersTrait
-
-	public function __construct() {
-
-		/**
-		 * I can call 'get_plugin_dir_path' from HelpersTrait just as it is defined 
-		 */
-		$path = $this->get_plugin_dir_path();
-	}
 }
 ```
 

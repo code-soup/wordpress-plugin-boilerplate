@@ -21,15 +21,9 @@
 		"wordpress plugin boilerplate"
 	],
 	"autoload": {
-		"psr-4": {
-			"WPPB\\Core\\": "includes/core/",
-			"WPPB\\Admin\\": "includes/admin/",
-			"WPPB\\Frontend\\": "includes/frontend/",
-			"WPPB\\Providers\\": "includes/providers/",
-			"WPPB\\Abstracts\\": "includes/abstracts/",
-			"WPPB\\Interfaces\\": "includes/interfaces/",
-			"WPPB\\Traits\\": "includes/traits/"
-		}
+		"files": [
+			"includes/autoloader.php"
+		]
 	},
 	"require": {
 		"php": ">=8.1.0",

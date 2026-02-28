@@ -19,3 +19,9 @@ source ./setup/setup-git.sh
 
 echo "Plugin setup completed."
 echo "Important: Please run 'composer install' before trying to activate plugin in WP admin"
+echo ""
+echo "Files updated:"
+echo "  - PHP files in includes/ and templates/"
+echo "  - Agent Skills in agent-skills/"
+echo "  - composer.json"
+echo "  - run.php, uninstall.php, phpcs.xml.dist"

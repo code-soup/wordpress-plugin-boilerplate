@@ -13,6 +13,9 @@ defined( 'ABSPATH' ) || die;
 // Load composer autoloader for dependencies.
 require 'vendor/autoload.php';
 
+// Register custom autoloader for WordPress-style filenames.
+\WPPB\Autoloader::register( __DIR__ );
+
 use WPPB\Core\Plugin;
 
 /**

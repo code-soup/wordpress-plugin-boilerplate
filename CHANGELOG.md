@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [2.0.12] - 2026-02-28
 
 - NPM dependency upgrades
+- Composer dependency upgrades
+- Switched to WPCS with custom autoloader
 
 ## [2.0.11] - 2024-12-24
 
