@@ -1,6 +1,5 @@
 {
 	"name": "codesoup/wppb",
-    "version": "1.0.0",
 	"description": "WordPress Plugin Boilerplate",
 	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
 	"type": "wordpress-plugin",
@@ -9,11 +8,6 @@
 		"issues": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
 	},
 	"authors": [
-		{
-			"name": "Vlado Bosnjak",
-			"email": "vb@bobz.co",
-			"homepage": "https://www.bobz.co"
-		},
 		{
 			"name": "Code Soup",
 			"email": "hi@codesoup.co",
@@ -34,8 +28,7 @@
 			"WPPB\\Providers\\": "includes/providers/",
 			"WPPB\\Abstracts\\": "includes/abstracts/",
 			"WPPB\\Interfaces\\": "includes/interfaces/",
-			"WPPB\\Traits\\": "includes/traits/",
-			"WPPB\\": "includes/"
+			"WPPB\\Traits\\": "includes/traits/"
 		}
 	},
 	"require": {
@@ -45,33 +38,31 @@
 		"psr/container": "^2.0"
 	},
 	"require-dev": {
-		"wp-coding-standards/wpcs": "*",
-		"phpcompatibility/phpcompatibility-wp": "*",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+		"wp-coding-standards/wpcs": "^3.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 		"php-parallel-lint/php-parallel-lint": "^1.3.1",
-		"php-parallel-lint/php-console-highlighter": "^0.5.0"
+		"php-parallel-lint/php-console-highlighter": "^1.0"
 	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"composer/installers": true
+		},
+		"platform": {
+			"php": "8.1.0"
 		}
 	},
 	"scripts": {
-		"wpcs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --report=full",
-		"cbf": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --report=full",
-		"lint": "@php ./vendor/bin/parallel-lint . -e php --show-deprecated --exclude vendor --exclude .git"
+		"lint": "@php ./vendor/bin/parallel-lint . -e php --show-deprecated --exclude vendor --exclude .git",
+		"lint:phpcs": "vendor/bin/phpcs",
+		"lint:phpcbf": "vendor/bin/phpcbf"
 	},
-	"extra": {
-		"installer-paths": {
-			"vendor/{$name}": [
-				"vendor/package"
-			]
-		},
-		"scripts-description": {
-			"wpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
-			"cbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier",
-			"lint": "Lint PHP files against parse errors"
-		}
-	}
+	"scripts-descriptions": {
+		"lint": "Lint PHP files against parse errors",
+		"lint:phpcs": "Analyze code against WordPress coding standards",
+		"lint:phpcbf": "Fix coding standards warnings/errors automatically"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
