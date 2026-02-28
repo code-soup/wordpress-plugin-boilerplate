@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - NPM dependency upgrades
 - Composer dependency upgrades
 - Switched to WPCS with custom autoloader
+- Added agent-skills
 
 ## [2.0.11] - 2024-12-24
 
