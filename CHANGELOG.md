@@ -2,21 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.12] - 2026-02-28
+
+- NPM dependency upgrades
+
 ## [2.0.11] - 2024-12-24
+
 - NPM dependency upgrades
 
 ## [2.0.2] - 2024-06-26
 
 ### Added
+
 - Uninstaller class
 - Service Provider pattern documentation with examples
 
 ### Removed
+
 - Lifecycle Class
 - Core Provider
 - Documentation Trait
 
 ### Changed
+
 - Webpack HMR update
 - Container optimizations and bug fixes
 - Plugin class bug fixes
@@ -24,7 +32,6 @@ All notable changes to this project will be documented in this file.
 - AI rules update
 - Documentation updates
 - Setup script updates
-
 
 ## [2.0.1] - 2024-06-22
 

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || die;
  * Plugin Name:       WordPress Plugin Boilerplate
  * Plugin URI:        https://github.com/code-soup/wordpress-plugin-boilerplate
  * Description:       A modern, modular WordPress plugin boilerplate with PSR-4 autoloading, Webpack 5 asset bundling, live reload, and code quality tools designed for streamlined, standards-compliant plugin development.
- * Version:           2.0.2
+ * Version:           0.0.1
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Author:            Code Soup
