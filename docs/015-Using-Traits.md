@@ -14,61 +14,7 @@ Traits help you:
 
 ## Available Traits
 
-### 1. HelpersTrait
-
-Provides helper methods for accessing plugin configuration values and performing common string manipulations.
-
-**Location**: `includes/traits/trait-helpers.php`
-
-**Methods**:
-- `get_name()`: Get the plugin name
-- `get_version()`: Get the plugin version
-- `get_prefix()`: Get the plugin prefix
-- `get_base_path()`: Get the plugin base path
-- `get_url()`: Get the plugin URL
-- `get_basename()`: Get the plugin basename
-- `get_text_domain()`: Get the plugin text domain
-- `get_plugin_id( string $append = '', bool $is_dashed = true )`: Generate plugin ID
-- `to_camel_case( string $input_string, bool $is_dashed = false )`: Convert string to camelCase
-
-**Requirements**: The class using this trait must have a `$config` property containing the plugin configuration array.
-
-**Example**:
-```php
-<?php
-
-namespace WPPB\Admin;
-
-use WPPB\Traits\HelpersTrait;
-
-class SettingsPage {
-
-	use HelpersTrait;
-
-	protected array $config;
-
-	public function __construct( array $config ) {
-		$this->config = $config;
-	}
-
-	public function display_version(): void {
-		echo esc_html(
-			sprintf(
-				'Plugin Version: %s',
-				$this->get_version()
-			)
-		);
-	}
-
-	public function get_settings_id(): string {
-		return $this->get_plugin_id( '-settings' );
-	}
-}
-```
-
----
-
-### 2. LoggingTrait
+### 1. LoggingTrait
 
 Contains methods for logging debug information to the WordPress debug log.
 
@@ -119,53 +65,16 @@ class EmailService {
 
 ---
 
-### 3. ValidationTrait
-
-Provides methods for data validation using the Respect\Validation library.
-
-**Location**: `includes/traits/trait-validation.php`
-
-**Methods**:
-- `validate( $value, string $rule )`: Validate a value against a rule
-- `get_validator()`: Get the validator instance
-
-**Example**:
-```php
-<?php
-
-namespace WPPB\Services;
-
-use WPPB\Traits\ValidationTrait;
-
-class UserService {
-
-	use ValidationTrait;
-
-	public function create_user( array $data ): bool {
-		if ( ! $this->validate( $data['email'], 'email' ) ) {
-			return false;
-		}
-
-		// Create user logic here
-
-		return true;
-	}
-}
-```
-
----
-
-### 4. RequirementChecksTrait
+### 2. RequirementChecksTrait
 
 Helper methods for checking WordPress and PHP version requirements.
 
 **Location**: `includes/traits/trait-requirement-checks.php`
 
 **Methods**:
-- `run_requirement_checks( array $config )`: Run all requirement checks
+- `run_requirement_checks( array $config )`: Run all requirement checks (throws exception on failure)
 - `is_wp_version_ok( string $min_wp_version )`: Check WordPress version
 - `is_php_version_ok( string $min_php_version )`: Check PHP version
-- `deactivate_plugin( string $plugin_basename, string $message )`: Deactivate plugin with message
 
 **Example**:
 ```php
@@ -183,9 +92,10 @@ class Activator {
 		$config = array(
 			'MIN_WP_VERSION'     => '5.8',
 			'MIN_PHP_VERSION'    => '7.4',
-			'PLUGIN_BASENAME'    => 'my-plugin/my-plugin.php',
 		);
 
+		// Throws \Exception if requirements not met
+		// WordPress handles deactivation automatically on activation failure
 		self::run_requirement_checks( $config );
 	}
 }
@@ -292,29 +202,16 @@ You can use multiple traits in a single class.
 
 namespace WPPB\Services;
 
-use WPPB\Traits\HelpersTrait;
 use WPPB\Traits\LoggingTrait;
 use WPPB\Traits\CachingTrait;
 
 class ComplexService {
 
-	use HelpersTrait;
 	use LoggingTrait;
 	use CachingTrait;
 
-	protected array $config;
-
-	public function __construct( array $config ) {
-		$this->config = $config;
-	}
-
 	public function process_data(): array {
-		$this->log(
-			sprintf(
-				'Processing data for plugin: %s',
-				$this->get_name()
-			)
-		);
+		$this->log( 'Processing data' );
 
 		$cached = $this->get_cache( 'processed_data' );
 

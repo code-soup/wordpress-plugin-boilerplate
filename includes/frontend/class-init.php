@@ -21,13 +21,13 @@ class Init {
 	 * Init constructor.
 	 */
 	public function __construct() {
-		$this->add_hooks();
+		// Hooks registered later to avoid circular dependency
 	}
 
 	/**
-	 * Add the frontend hooks.
+	 * Initialize and register hooks.
 	 */
-	private function add_hooks(): void {
+	public function init(): void {
 		$hooker = plugin()->get( 'hooker' );
 		$hooker->add_actions(
 			array(
@@ -42,41 +42,54 @@ class Init {
 	public function wp_enqueue_scripts(): void {
 
 		$assets_handler = plugin()->get( 'assets' );
-		$plugin_version = plugin()->config['PLUGIN_VERSION'];
+		$plugin_version = plugin()->get_config( 'PLUGIN_VERSION' );
 
-		// Enqueue the main admin stylesheet.
-		wp_enqueue_style(
-			'wppb-common',
-			$assets_handler->get_asset_url( 'frontend-common.css' ),
-			array(),
-			$plugin_version
-		);
+		// Build dependencies list, only including assets that exist.
+		$dependencies = array();
 
-		// Enqueue the webpack runtime script.
-		wp_enqueue_script(
-			'wppb-runtime',
-			$assets_handler->get_asset_url( 'runtime.js' ),
-			array(),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the webpack runtime script.
+		if ( $assets_handler->asset_exists( 'runtime.js' ) ) {
+			wp_enqueue_script(
+				'wppb-frontend-runtime',
+				$assets_handler->get_asset_url( 'runtime.js' ),
+				array(),
+				$plugin_version,
+				true
+			);
+			$dependencies[] = 'wppb-frontend-runtime';
+		}
 
-		// Enqueue the vendor libs script, dependent on the runtime.
-		wp_enqueue_script(
-			'wppb-vendor',
-			$assets_handler->get_asset_url( 'vendor-libs.js' ),
-			array( 'wppb-runtime' ),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the vendor libs script.
+		if ( $assets_handler->asset_exists( 'vendor-libs.js' ) ) {
+			wp_enqueue_script(
+				'wppb-frontend-vendor',
+				$assets_handler->get_asset_url( 'vendor-libs.js' ),
+				$dependencies,
+				$plugin_version,
+				true
+			);
+			$dependencies[] = 'wppb-frontend-vendor';
+		}
 
-		// Enqueue the main admin script, dependent on runtime and vendors.
-		wp_enqueue_script(
-			'wppb-frontend-common',
-			$assets_handler->get_asset_url( 'frontend-common.js' ),
-			array( 'wppb-runtime', 'wppb-vendor' ),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the main frontend stylesheet.
+		if ( $assets_handler->asset_exists( 'frontend-common.css' ) ) {
+			wp_enqueue_style(
+				'wppb-frontend',
+				$assets_handler->get_asset_url( 'frontend-common.css' ),
+				array(),
+				$plugin_version
+			);
+		}
+
+		// Check and enqueue the main frontend script.
+		if ( $assets_handler->asset_exists( 'frontend-common.js' ) ) {
+			wp_enqueue_script(
+				'wppb-frontend-common',
+				$assets_handler->get_asset_url( 'frontend-common.js' ),
+				$dependencies,
+				$plugin_version,
+				true
+			);
+		}
 	}
 }

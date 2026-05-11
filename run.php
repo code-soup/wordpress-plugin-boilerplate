@@ -10,11 +10,7 @@ namespace WPPB;
 // If this file is called directly, abort.
 defined( 'ABSPATH' ) || die;
 
-// Load composer autoloader for dependencies.
-require 'vendor/autoload.php';
-
-// Register custom autoloader for WordPress-style filenames.
-\WPPB\Autoloader::register( __DIR__ );
+// Autoloaders already loaded in index.php before activation hooks.
 
 use WPPB\Core\Plugin;
 

@@ -662,8 +662,6 @@ $i18n   = $this->container->get( 'i18n' );    // WPPB\Core\I18n
 ### Available Traits
 
 ```php
-use WPPB\Traits\HelpersTrait;           // Plugin config helpers
-use WPPB\Traits\ValidationTrait;        // Data validation
 use WPPB\Traits\LoggingTrait;           // Debug logging
 use WPPB\Traits\RequirementChecksTrait; // Version checks
 ```
@@ -728,7 +726,7 @@ Entry points define which files webpack bundles together.
 const config = {
 	entry: {
 		"admin-common": ["./scripts/admin.js", "./styles/admin.scss"],
-		"main-common": ["./scripts/main.js", "./styles/main.scss"],
+		"frontend-common": ["./scripts/main.js", "./styles/main.scss"],
 
 		// Add new entry point
 		"custom-bundle": ["./scripts/custom.js", "./styles/custom.scss"],
@@ -744,11 +742,11 @@ const config = {
 dist/
 ├── scripts/
 │   ├── admin-common.js
-│   ├── main-common.js
+│   ├── frontend-common.js
 │   └── custom-bundle.js
 └── styles/
     ├── admin-common.css
-    ├── main-common.css
+    ├── frontend-common.css
     └── custom-bundle.css
 ```
 

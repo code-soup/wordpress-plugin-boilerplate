@@ -56,7 +56,7 @@ class Autoloader {
 	 */
 	public static function autoload( $class ) {
 		// Check if class belongs to WPPB namespace.
-		if ( strpos( $class, 'WPPB\\' ) !== 0 ) {
+		if ( ! str_starts_with( $class, 'WPPB\\' ) ) {
 			return;
 		}
 
@@ -94,7 +94,7 @@ class Autoloader {
 	 */
 	private static function get_directory( $class ) {
 		foreach ( self::$namespace_map as $namespace => $directory ) {
-			if ( strpos( $class, $namespace ) === 0 ) {
+			if ( str_starts_with( $class, $namespace ) ) {
 				return $directory;
 			}
 		}
@@ -140,11 +140,11 @@ class Autoloader {
 	 * @return string File prefix (class-, trait-, interface-).
 	 */
 	private static function get_file_prefix( $class_name, $full_class ) {
-		if ( strpos( $full_class, 'WPPB\\Traits\\' ) === 0 ) {
+		if ( str_starts_with( $full_class, 'WPPB\\Traits\\' ) ) {
 			return 'trait-';
 		}
 
-		if ( strpos( $full_class, 'WPPB\\Interfaces\\' ) === 0 ) {
+		if ( str_starts_with( $full_class, 'WPPB\\Interfaces\\' ) ) {
 			return 'interface-';
 		}
 

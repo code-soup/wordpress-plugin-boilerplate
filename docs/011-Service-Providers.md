@@ -151,6 +151,8 @@ class EmailServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Initialize the email service
 		$email_service = $this->container->get( 'email' );
 		$email_service->init();
@@ -296,6 +298,8 @@ class IntegrationServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Only initialize if WooCommerce is active
 		if ( class_exists( 'WooCommerce' ) ) {
 			$this->container->get( 'woo' )->init();
@@ -352,6 +356,8 @@ class AdminEnhancementServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Only boot if we're in admin and user has appropriate capabilities
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 			$this->container->get( 'dashboard_widgets' )->init();
@@ -391,6 +397,8 @@ public function __construct(
 ### 3. Use Conditional Loading
 ```php
 public function boot(): void {
+	parent::boot();
+
 	// Only load if specific conditions are met
 	if ( $this->should_load_feature() ) {
 		$this->container->get( 'feature_service' )->init();
@@ -427,6 +435,8 @@ Once registered, you can access your services from anywhere in your plugin:
 ### From Another Service Provider
 ```php
 public function boot(): void {
+	parent::boot();
+
 	$email_service = $this->container->get( 'email' );
 	$email_service->send_notification( 'admin@site.com', 'Test', 'Hello World' );
 }

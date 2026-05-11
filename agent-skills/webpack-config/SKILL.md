@@ -24,7 +24,7 @@ Edit `src/config/config.user.js`:
 ```javascript
 entry: {
 	"admin-common": ["./scripts/admin.js", "./styles/admin.scss"],
-	"main-common": ["./scripts/main.js", "./styles/main.scss"],
+	"frontend-common": ["./scripts/main.js", "./styles/main.scss"],
 	"new-bundle": ["./scripts/new.js", "./styles/new.scss"],
 },
 ```

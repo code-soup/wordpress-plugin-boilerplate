@@ -26,30 +26,24 @@ defined( 'ABSPATH' ) || die;
  * Domain Path:       /languages
  */
 
+// Load autoloaders BEFORE registering hooks.
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
+
 // NOTE: Activation hooks need to be inside index.php file or it might not work properly.
 // It can fail without error, WordPress is silently failing in case of error.
 
 // The code that runs during plugin activation.
-// - includes/core/Activator.php.
 register_activation_hook(
 	__FILE__,
-	function () {
-
-		// On activate do this.
-		\WPPB\Core\Activator::activate();
-	}
+	array( \WPPB\Core\Activator::class, 'activate' )
 );
 
 // The code that runs during plugin deactivation.
-// - includes/core/Deactivator.php.
 register_deactivation_hook(
 	__FILE__,
-	function () {
-
-		// On deactivate do that.
-		\WPPB\Core\Deactivator::deactivate();
-	}
+	array( \WPPB\Core\Deactivator::class, 'deactivate' )
 );
 
 // Run plugin, run.
-require_once 'run.php';
+require_once __DIR__ . '/run.php';

@@ -201,6 +201,8 @@ class ApiServiceProvider extends AbstractServiceProvider {
 	}
 
 	public function boot(): void {
+		parent::boot();
+
 		$controller = $this->container->get( 'api.posts' );
 		$controller->init();
 	}

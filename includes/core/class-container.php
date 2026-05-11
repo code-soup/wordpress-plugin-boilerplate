@@ -48,6 +48,13 @@ class Container implements ContainerInterface {
 	private array $aliases = array();
 
 	/**
+	 * Services currently being resolved (for circular dependency detection).
+	 *
+	 * @var array<string, true>
+	 */
+	private array $resolving = array();
+
+	/**
 	 * Bind a new service into the container.
 	 *
 	 * @param string          $id       The abstract identifier.
@@ -116,7 +123,7 @@ class Container implements ContainerInterface {
 				return $this->resolve( $id );
 			}
 
-			throw new \Exception( sprintf( 'Service "%s" not found in container.', esc_html( $id ) ) );
+			throw new \Exception( sprintf( 'Service "%s" not found in container.', $id ) );
 		}
 
 		$binding = $this->bindings[ $id ];
@@ -144,6 +151,18 @@ class Container implements ContainerInterface {
 	}
 
 	/**
+	 * Resolve and return a new instance (alias for get).
+	 *
+	 * @param string $abstract The class name to resolve.
+	 *
+	 * @return mixed
+	 * @throws \Exception If the class cannot be resolved.
+	 */
+	public function make( string $abstract ) {
+		return $this->get( $abstract );
+	}
+
+	/**
 	 * Resolve a service from the container.
 	 *
 	 * @param callable|string $concrete The concrete implementation.
@@ -157,39 +176,57 @@ class Container implements ContainerInterface {
 		}
 
 		if ( ! class_exists( $concrete ) ) {
-			throw new \Exception( sprintf( 'Cannot resolve concrete class: %s.', esc_html( $concrete ) ) );
+			throw new \Exception( sprintf( 'Cannot resolve concrete class: %s.', $concrete ) );
 		}
 
-		$reflector = new ReflectionClass( $concrete );
-
-		if ( ! $reflector->isInstantiable() ) {
-			throw new \Exception( sprintf( 'Class "%s" is not instantiable.', esc_html( $concrete ) ) );
+		// Check for circular dependency.
+		if ( isset( $this->resolving[ $concrete ] ) ) {
+			$chain = implode( ' -> ', array_keys( $this->resolving ) ) . ' -> ' . $concrete;
+			throw new \Exception( sprintf( 'Circular dependency detected: %s', $chain ) );
 		}
 
-		$constructor = $reflector->getConstructor();
+		$this->resolving[ $concrete ] = true;
 
-		if ( is_null( $constructor ) ) {
-			return new $concrete();
+		try {
+			$reflector = new ReflectionClass( $concrete );
+
+			if ( ! $reflector->isInstantiable() ) {
+				throw new \Exception( sprintf( 'Class "%s" is not instantiable.', $concrete ) );
+			}
+
+			$constructor = $reflector->getConstructor();
+
+			if ( is_null( $constructor ) ) {
+				unset( $this->resolving[ $concrete ] );
+				return new $concrete();
+			}
+
+			$dependencies = array_map(
+				function ( ReflectionParameter $param ) use ( $concrete ) {
+					$type = $param->getType();
+
+					if ( ! $type ) {
+						throw new \Exception( sprintf( 'Cannot resolve class dependency "%s" in class "%s".', $param->getName(), $concrete ) );
+					}
+
+					if ( $type->isBuiltin() ) {
+						throw new \Exception( sprintf( 'Cannot resolve built-in type "%s" in class "%s".', $type->getName(), $concrete ) );
+					}
+
+					return $this->get( $type->getName() );
+				},
+				$constructor->getParameters()
+			);
+
+			$instance = $reflector->newInstanceArgs( $dependencies );
+
+			unset( $this->resolving[ $concrete ] );
+
+			return $instance;
+		} catch ( \Exception $e ) {
+			unset( $this->resolving[ $concrete ] );
+			throw $e;
 		}
-
-		$dependencies = array_map(
-			function ( ReflectionParameter $param ) use ( $concrete ) {
-				$type = $param->getType();
-
-				if ( ! $type ) {
-					throw new \Exception( sprintf( 'Cannot resolve class dependency "%s" in class "%s".', esc_html( $param->getName() ), esc_html( $concrete ) ) );
-				}
-
-				if ( $type->isBuiltin() ) {
-					throw new \Exception( sprintf( 'Cannot resolve built-in type "%s" in class "%s".', esc_html( $type->getName() ), esc_html( $concrete ) ) );
-				}
-
-				return $this->get( $type->getName() );
-			},
-			$constructor->getParameters()
-		);
-
-		return $reflector->newInstanceArgs( $dependencies );
 	}
 
 	/**

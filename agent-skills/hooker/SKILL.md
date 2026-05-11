@@ -9,21 +9,15 @@ The Hooker service manages WordPress hooks. Always use Hooker, never direct `add
 
 ## Get Hooker Instance
 
-### From Container
-
-```php
-public function __construct( Hooker $hooker ) {
-	$this->hooker = $hooker;
-}
-```
-
-### From Global Plugin Instance
+Use the `plugin()` helper function to get the Hooker service:
 
 ```php
 use function WPPB\plugin;
 
-$hooker = plugin()->get_hooker();
+$hooker = plugin()->get( 'hooker' );
 ```
+
+**Important**: Do NOT call `plugin()` in class constructors during plugin initialization to avoid circular dependencies. Call it in `init()` methods instead.
 
 ## Add Action
 
@@ -107,18 +101,24 @@ $hooks = array(
 $this->hooker->register( $this, $hooks );
 ```
 
-## Method Name Shortcuts
+## Method Omission Fallback
 
-Hooker automatically converts method names:
+If method is null, hook name becomes method name:
 
 ```php
-// These are equivalent:
-$this->hooker->add_action( 'init', $this, 'init' );
-$this->hooker->add_action( 'init', $this, 'on_init' );
-$this->hooker->add_action( 'init', $this, 'handle_init' );
+// Calls $this->init() method
+$this->hooker->add_action( 'init', $this );
 ```
 
-Prefixes removed: `on_`, `handle_`, `filter_`, `action_`
+## Method Validation
+
+Hooker validates methods exist before registering:
+
+```php
+// Throws exception if method missing
+$this->hooker->add_action( 'init', $this, 'missing_method' );
+// Exception: Method "missing_method" does not exist in class "YourClass"
+```
 
 ## Complete Example
 
@@ -127,19 +127,19 @@ Prefixes removed: `on_`, `handle_`, `filter_`, `action_`
 
 namespace WPPB\Admin;
 
-use WPPB\Core\Hooker;
+use function WPPB\plugin;
 
 class SettingsPage {
 
-	private Hooker $hooker;
-
-	public function __construct( Hooker $hooker ) {
-		$this->hooker = $hooker;
+	public function __construct() {
+		// Constructor intentionally empty
 	}
 
 	public function init(): void {
+		$hooker = plugin()->get( 'hooker' );
+
 		// Multiple actions at once
-		$this->hooker->add_actions(
+		$hooker->add_actions(
 			$this,
 			array(
 				'admin_menu',
@@ -148,7 +148,7 @@ class SettingsPage {
 		);
 
 		// Single filter with custom priority and args
-		$this->hooker->add_filter(
+		$hooker->add_filter(
 			'plugin_action_links',
 			$this,
 			'add_settings_link',

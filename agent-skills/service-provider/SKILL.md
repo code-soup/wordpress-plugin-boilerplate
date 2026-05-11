@@ -31,6 +31,8 @@ class SettingsServiceProvider extends AbstractServiceProvider {
 	}
 
 	public function boot(): void {
+		parent::boot();
+
 		$settings = $this->container->get( 'admin.settings' );
 		$settings->init();
 	}
@@ -120,6 +122,8 @@ public function register(): void {
 }
 
 public function boot(): void {
+	parent::boot();
+
 	$this->container->get( 'admin.settings' )->init();
 	$this->container->get( 'admin.dashboard' )->init();
 	$this->container->get( 'admin.notices' )->init();
@@ -170,6 +174,8 @@ class ApiServiceProvider extends AbstractServiceProvider {
 	}
 
 	public function boot(): void {
+		parent::boot();
+
 		// Boot controller
 		$controller = $this->container->get( 'api.posts' );
 		$controller->init();
@@ -182,6 +188,7 @@ class ApiServiceProvider extends AbstractServiceProvider {
 - Create one provider per feature/domain
 - Use `register()` for binding services
 - Use `boot()` for initialization
+- **Always call `parent::boot()` first in boot() method**
 - Add provider to `$providers` array in Plugin class
 - Use singleton for shared instances
 - Use descriptive service names (e.g., `admin.settings`, `api.posts`)

@@ -25,8 +25,8 @@ The autoloader expects files to follow these WordPress naming patterns:
 
 ### Traits
 - **Format**: `trait-{name}.php`
-- **Example**: `WPPB\Traits\HelpersTrait` → `includes/traits/trait-helpers.php`
-- **Example**: `WPPB\Traits\ValidationTrait` → `includes/traits/trait-validation.php`
+- **Example**: `WPPB\Traits\LoggingTrait` → `includes/traits/trait-logging.php`
+- **Example**: `WPPB\Traits\LoggingTrait` → `includes/traits/trait-logging.php`
 
 ### Interfaces
 - **Format**: `interface-{name}.php`
@@ -45,7 +45,7 @@ The autoloader automatically converts CamelCase class names to kebab-case filena
 | `Container` | `class-container.php` |
 | `ServiceProvider` | `class-service-provider.php` |
 | `AdminServiceProvider` | `class-admin-service-provider.php` |
-| `ValidationTrait` | `trait-validation.php` |
+| `LoggingTrait` | `trait-logging.php` |
 | `I18n` | `class-i18n.php` |
 
 ## Namespace to Directory Mapping

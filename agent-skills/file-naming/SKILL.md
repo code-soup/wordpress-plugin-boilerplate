@@ -23,10 +23,10 @@ AjaxHandler      → class-ajax-handler.php
 **Pattern**: `trait-{kebab-case-name}.php`
 
 ```
-HelpersTrait     → trait-helpers.php
+LoggingTrait     → trait-logging.php
 LoggingTrait     → trait-logging.php
 CachingTrait     → trait-caching.php
-ValidationTrait  → trait-validation.php
+LoggingTrait     → trait-logging.php
 ```
 
 ## Interfaces

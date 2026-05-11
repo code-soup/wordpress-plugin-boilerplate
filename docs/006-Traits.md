@@ -6,62 +6,12 @@ This approach is preferred over maintaining a large, procedural `helpers.php` fi
 
 ## Available Traits
 
--   `HelpersTrait`: Provides helper methods for accessing plugin configuration values (like name, version, path) and performing common string manipulations.
 -   `LoggingTrait`: Contains methods for logging debug information.
--   `ValidationTrait`: Provides methods for data validation.
--   `RequirementChecksTrait`: Helper methods for checking WordPress and PHP version requirements.
+-   `RequirementChecksTrait`: Helper methods for checking WordPress and PHP version requirements. Throws exceptions on failure.
 
 ## Using an Existing Trait
 
 To use a trait, include the `use` statement inside your class definition. This will make the trait's methods available on the class instance as if they were defined directly in that class.
-
-**Important Note:** The `HelpersTrait` depends on a `$this->config` property being available on the class that uses it. The main `Plugin` class has this property, making it a primary user of this trait.
-
-### Example: Using `HelpersTrait` in a new class
-
-If you want to use the `HelpersTrait` in a class other than `Plugin`, you must ensure that class has access to the plugin's configuration array.
-
-```php
-<?php
-
-namespace WPPB\Admin;
-
-use WPPB\Core\Plugin;
-use WPPB\Traits\HelpersTrait;
-
-class MyAdminPage {
-
-    // 1. Declare that you are using the trait.
-    use HelpersTrait;
-
-    /**
-     * The plugin's configuration array.
-     * @var array
-     */
-    protected array $config;
-
-    /**
-     * Constructor.
-     */
-    public function __construct() {
-        // 2. Get the main plugin instance to access its config.
-        $plugin = Plugin::instance();
-        $this->config = $plugin->config;
-
-        // 3. Now you can use methods from the HelpersTrait.
-        $this->display_plugin_version();
-    }
-
-    /**
-     * Example method that uses a trait function.
-     */
-    public function display_plugin_version(): void {
-        // 'get_version()' is a method from HelpersTrait.
-        $version = $this->get_version();
-        echo esc_html( "The plugin version is: " . $version );
-    }
-}
-```
 
 ## Creating a New Trait
 

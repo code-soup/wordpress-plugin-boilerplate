@@ -19,20 +19,20 @@ WordPress provides hooks that fire when a plugin is activated or deactivated. Th
 
 ```php
 <?php
+// Load autoloaders BEFORE registering hooks.
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
+
 // The code that runs during plugin activation.
 register_activation_hook(
 	__FILE__,
-	function () {
-		\WPPB\Core\Activator::activate();
-	}
+	array( \WPPB\Core\Activator::class, 'activate' )
 );
 
 // The code that runs during plugin deactivation.
 register_deactivation_hook(
 	__FILE__,
-	function () {
-		\WPPB\Core\Deactivator::deactivate();
-	}
+	array( \WPPB\Core\Deactivator::class, 'deactivate' )
 );
 ```
 
@@ -42,7 +42,7 @@ register_deactivation_hook(
 
 ### Default Activator
 
-The default `Activator` class performs requirement checks during activation.
+The default `Activator` class provides a hook for activation logic.
 
 **File**: `includes/core/class-activator.php`
 
@@ -51,27 +51,15 @@ The default `Activator` class performs requirement checks during activation.
 
 namespace WPPB\Core;
 
-use WPPB\Traits\RequirementChecksTrait;
-use function WPPB\plugin;
-
 class Activator {
 
-	use RequirementChecksTrait;
-
 	public static function activate(): void {
-		$plugin = plugin();
-		self::run_requirement_checks( $plugin->config );
+		// Activation logic here if needed.
 	}
 }
 ```
 
-### Requirement Checks
-
-The `RequirementChecksTrait` validates:
-- Minimum WordPress version
-- Minimum PHP version
-
-If requirements are not met, the plugin is automatically deactivated with an error message.
+**Note**: Requirement checks are handled in `Plugin::is_compatible()` during runtime, not during activation.
 
 **Configuration** is set in `run.php`:
 
@@ -96,17 +84,9 @@ Add your activation logic directly to the `Activator` class:
 
 namespace WPPB\Core;
 
-use WPPB\Traits\RequirementChecksTrait;
-use function WPPB\plugin;
-
 class Activator {
 
-	use RequirementChecksTrait;
-
 	public static function activate(): void {
-		$plugin = plugin();
-		self::run_requirement_checks( $plugin->config );
-
 		// Add custom activation logic
 		self::create_database_tables();
 		self::set_default_options();
@@ -227,9 +207,6 @@ class Activator {
 	use RequirementChecksTrait;
 
 	public static function activate(): void {
-		$plugin = plugin();
-		self::run_requirement_checks( $plugin->config );
-
 		// Create database tables
 		CustomTableSchema::create();
 	}
@@ -321,6 +298,10 @@ For cleanup when the plugin is deleted (not just deactivated), use the uninstall
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+// Load autoloaders if using Uninstaller class
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
 
 // Delete options
 delete_option( 'wppb_version' );
@@ -545,8 +526,6 @@ Handle errors gracefully:
 ```php
 public static function activate(): void {
 	try {
-		$plugin = plugin();
-		self::run_requirement_checks( $plugin->config );
 		self::create_database_tables();
 		self::set_default_options();
 	} catch ( \Exception $e ) {

@@ -20,14 +20,13 @@ trait RequirementChecksTrait {
 	 * Run all requirement checks.
 	 *
 	 * @param array<string, mixed> $config The plugin configuration array.
+	 * @throws \Exception If requirements not met.
 	 */
 	public static function run_requirement_checks( array $config ): void {
 		if ( ! self::is_wp_version_ok( $config['MIN_WP_VERSION'] ) ) {
-			self::deactivate_plugin(
-				$config['PLUGIN_BASENAME'],
+			throw new \Exception(
 				sprintf(
-					// translators: 1. Minimum WordPress version, 2. Current WordPress version.
-					esc_html__( 'Minimum WordPress version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
+					'Minimum WordPress version required: %s. You are running version: %s.',
 					$config['MIN_WP_VERSION'],
 					get_bloginfo( 'version' )
 				)
@@ -35,11 +34,9 @@ trait RequirementChecksTrait {
 		}
 
 		if ( ! self::is_php_version_ok( $config['MIN_PHP_VERSION'] ) ) {
-			self::deactivate_plugin(
-				$config['PLUGIN_BASENAME'],
+			throw new \Exception(
 				sprintf(
-					// translators: 1. Minimum PHP version, 2. Current PHP version.
-					esc_html__( 'Minimum PHP version required: %1$s. You are running version: %2$s.', '__PLUGIN_TEXTDOMAIN__' ),
+					'Minimum PHP version required: %s. You are running version: %s.',
 					$config['MIN_PHP_VERSION'],
 					phpversion()
 				)
@@ -65,16 +62,5 @@ trait RequirementChecksTrait {
 	 */
 	private static function is_php_version_ok( string $min_php_version ): bool {
 		return version_compare( phpversion(), $min_php_version, '>=' );
-	}
-
-	/**
-	 * Deactivate the plugin and show an error message.
-	 *
-	 * @param string $plugin_basename The plugin's basename.
-	 * @param string $message The message to display.
-	 */
-	private static function deactivate_plugin( string $plugin_basename, string $message ): void {
-		deactivate_plugins( $plugin_basename );
-		wp_die( esc_html( $message ) );
 	}
 }

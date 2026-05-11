@@ -98,6 +98,11 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		if ( $this->booted ) {
+			return;
+		}
+
+		$this->booted = true;
 		// Can be implemented by child classes.
 	}
 
@@ -107,7 +112,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 * @since 1.0.0
 	 * @return bool
 	 */
-	public function isBooted(): bool {
+	public function is_booted(): bool {
 		return $this->booted;
 	}
 

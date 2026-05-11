@@ -26,8 +26,16 @@ class AdminServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
-		if ( is_admin() ) {
-			$this->container->get( 'admin' );
+		parent::boot();
+
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			// Register hook to initialize after WordPress is loaded
+			add_action(
+				'init',
+				function () {
+					$this->container->get( 'admin' )->init();
+				}
+			);
 		}
 	}
 }

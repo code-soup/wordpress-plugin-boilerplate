@@ -22,16 +22,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class I18n {
 
-	use \WPPB\Traits\HelpersTrait;
-
-	/**
-	 * Main plugin instance.
-	 *
-	 * @var self|null
-	 * @since 1.0.0
-	 */
-	protected static ?self $instance = null;
-
 	/**
 	 * I18n constructor.
 	 */
@@ -46,10 +36,7 @@ class I18n {
 	 * @return void
 	 */
 	private function register_hooks(): void {
-		$hooker = plugin()->get( 'hooker' );
-
-		// Register the textdomain loading hook.
-		$hooker->add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 	}
 
 	/**
@@ -59,7 +46,7 @@ class I18n {
 		load_plugin_textdomain(
 			'__PLUGIN_TEXTDOMAIN__',
 			false,
-			plugin()->get_basename() . '/languages/'
+			plugin()->get_config( 'PLUGIN_BASENAME' ) . '/languages/'
 		);
 	}
 }

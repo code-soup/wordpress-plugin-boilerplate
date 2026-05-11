@@ -8,21 +8,21 @@ Example `.env.local`:
 
 ## Adding entry points
 
-Webpack entry points are defined in the `src/config/entry.js` file.
+Webpack entry points are defined in the `src/config/config.user.js` file.
 
-To add a new entry point, add a new key-value pair to the exported object.
+To add a new entry point, add a new key-value pair to the `entry` object.
 - The **key** is the output file name (without extension).
 - The **value** is an array of paths to the source files, relative to the `src/` directory.
 
-Example: To add a new `custom` entry point that compiles `custom.js` and `custom.scss`, edit `src/config/entry.js` as follows:
+Example: To add a new `custom` entry point that compiles `custom.js` and `custom.scss`, edit `src/config/config.user.js` as follows:
 
 ```javascript
-export default {
+entry: {
 	'admin-common': ['./scripts/admin.js', './styles/admin.scss'],
-	common: ['./scripts/main.js', './styles/main.scss'],
-    // New entry point
-    custom: ['./scripts/custom.js', './styles/custom.scss'],
-};
+	'frontend-common': ['./scripts/main.js', './styles/main.scss'],
+	// New entry point
+	'custom': ['./scripts/custom.js', './styles/custom.scss'],
+},
 ```
 This configuration will generate `dist/scripts/custom.js` and `dist/styles/custom.css`.
 

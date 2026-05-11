@@ -26,13 +26,13 @@ class Init {
 	 * Init constructor.
 	 */
 	public function __construct() {
-		$this->add_hooks();
+		// Hooks registered later to avoid circular dependency
 	}
 
 	/**
-	 * Add the admin hooks.
+	 * Initialize and register hooks.
 	 */
-	private function add_hooks(): void {
+	public function init(): void {
 		$hooker = plugin()->get( 'hooker' );
 		$hooker->add_actions(
 			array(
@@ -47,41 +47,54 @@ class Init {
 	public function admin_enqueue_scripts(): void {
 
 		$assets_handler = plugin()->get( 'assets' );
-		$plugin_version = plugin()->config['PLUGIN_VERSION'];
+		$plugin_version = plugin()->get_config( 'PLUGIN_VERSION' );
 
-		// Enqueue the main admin stylesheet.
-		wp_enqueue_style(
-			'wppb-admin',
-			$assets_handler->get_asset_url( 'admin-common.css' ),
-			array(),
-			$plugin_version
-		);
+		// Build dependencies list, only including assets that exist.
+		$dependencies = array();
 
-		// Enqueue the webpack runtime script.
-		wp_enqueue_script(
-			'wppb-runtime',
-			$assets_handler->get_asset_url( 'runtime.js' ),
-			array(),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the webpack runtime script.
+		if ( $assets_handler->asset_exists( 'runtime.js' ) ) {
+			wp_enqueue_script(
+				'wppb-admin-runtime',
+				$assets_handler->get_asset_url( 'runtime.js' ),
+				array(),
+				$plugin_version,
+				true
+			);
+			$dependencies[] = 'wppb-admin-runtime';
+		}
 
-		// Enqueue the vendor libs script, dependent on the runtime.
-		wp_enqueue_script(
-			'wppb-vendor',
-			$assets_handler->get_asset_url( 'vendor-libs.js' ),
-			array( 'wppb-runtime' ),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the vendor libs script.
+		if ( $assets_handler->asset_exists( 'vendor-libs.js' ) ) {
+			wp_enqueue_script(
+				'wppb-admin-vendor',
+				$assets_handler->get_asset_url( 'vendor-libs.js' ),
+				$dependencies,
+				$plugin_version,
+				true
+			);
+			$dependencies[] = 'wppb-admin-vendor';
+		}
 
-		// Enqueue the main admin script, dependent on runtime and vendors.
-		wp_enqueue_script(
-			'wppb-admin-common',
-			$assets_handler->get_asset_url( 'admin-common.js' ),
-			array( 'wppb-runtime', 'wppb-vendor' ),
-			$plugin_version,
-			true
-		);
+		// Check and enqueue the main admin stylesheet.
+		if ( $assets_handler->asset_exists( 'admin-common.css' ) ) {
+			wp_enqueue_style(
+				'wppb-admin',
+				$assets_handler->get_asset_url( 'admin-common.css' ),
+				array(),
+				$plugin_version
+			);
+		}
+
+		// Check and enqueue the main admin script.
+		if ( $assets_handler->asset_exists( 'admin-common.js' ) ) {
+			wp_enqueue_script(
+				'wppb-admin-common',
+				$assets_handler->get_asset_url( 'admin-common.js' ),
+				$dependencies,
+				$plugin_version,
+				true
+			);
+		}
 	}
 }

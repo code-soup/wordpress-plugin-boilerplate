@@ -9,37 +9,6 @@ Traits provide reusable methods across classes.
 
 ## Available Traits
 
-### HelpersTrait
-
-Access plugin configuration values.
-
-**Location**: `includes/traits/trait-helpers.php`
-
-**Requires**: Class must have `$config` property.
-
-```php
-use WPPB\Traits\HelpersTrait;
-
-class MyClass {
-	use HelpersTrait;
-
-	protected array $config;
-
-	public function __construct( array $config ) {
-		$this->config = $config;
-	}
-
-	public function example(): void {
-		$name    = $this->get_name();
-		$version = $this->get_version();
-		$prefix  = $this->get_prefix();
-		$url     = $this->get_url();
-		$path    = $this->get_base_path();
-		$id      = $this->get_plugin_id( '-suffix' );
-	}
-}
-```
-
 ### LoggingTrait
 
 Log debug messages to WordPress debug log.
@@ -62,31 +31,9 @@ class MyClass {
 }
 ```
 
-### ValidationTrait
-
-Validate data using Respect\Validation library.
-
-**Location**: `includes/traits/trait-validation.php`
-
-```php
-use WPPB\Traits\ValidationTrait;
-
-class MyClass {
-	use ValidationTrait;
-
-	public function validate_email( string $email ): bool {
-		return $this->validate( $email, 'email' );
-	}
-
-	public function validate_url( string $url ): bool {
-		return $this->validate( $url, 'url' );
-	}
-}
-```
-
 ### RequirementChecksTrait
 
-Check WordPress and PHP version requirements.
+Check WordPress and PHP version requirements. Throws exception on failure.
 
 **Location**: `includes/traits/trait-requirement-checks.php`
 
@@ -100,9 +47,10 @@ class Activator {
 		$config = array(
 			'MIN_WP_VERSION'  => '5.8',
 			'MIN_PHP_VERSION' => '7.4',
-			'PLUGIN_BASENAME' => 'plugin/plugin.php',
 		);
 
+		// Throws \Exception if requirements not met
+		// WordPress auto-deactivates on activation failure
 		self::run_requirement_checks( $config );
 	}
 }
@@ -115,26 +63,24 @@ class Activator {
 
 namespace WPPB\Services;
 
-use WPPB\Traits\HelpersTrait;
 use WPPB\Traits\LoggingTrait;
+use WPPB\Traits\CachingTrait;
 
 class DataService {
-	use HelpersTrait;
 	use LoggingTrait;
-
-	protected array $config;
-
-	public function __construct( array $config ) {
-		$this->config = $config;
-	}
+	use CachingTrait;
 
 	public function process(): void {
-		$this->log(
-			sprintf(
-				'Processing for plugin: %s',
-				$this->get_name()
-			)
-		);
+		$this->log( 'Processing data' );
+
+		$cached = $this->get_cache( 'data' );
+		if ( $cached ) {
+			return $cached;
+		}
+
+		// Process and cache
+		$data = array();
+		$this->set_cache( 'data', $data );
 	}
 }
 ```

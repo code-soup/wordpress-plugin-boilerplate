@@ -52,9 +52,23 @@ class Hooker {
 	 */
 	public function add_action( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
-		$callback = is_object( $component )
-			? array( $component, $method ?? $hook )
-			: $component;
+		if ( is_object( $component ) ) {
+			$method_name = $method ?? $hook;
+
+			if ( ! method_exists( $component, $method_name ) ) {
+				throw new \Exception(
+					sprintf(
+						'Method "%s" does not exist in class "%s"',
+						$method_name,
+						get_class( $component )
+					)
+				);
+			}
+
+			$callback = array( $component, $method_name );
+		} else {
+			$callback = $component;
+		}
 
 		$this->actions[] = array(
 			'hook'          => $hook,
@@ -84,9 +98,23 @@ class Hooker {
 	 */
 	public function add_filter( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
-		$callback = is_object( $component )
-			? array( $component, $method ?? $hook )
-			: $component;
+		if ( is_object( $component ) ) {
+			$method_name = $method ?? $hook;
+
+			if ( ! method_exists( $component, $method_name ) ) {
+				throw new \Exception(
+					sprintf(
+						'Method "%s" does not exist in class "%s"',
+						$method_name,
+						get_class( $component )
+					)
+				);
+			}
+
+			$callback = array( $component, $method_name );
+		} else {
+			$callback = $component;
+		}
 
 		$this->filters[] = array(
 			'hook'          => $hook,
@@ -133,9 +161,9 @@ class Hooker {
 		foreach ( $actions as $args ) {
 			$hook          = $args[0] ?? null;
 			$component     = $args[1] ?? null;
-			$method        = isset( $args[2] ) ? $args[2] : null;
-			$priority      = isset( $args[3] ) ? $args[3] : 10;
-			$accepted_args = isset( $args[4] ) ? $args[4] : 1;
+			$method        = array_key_exists( 2, $args ) ? $args[2] : null;
+			$priority      = array_key_exists( 3, $args ) ? $args[3] : 10;
+			$accepted_args = array_key_exists( 4, $args ) ? $args[4] : 1;
 
 			$this->add_action( $hook, $component, $method, $priority, $accepted_args );
 		}
@@ -162,9 +190,9 @@ class Hooker {
 		foreach ( $filters as $args ) {
 			$hook          = $args[0] ?? null;
 			$component     = $args[1] ?? null;
-			$method        = isset( $args[2] ) ? $args[2] : null;
-			$priority      = isset( $args[3] ) ? $args[3] : 10;
-			$accepted_args = isset( $args[4] ) ? $args[4] : 1;
+			$method        = array_key_exists( 2, $args ) ? $args[2] : null;
+			$priority      = array_key_exists( 3, $args ) ? $args[3] : 10;
+			$accepted_args = array_key_exists( 4, $args ) ? $args[4] : 1;
 
 			$this->add_filter( $hook, $component, $method, $priority, $accepted_args );
 		}

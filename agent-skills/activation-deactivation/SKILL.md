@@ -28,10 +28,10 @@ class Activator {
 		$config = array(
 			'MIN_WP_VERSION'  => '5.8',
 			'MIN_PHP_VERSION' => '7.4',
-			'PLUGIN_BASENAME' => plugin_basename( __FILE__ ),
 		);
 
-		// Check requirements
+		// Check requirements - throws \Exception on failure
+		// WordPress auto-deactivates plugin if activation fails
 		self::run_requirement_checks( $config );
 
 		// Create database tables
@@ -145,6 +145,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// Load autoloaders if using Uninstaller class
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
+
 // Delete options
 delete_option( 'wppb_setting_1' );
 delete_option( 'wppb_setting_2' );
@@ -168,16 +172,17 @@ wp_clear_scheduled_hook( 'wppb_daily_task' );
 
 ## Register Hooks
 
-**File**: `run.php`
+**File**: `index.php`
 
 ```php
 <?php
 
-use WPPB\Core\Activator;
-use WPPB\Core\Deactivator;
+// Load autoloaders BEFORE hooks
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
 
-register_activation_hook( __FILE__, array( Activator::class, 'activate' ) );
-register_deactivation_hook( __FILE__, array( Deactivator::class, 'deactivate' ) );
+register_activation_hook( __FILE__, array( \WPPB\Core\Activator::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( \WPPB\Core\Deactivator::class, 'deactivate' ) );
 ```
 
 ## Requirement Checks
@@ -192,9 +197,10 @@ class Activator {
 		$config = array(
 			'MIN_WP_VERSION'  => '5.8',
 			'MIN_PHP_VERSION' => '7.4',
-			'PLUGIN_BASENAME' => plugin_basename( __FILE__ ),
 		);
 
+		// Throws \Exception if requirements not met
+		// WordPress auto-deactivates plugin on activation failure
 		self::run_requirement_checks( $config );
 	}
 }
