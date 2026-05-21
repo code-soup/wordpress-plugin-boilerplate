@@ -91,7 +91,7 @@ for file in "${namespace_composer[@]}"; do
 done
 
 # Update Namespace in other files (excluding index.php and composer.json)
-namespace_files=("run.php" "uninstall.php" "phpcs.xml.dist")
+namespace_files=("run.php" "uninstall.php" "phpcs.xml")
 
 for file in "${namespace_files[@]}"; do
   if [[ "$OS" == "Darwin" ]]; then
