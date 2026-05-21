@@ -71,7 +71,12 @@ All PHP files must start with `defined('ABSPATH') || exit;` to prevent direct ac
 ### File Structure & Autoloading
 
 - All PHP source code resides in the `/includes` directory.
-- The project uses PSR-4 autoloading, configured in `composer.json`. The root namespace `WPPB` maps to the `/includes` directory.
+- The project uses a custom autoloader that maps WordPress-style filenames to namespaced classes.
+- Files must follow WordPress naming conventions:
+  - Classes: `class-{name}.php` (e.g., `class-container.php`)
+  - Traits: `trait-{name}.php` (e.g., `trait-helpers.php`)
+  - Interfaces: `interface-{name}.php` (e.g., `interface-service-provider.php`)
+  - Abstract classes: `class-abstract-{name}.php`
 - Create new sub-namespaces for logical features (e.g., `WPPB\Admin`, `WPPB\Shortcodes`).
 
 ### Dependency Injection & Service Providers
@@ -103,7 +108,7 @@ The boilerplate provides several core services. Access them from the container w
 - Use modern PHP 8.1+ features where appropriate (e.g., `readonly` properties, `enum` types, arrow functions, `match` expressions).
 - Use strict types: `declare(strict_types=1);`.
 - All functions, methods, and properties must have full PHPDoc blocks, including `@param`, `@return`, and `@throws` tags.
-- Use the short array syntax (`[]` instead of `array()`).
+- Use the WordPress array syntax (`array()` instead of `[]`) for consistency with WordPress Coding Standards.
 - Use generators for processing large datasets to improve memory efficiency.
 - Use getter and setter methods to encapsulate data where appropriate.
 
@@ -190,7 +195,7 @@ This example demonstrates the standard workflow for adding new functionality.
 
 1.  **Create the Feature Class**:
 
-    - Create a new file: `/includes/Shortcodes/MyAwesomeShortcode.php`.
+    - Create a new file: `/includes/shortcodes/class-my-awesome-shortcode.php`.
     - This class will contain the logic for the shortcode. It should receive its dependencies (like the `Hooker`) via its constructor.
 
     ```php
@@ -223,7 +228,7 @@ This example demonstrates the standard workflow for adding new functionality.
 
 2.  **Create a Service Provider**:
 
-    - Create a new file: `/includes/Providers/ShortcodeServiceProvider.php`.
+    - Create a new file: `/includes/providers/class-shortcode-service-provider.php`.
     - This provider will register the shortcode class and tell it to add its hooks.
 
     ```php

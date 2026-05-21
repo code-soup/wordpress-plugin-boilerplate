@@ -10,6 +10,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// Load autoloaders.
+require_once __DIR__ . '/vendor/autoload.php';
+\WPPB\Autoloader::register( __DIR__ );
+
 /**
  * Fired when the plugin is uninstalled.
  *

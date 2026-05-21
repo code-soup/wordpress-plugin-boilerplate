@@ -25,6 +25,10 @@ trait LoggingTrait {
 	 * @param string $level The log level.
 	 */
 	public function log( string $message, string $level = 'info' ): void {
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+			return;
+		}
+
 		if ( ! defined( 'WP_DEBUG_LOG' ) || ! WP_DEBUG_LOG ) {
 			return;
 		}

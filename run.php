@@ -10,8 +10,7 @@ namespace WPPB;
 // If this file is called directly, abort.
 defined( 'ABSPATH' ) || die;
 
-// Load composer autoloader for dependencies.
-require 'vendor/autoload.php';
+// Autoloaders already loaded in index.php before activation hooks.
 
 use WPPB\Core\Plugin;
 

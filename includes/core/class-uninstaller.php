@@ -1,14 +1,11 @@
 <?php
 /**
- * Fired during plugin activation.
+ * Fired during plugin uninstall.
  *
  * @package WPPB
  */
 
 namespace WPPB\Core;
-
-use WPPB\Traits\RequirementChecksTrait;
-use function WPPB\plugin;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -21,8 +18,6 @@ defined( 'ABSPATH' ) || exit;
  * @since      2.0.2
  */
 class Uninstaller {
-
-	use RequirementChecksTrait;
 
 	/**
 	 * The code that runs during plugin deinstallation.

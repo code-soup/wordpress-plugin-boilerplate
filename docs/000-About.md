@@ -4,7 +4,7 @@ This project provides a pre-configured starting point for WordPress plugin devel
 
 Key components include:
 
-*   **A PHP architecture** using modern practices like namespaces, PSR-4 autoloading, and a Dependency Injection container.
+*   **A PHP architecture** using modern practices like namespaces, custom WordPress-compliant autoloading, and a Dependency Injection container.
 *   **A Webpack 5 configuration** for handling frontend assets like JavaScript (via Babel) and Sass.
 *   **Integrated linting tools** (`PHP_CodeSniffer`, `ESLint`, `Stylelint`) to maintain code quality and consistency.
 *   **A set of pre-configured scripts** for common development tasks such as building assets, running a development server, and cleaning the project.

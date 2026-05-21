@@ -11,7 +11,6 @@ namespace WPPB\Core;
 
 use WPPB\Providers\AdminServiceProvider;
 use WPPB\Providers\FrontendServiceProvider;
-use WPPB\Traits\HelpersTrait;
 use WPPB\Traits\RequirementChecksTrait;
 
 /**
@@ -19,7 +18,6 @@ use WPPB\Traits\RequirementChecksTrait;
  */
 final class Plugin {
 
-	use HelpersTrait;
 	use RequirementChecksTrait;
 
 	/**
@@ -34,7 +32,14 @@ final class Plugin {
 	 *
 	 * @var array
 	 */
-	public array $config = array();
+	private array $config = array();
+
+	/**
+	 * Error message for display
+	 *
+	 * @var string|null
+	 */
+	private ?string $error_message = null;
 
 	/**
 	 * The dependency injection container.
@@ -107,6 +112,7 @@ final class Plugin {
 		// Bind the container instance to prevent auto-resolution.
 		$this->container->instance( Container::class, $this->container );
 
+		$this->load_providers();
 		$this->bind_services();
 	}
 
@@ -118,8 +124,6 @@ final class Plugin {
 		if ( ! $this->is_compatible() ) {
 			return;
 		}
-
-		$this->load_providers();
 		$this->get( 'hooker' )->run();
 	}
 
@@ -135,6 +139,29 @@ final class Plugin {
 	}
 
 	/**
+	 * Get plugin configuration.
+	 *
+	 * @param string|null $key     Optional. Config key to retrieve (case-insensitive).
+	 * @param mixed       $default Optional. Default value if key not found.
+	 * @return mixed Full config array if no key provided, specific value otherwise.
+	 */
+	public function get_config( ?string $key = null, $default = null ) {
+		if ( null === $key ) {
+			return $this->config;
+		}
+
+		$key_upper = strtoupper( $key );
+
+		foreach ( $this->config as $config_key => $value ) {
+			if ( strtoupper( $config_key ) === $key_upper ) {
+				return $value;
+			}
+		}
+
+		return $default;
+	}
+
+	/**
 	 * Register the essential services for the plugin.
 	 */
 	private function bind_services(): void {
@@ -145,10 +172,21 @@ final class Plugin {
 
 	/**
 	 * Load and boot all service providers.
+	 *
+	 * @throws \Exception If provider class doesn't exist.
 	 */
 	private function load_providers(): void {
 		foreach ( $this->providers as $provider_class ) {
-			$provider = new $provider_class( $this->container );
+			if ( ! class_exists( $provider_class ) ) {
+				throw new \Exception(
+					sprintf(
+						'Service Provider class "%s" not found. Check that the class exists and is autoloaded correctly.',
+						$provider_class
+					)
+				);
+			}
+
+			$provider = $this->container->make( $provider_class );
 			$provider->register();
 			$provider->boot();
 		}
@@ -166,15 +204,25 @@ final class Plugin {
 
 			return true;
 		} catch ( \Exception $e ) {
-			add_action(
+			$this->error_message = $e->getMessage();
+			$this->get( 'hooker' )->add_action(
 				'admin_notices',
-				function () use ( $e ) {
-					echo '<div class="notice notice-error"><p>' . esc_html( $e->getMessage() ) . '</p></div>';
-				}
+				$this,
+				'render_error_notice'
 			);
 
 			return false;
 		}
+	}
+
+	/**
+	 * Render error notice.
+	 */
+	public function render_error_notice(): void {
+		printf(
+			'<div class="notice notice-error"><p>%s</p></div>',
+			esc_html( $this->error_message )
+		);
 	}
 
 	/**

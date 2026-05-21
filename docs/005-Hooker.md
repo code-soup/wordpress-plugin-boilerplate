@@ -13,7 +13,7 @@ The `hooker` service is available from the main plugin container. There are two 
 In any service provider that extends `AbstractServiceProvider`, the container is available via `$this->container`.
 
 ```php
-// In a service provider, e.g., includes/providers/FrontendServiceProvider.php
+// In a service provider, e.g., includes/providers/class-frontend-service-provider.php
 $hooker = $this->container->get('hooker');
 ```
 
@@ -40,20 +40,20 @@ The `callable` argument is typically an array containing an object instance and 
 This example shows how to register a hook from within a class that is managed by the container.
 
 ```php
-// In some class, e.g., includes/frontend/Display.php
+// In some class, e.g., includes/frontend/class-display.php
 namespace WPPB\Frontend;
 
 use WPPB\Core\Hooker;
 
 class Display {
-    private Hooker $hooker;
 
     public function __construct() {
-        $this->hooker = plugin()->get('hooker');
+        // Constructor intentionally empty
     }
 
     public function init(): void {
-        $this->hooker->add_action(
+        $hooker = plugin()->get('hooker');
+        $hooker->add_action(
             'wp_footer',      // The hook name
             $this,
             'render',         // The callable: this object, 'render' method
@@ -136,3 +136,15 @@ If the method name is the same as the hook name, you can omit the method argumen
 // Equivalent to [ 'the_title', $this, 'the_title' ]
 $hooker->add_filter([ 'the_title', $this ]);
 ```
+
+## Method Validation
+
+The `Hooker` service validates that methods exist before registering hooks. If you pass an object with a method name that doesn't exist, it will throw an exception immediately:
+
+```php
+// This will throw an exception if the method doesn't exist
+$hooker->add_action( 'init', $this, 'nonexistent_method' );
+// Exception: Method "nonexistent_method" does not exist in class "YourClass"
+```
+
+This validation prevents WordPress errors later when hooks fire and helps catch typos early.

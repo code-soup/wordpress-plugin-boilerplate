@@ -44,7 +44,7 @@ const createWebpackConfig = (envArgs, argv) => {
 			cacheDirectory: pathUtils.paths.cache,
 			name: `${isProduction ? 'prod' : 'dev'}-cache`,
 		},
-		target: ['web', 'es5'],
+		target: 'web',
 		devtool: env.getEnvSpecific(isProduction, 'source-map', 'cheap-module-source-map'),
 		module: moduleConfig(userConfig, { isProduction }),
 		resolve: {
@@ -69,8 +69,8 @@ const createWebpackConfig = (envArgs, argv) => {
 		},
 		performance: {
 			hints: env.getEnvSpecific(isProduction, 'warning', false),
-			maxEntrypointSize: 1000000,
-			maxAssetSize: 1000000,
+			maxEntrypointSize: 512000,
+			maxAssetSize: 512000,
 		},
 		plugins: pluginsConfig(userConfig, { ...env, isProduction }, fileName),
 		optimization: optimizationConfig(userConfig, { isProduction }),

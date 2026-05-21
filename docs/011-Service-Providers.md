@@ -29,6 +29,8 @@ First, create the class that contains your actual functionality:
 /**
  * Email Service.
  *
+ * File: includes/services/class-email-service.php
+ *
  * @package WPPB
  */
 
@@ -112,6 +114,8 @@ Create a service provider that extends `AbstractServiceProvider`:
 /**
  * Email Service Provider.
  *
+ * File: includes/providers/class-email-service-provider.php
+ *
  * @package WPPB
  */
 
@@ -147,6 +151,8 @@ class EmailServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Initialize the email service
 		$email_service = $this->container->get( 'email' );
 		$email_service->init();
@@ -159,7 +165,7 @@ class EmailServiceProvider extends AbstractServiceProvider {
 Add your service provider to the `$providers` array in the main plugin class:
 
 ```php
-// In includes/core/Plugin.php, add to the $providers array:
+// In includes/core/class-plugin.php, add to the $providers array:
 protected array $providers = array(
 	AdminServiceProvider::class,
 	FrontendServiceProvider::class,
@@ -179,6 +185,8 @@ If you prefer to implement the interface directly, you can do so:
 <?php
 /**
  * Custom Service Provider.
+ *
+ * File: includes/providers/class-custom-service-provider.php
  *
  * @package WPPB
  */
@@ -252,6 +260,8 @@ class CustomServiceProvider implements ServiceProviderInterface {
 /**
  * Integration Service Provider.
  *
+ * File: includes/providers/class-integration-service-provider.php
+ *
  * @package WPPB
  */
 
@@ -288,6 +298,8 @@ class IntegrationServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Only initialize if WooCommerce is active
 		if ( class_exists( 'WooCommerce' ) ) {
 			$this->container->get( 'woo' )->init();
@@ -307,6 +319,8 @@ class IntegrationServiceProvider extends AbstractServiceProvider {
 <?php
 /**
  * Admin Enhancement Service Provider.
+ *
+ * File: includes/providers/class-admin-enhancement-service-provider.php
  *
  * @package WPPB
  */
@@ -342,6 +356,8 @@ class AdminEnhancementServiceProvider extends AbstractServiceProvider {
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
+		parent::boot();
+
 		// Only boot if we're in admin and user has appropriate capabilities
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 			$this->container->get( 'dashboard_widgets' )->init();
@@ -381,6 +397,8 @@ public function __construct(
 ### 3. Use Conditional Loading
 ```php
 public function boot(): void {
+	parent::boot();
+
 	// Only load if specific conditions are met
 	if ( $this->should_load_feature() ) {
 		$this->container->get( 'feature_service' )->init();
@@ -417,6 +435,8 @@ Once registered, you can access your services from anywhere in your plugin:
 ### From Another Service Provider
 ```php
 public function boot(): void {
+	parent::boot();
+
 	$email_service = $this->container->get( 'email' );
 	$email_service->send_notification( 'admin@site.com', 'Test', 'Hello World' );
 }

@@ -58,6 +58,9 @@ function display_svg_icon( string $icon_name ): void {
         return;
     }
 
+    // Validate path - prevent directory traversal.
+    $spritemap_file = str_replace( array( '..', '\\' ), '', $spritemap_file );
+
     // Construct the full URL to the icon in the spritemap.
     $icon_url = plugins_url( '../dist/' . $spritemap_file, __FILE__ ) . '#icon-' . $icon_name;
 

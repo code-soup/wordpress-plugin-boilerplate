@@ -10,6 +10,7 @@ export const isWatching = !!process.env.WEBPACK_SERVE;
 export const isAnalyzing = !!process.env.ANALYZE;
 export const isLintingScripts = !!process.env.LINT_SCRIPTS;
 export const isLintingStyles = !!process.env.LINT_STYLES;
+export const isDevelopment = process.env.NODE_ENV !== 'production';
 
 /**
  * Returns a value based on the current environment.
