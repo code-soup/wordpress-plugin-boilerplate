@@ -26,13 +26,6 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	protected Container $container;
 
 	/**
-	 * The list of provided services.
-	 *
-	 * @var array
-	 */
-	protected array $provides = array();
-
-	/**
 	 * Whether the provider has been booted
 	 *
 	 * @var bool
@@ -56,35 +49,6 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface {
 	 */
 	public function get_container(): Container {
 		return $this->container;
-	}
-
-	/**
-	 * Get the list of provided services.
-	 *
-	 * @return array
-	 */
-	public function get_provides(): array {
-		return $this->provides;
-	}
-
-	/**
-	 * Set the list of provided services.
-	 *
-	 * @param array $provides The list of provided services.
-	 */
-	public function set_provides( array $provides ): void {
-		$this->provides = $provides;
-	}
-
-	/**
-	 * Check if the service provider provides a certain service.
-	 *
-	 * @param string $service The service to check.
-	 *
-	 * @return bool
-	 */
-	public function provides( string $service ): bool {
-		return in_array( $service, $this->provides, true );
 	}
 
 	/**

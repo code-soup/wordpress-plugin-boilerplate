@@ -32,7 +32,7 @@ final class Plugin {
 	 *
 	 * @var array
 	 */
-	private array $config = array();
+	public array $config = array();
 
 	/**
 	 * Error message for display
@@ -112,20 +112,26 @@ final class Plugin {
 		// Bind the container instance to prevent auto-resolution.
 		$this->container->instance( Container::class, $this->container );
 
-		$this->load_providers();
 		$this->bind_services();
+		
 	}
 
 	/**
-	 * Boots providers and fires all registered hooks.
-	 * This is the main entry point for the plugin logic.
-	 */
-	public function run(): void {
-		if ( ! $this->is_compatible() ) {
-			return;
-		}
-		$this->get( 'hooker' )->run();
-	}
+     * Boots providers and fires all registered hooks.
+     * This is the main entry point for the plugin logic.
+     */
+    public function run(): void {
+        if ( ! $this->is_compatible() ) {
+            return;
+        }
+
+        $this->get( 'hooker' )->add_action( 'init',
+            $this, 'load_textdomain', 1
+        );
+
+        $this->load_providers();
+        $this->get( 'hooker' )->run();
+    }
 
 	/**
 	 * Get a service from the container by $alias.
@@ -138,36 +144,17 @@ final class Plugin {
 		return $this->container->get( $alias );
 	}
 
-	/**
-	 * Get plugin configuration.
-	 *
-	 * @param string|null $key     Optional. Config key to retrieve (case-insensitive).
-	 * @param mixed       $default Optional. Default value if key not found.
-	 * @return mixed Full config array if no key provided, specific value otherwise.
-	 */
-	public function get_config( ?string $key = null, $default = null ) {
-		if ( null === $key ) {
-			return $this->config;
-		}
-
-		$key_upper = strtoupper( $key );
-
-		foreach ( $this->config as $config_key => $value ) {
-			if ( strtoupper( $config_key ) === $key_upper ) {
-				return $value;
-			}
-		}
-
-		return $default;
-	}
 
 	/**
 	 * Register the essential services for the plugin.
 	 */
 	private function bind_services(): void {
 		$this->container->singleton( 'hooker', Hooker::class );
+
+		// Ensure type-hinted Hooker resolves to the same singleton instance.
+        $this->container->alias( 'hooker', Hooker::class );
+        
 		$this->container->singleton( 'assets', Assets::class );
-		$this->container->singleton( 'i18n', I18n::class );
 	}
 
 	/**
@@ -186,7 +173,7 @@ final class Plugin {
 				);
 			}
 
-			$provider = $this->container->make( $provider_class );
+			$provider = new $provider_class( $this->container );
 			$provider->register();
 			$provider->boot();
 		}
@@ -205,10 +192,8 @@ final class Plugin {
 			return true;
 		} catch ( \Exception $e ) {
 			$this->error_message = $e->getMessage();
-			$this->get( 'hooker' )->add_action(
-				'admin_notices',
-				$this,
-				'render_error_notice'
+			$this->get( 'hooker' )->add_action( 'admin_notices',
+				$this, 'render_error_notice'
 			);
 
 			return false;

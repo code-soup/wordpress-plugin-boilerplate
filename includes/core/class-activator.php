@@ -23,6 +23,10 @@ class Activator {
 	 * The code that runs during plugin activation.
 	 */
 	public static function activate(): void {
-		// Activation logic here if needed.
+		// Trigger module activation hooks
+		do_action( '__PLUGIN_NAME___activate' );
+
+		// Flush rewrite rules after all CPTs are registered
+		flush_rewrite_rules();
 	}
 }
