@@ -51,7 +51,14 @@ Before you begin, please ensure you have the following installed:
     npm run setup
     ```
 
-3.  **Install Dependencies**:
+3.  **Configure Development Environment** (Optional):
+    Copy the example environment file and configure your local development settings.
+    ```bash
+    cp .env.local.example .env.local
+    # Edit .env.local with your local WordPress URL and webpack dev server settings
+    ```
+
+4.  **Install Dependencies**:
     Once the setup is complete, install the necessary PHP and Node.js dependencies.
     ```bash
     # Install PHP dependencies
@@ -61,7 +68,7 @@ Before you begin, please ensure you have the following installed:
     npm install
     ```
 
-4.  **Run the Development Server**:
+5.  **Run the Development Server**:
     For live-reloading and automatic recompilation of assets during development.
     ```bash
     npm run dev
@@ -119,6 +126,7 @@ For more detailed information on specific topics, please refer to the documentat
 -   **[SCSS - Custom Fonts](./docs/008-SCSS-Fonts.md)**: How to add and use custom self-hosted fonts.
 -   **[SCSS - SVG Sprites](./docs/009-SCSS-Spritemap.md)**: How to use the automated SVG spritemap generator.
 -   **[AI Development Rules](./docs/010-AI-Rules.md)**: Guidelines for AI-assisted development with this boilerplate.
+-   **[Vendor Prefixing](./docs/016-Vendor-Prefixing.md)**: How to prefix composer dependencies to prevent conflicts when distributing your plugin.
 
 ## Issues
 

@@ -16,26 +16,33 @@ defined( 'ABSPATH' ) || die;
 class Autoloader {
 
 	/**
-	 * Namespace to directory mappings.
-	 *
-	 * @var array
-	 */
-	private static $namespace_map = array(
-		'WPPB\\Core\\'       => 'includes/core/',
-		'WPPB\\Admin\\'      => 'includes/admin/',
-		'WPPB\\Frontend\\'   => 'includes/frontend/',
-		'WPPB\\Providers\\'  => 'includes/providers/',
-		'WPPB\\Abstracts\\'  => 'includes/abstracts/',
-		'WPPB\\Interfaces\\' => 'includes/interfaces/',
-		'WPPB\\Traits\\'     => 'includes/traits/',
-	);
-
-	/**
 	 * Base directory.
 	 *
 	 * @var string
 	 */
 	private static $base_dir = '';
+
+	/**
+	 * Root namespace (detected from this class).
+	 *
+	 * @var string
+	 */
+	private static $root_namespace = '';
+
+	/**
+	 * Namespace to directory mappings (relative to root namespace).
+	 *
+	 * @var array
+	 */
+	private static $namespace_map = array(
+		'Core\\'       => 'includes/core/',
+		'Admin\\'      => 'includes/admin/',
+		'Frontend\\'   => 'includes/frontend/',
+		'Providers\\'  => 'includes/providers/',
+		'Abstracts\\'  => 'includes/abstracts/',
+		'Interfaces\\' => 'includes/interfaces/',
+		'Traits\\'     => 'includes/traits/',
+	);
 
 	/**
 	 * Register the autoloader.
@@ -44,7 +51,9 @@ class Autoloader {
 	 * @return void
 	 */
 	public static function register( $base_dir ) {
-		self::$base_dir = rtrim( $base_dir, '/\\' ) . DIRECTORY_SEPARATOR;
+		// Detect root namespace from this class.
+		self::$root_namespace = __NAMESPACE__ . '\\';
+		self::$base_dir       = rtrim( $base_dir, '/\\' ) . DIRECTORY_SEPARATOR;
 		spl_autoload_register( array( __CLASS__, 'autoload' ) );
 	}
 
@@ -55,8 +64,8 @@ class Autoloader {
 	 * @return void
 	 */
 	public static function autoload( $class ) {
-		// Check if class belongs to WPPB namespace.
-		if ( ! str_starts_with( $class, 'WPPB\\' ) ) {
+		// Check if class belongs to our root namespace.
+		if ( ! str_starts_with( $class, self::$root_namespace ) ) {
 			return;
 		}
 
@@ -94,7 +103,8 @@ class Autoloader {
 	 */
 	private static function get_directory( $class ) {
 		foreach ( self::$namespace_map as $namespace => $directory ) {
-			if ( str_starts_with( $class, $namespace ) ) {
+			$full_namespace = self::$root_namespace . $namespace;
+			if ( str_starts_with( $class, $full_namespace ) ) {
 				return $directory;
 			}
 		}
@@ -140,11 +150,11 @@ class Autoloader {
 	 * @return string File prefix (class-, trait-, interface-).
 	 */
 	private static function get_file_prefix( $class_name, $full_class ) {
-		if ( str_starts_with( $full_class, 'WPPB\\Traits\\' ) ) {
+		if ( str_starts_with( $full_class, self::$root_namespace . 'Traits\\' ) ) {
 			return 'trait-';
 		}
 
-		if ( str_starts_with( $full_class, 'WPPB\\Interfaces\\' ) ) {
+		if ( str_starts_with( $full_class, self::$root_namespace . 'Interfaces\\' ) ) {
 			return 'interface-';
 		}
 

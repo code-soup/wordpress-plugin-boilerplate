@@ -1,7 +1,7 @@
 // @ts-nocheck
 import globals from "globals";
 import js from "@eslint/js";
-import pluginImport from "eslint-plugin-import";
+import pluginImport from "eslint-plugin-import-x";
 
 export default [
 	// Apply recommended defaults
@@ -43,7 +43,7 @@ export default [
 			],
 		},
 		settings: {
-			"import/ignore": [
+			"import-x/ignore": [
 				"node_modules",
 				"\\.(coffee|scss|css|less|hbs|svg|json)$",
 			],

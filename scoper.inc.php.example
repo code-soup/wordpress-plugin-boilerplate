@@ -1,0 +1,164 @@
+<?php
+/**
+ * PHP-Scoper Configuration Example
+ *
+ * This file demonstrates how to configure PHP-Scoper to prefix your plugin's
+ * vendor dependencies, preventing namespace conflicts with other plugins.
+ *
+ * USAGE:
+ * 1. Copy this file: cp scoper.inc.php.example scoper.inc.php
+ * 2. Update the $prefix variable with your plugin's namespace
+ * 3. Install PHP-Scoper: composer require --dev humbug/php-scoper
+ * 4. Run scoping: vendor/bin/php-scoper add-prefix
+ * 5. Update index.php to use vendor-prefixed/scoper-autoload.php
+ *
+ * @see https://github.com/humbug/php-scoper
+ * @see docs/016-Vendor-Prefixing.md
+ *
+ * @package WPPB
+ */
+
+declare(strict_types=1);
+
+use Isolated\Symfony\Component\Finder\Finder;
+
+/**
+ * Define your namespace prefix
+ *
+ * This should match your plugin's root namespace followed by \Vendor
+ * Example: If your namespace is MyPlugin, use MyPlugin\Vendor
+ */
+$prefix = 'WPPB\\Vendor';
+
+/**
+ * WordPress functions and constants to exclude from prefixing
+ *
+ * These are global WordPress functions that should never be prefixed
+ */
+$wordpress_excludes = [
+	// Hook functions
+	'add_action',
+	'add_filter',
+	'remove_action',
+	'remove_filter',
+	'do_action',
+	'do_action_ref_array',
+	'apply_filters',
+	'apply_filters_ref_array',
+	'has_action',
+	'has_filter',
+	'did_action',
+	
+	// Registration functions
+	'register_activation_hook',
+	'register_deactivation_hook',
+	'register_uninstall_hook',
+	
+	// Common WordPress functions
+	'__',
+	'_e',
+	'_n',
+	'_x',
+	'esc_html',
+	'esc_html__',
+	'esc_html_e',
+	'esc_attr',
+	'esc_attr__',
+	'esc_attr_e',
+	'esc_url',
+	'sanitize_text_field',
+	'wp_enqueue_script',
+	'wp_enqueue_style',
+	'wp_localize_script',
+	'get_option',
+	'update_option',
+	'delete_option',
+];
+
+return [
+	/**
+	 * The prefix to be used to isolate your dependencies.
+	 */
+	'prefix' => $prefix,
+
+	/**
+	 * Output directory for scoped dependencies
+	 */
+	'output-dir' => 'vendor-prefixed',
+
+	/**
+	 * By default when running php-scoper add-prefix, it will prefix all relevant code found in the current working
+	 * directory. You can however define which files should be scoped by using Finders.
+	 */
+	'finders' => [
+		// Scope the vendor directory
+		Finder::create()
+			->files()
+			->ignoreVCS(true)
+			->notName('/.*\\.md|.*\\.dist|.*\\.xml|Makefile|composer\\.json|composer\\.lock/')
+			->exclude([
+				'doc',
+				'docs',
+				'test',
+				'test_old',
+				'tests',
+				'Tests',
+				'vendor-bin',
+			])
+			->in('vendor'),
+
+		// Include composer.json for autoloader
+		Finder::create()->append([
+			'composer.json',
+		]),
+	],
+
+	/**
+	 * List of excluded files, i.e. files for which the content will be left untouched.
+	 */
+	'exclude-files' => [
+		'vendor/composer/installed.json',
+	],
+
+	/**
+	 * When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
+	 * original namespace. These will include, for example, strings or string manipulations. PHP-Scoper has limited
+	 * support for prefixing such strings. To circumvent that, you can define patchers to manipulate the file to your
+	 * heart contents.
+	 */
+	'patchers' => [
+		/**
+		 * Patcher for WordPress compatibility
+		 */
+		static function (string $filePath, string $prefix, string $contents): string {
+			// Don't modify files that contain WordPress core constants
+			if (str_contains($contents, 'ABSPATH')) {
+				return $contents;
+			}
+
+			return $contents;
+		},
+	],
+
+	/**
+	 * List of symbols to exclude from the scoping.
+	 */
+	'exclude-namespaces' => [
+		// Global namespace
+		'#^$#',
+	],
+
+	/**
+	 * WordPress constants that should not be prefixed
+	 */
+	'exclude-constants' => [
+		'/^ABSPATH$/',
+		'/^WP_.*/',
+		'/^WPINC$/',
+	],
+
+	/**
+	 * WordPress and global functions that should not be prefixed
+	 */
+	'exclude-functions' => $wordpress_excludes,
+];
