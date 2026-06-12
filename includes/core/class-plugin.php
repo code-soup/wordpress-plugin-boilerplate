@@ -134,6 +134,17 @@ final class Plugin {
     }
 
 	/**
+	 * Load the plugin text domain for translation.
+	 */
+	public function load_textdomain(): void {
+		load_plugin_textdomain(
+			'__PLUGIN_TEXTDOMAIN__',
+			false,
+			dirname( $this->config['PLUGIN_BASENAME'] ) . '/languages/'
+		);
+	}
+
+	/**
 	 * Get a service from the container by $alias.
 	 *
 	 * @param string $alias The service name to retrieve.

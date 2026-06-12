@@ -30,6 +30,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **Critical:** Added missing `load_textdomain()` method in Plugin class
+  - Plugins created from boilerplate were failing on activation
+  - Method uses `__PLUGIN_TEXTDOMAIN__` placeholder replaced by setup script
 - Version synchronization between `package.json` and `index.php`
 - Autoloader fragility when setup script changes namespace
 - CHANGELOG version history cleaned up to reflect actual git history
