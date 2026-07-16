@@ -49,7 +49,7 @@ const createWebpackConfig = (envArgs, argv) => {
 		module: moduleConfig(userConfig, { isProduction }),
 		resolve: {
 			modules: [userConfig.paths.src, 'node_modules'],
-			extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+			extensions: ['.js', '.jsx', '.json'],
 			enforceExtension: false,
 			alias: {
 				'@': userConfig.paths.src,

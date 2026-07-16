@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.3] - 2026-06-12
+## [0.0.3] - 2026-06-29
 
 ### Security
 
@@ -20,22 +20,26 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Vendor prefixing infrastructure for preventing dependency conflicts
-  - Created `scoper.inc.php.example` template with WordPress-safe configuration
-  - Added comprehensive vendor prefixing documentation (`docs/016-Vendor-Prefixing.md`)
-  - Updated `.gitignore` to exclude scoped vendor directory
+    - Created `scoper.inc.php.example` template with WordPress-safe configuration
+    - Added comprehensive vendor prefixing documentation (`docs/016-Vendor-Prefixing.md`)
+    - Updated `.gitignore` to exclude scoped vendor directory
 - Environment configuration template (`.env.local.example`)
 - Dynamic namespace detection in autoloader
-  - Autoloader now uses `__NAMESPACE__` instead of hardcoded namespace
-  - Ensures compatibility after setup script changes namespace
+    - Autoloader now uses `__NAMESPACE__` instead of hardcoded namespace
+    - Ensures compatibility after setup script changes namespace
+- Auto-detection of license URIs in setup script
+    - Supports GPL-3.0+, GPL-2.0+, MIT, Apache-2.0, BSD licenses
+    - Users can leave License URI blank for automatic URL assignment
 
 ### Fixed
 
 - **Critical:** Added missing `load_textdomain()` method in Plugin class
-  - Plugins created from boilerplate were failing on activation
-  - Method uses `__PLUGIN_TEXTDOMAIN__` placeholder replaced by setup script
+    - Plugins created from boilerplate were failing on activation
+    - Method uses `__PLUGIN_TEXTDOMAIN__` placeholder replaced by setup script
 - Version synchronization between `package.json` and `index.php`
 - Autoloader fragility when setup script changes namespace
 - CHANGELOG version history cleaned up to reflect actual git history
+- Fixed asset loader to always use manifest.json
 
 ## 2026-02-28
 

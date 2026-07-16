@@ -87,10 +87,8 @@ final class Assets {
 		$path = $asset_key;
 
 		// In production, get the hashed filename from the manifest.
-		if ( $this->is_production ) {
-			$manifest = $this->get_manifest();
-			$path     = $manifest[ $asset_key ] ?? $asset_key;
-		}
+		$manifest = $this->get_manifest();
+		$path     = $manifest[ $asset_key ] ?? $asset_key;
 
 		// Validate path - prevent directory traversal.
 		$path = str_replace( array( '..', '\\' ), '', $path );
@@ -110,9 +108,9 @@ final class Assets {
 	 */
 	public function asset_exists( string $asset_key ): bool {
 		
-		if ( $this->is_production ) {
-			$manifest = $this->get_manifest();
-			return isset( $manifest[ $asset_key ] );
+		$manifest = $this->get_manifest();
+		if ( isset( $manifest[ $asset_key ] ) ) {
+			$asset_key = isset( $manifest[ $asset_key ] );
 		}
 
 		// In development, check if file exists in dist directory.

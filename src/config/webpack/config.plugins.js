@@ -5,8 +5,6 @@
 
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import StyleLintPlugin from 'stylelint-webpack-plugin';
-import ESLintPlugin from 'eslint-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 
@@ -21,8 +19,14 @@ export default (config, env, fileName) => {
             chunkFilename: `styles/${env.isProduction ? '[id].[contenthash]' : '[id]'}.chunk.css`,
         }),
 
+        // Manifest plugin - always generate manifest for asset mapping
+        new WebpackManifestPlugin({
+            fileName: 'manifest.json',
+            publicPath: '',
+            writeToFileEmit: true,
+        }),
     ];
-    
+
     // Conditional plugins based on build context
     const contextPlugins = conditionalPlugins([
         // SVG Spritemap plugin - only when SVG files exist
@@ -46,39 +50,7 @@ export default (config, env, fileName) => {
                         })
                 ),
         },
-        
-        // Manifest plugin - always generate manifest for asset mapping
-        {
-            condition: true, // Always generate manifest
-            factory: () => new WebpackManifestPlugin({
-                fileName: 'manifest.json',
-                publicPath: '',
-                writeToFileEmit: true,
-            }),
-        },
-        
-        // ESLint plugin - only when running lint commands
-        {
-            condition: env.isLintingScripts,
-            factory: () =>
-                new ESLintPlugin({
-                    extensions: ['js'],
-                    emitWarning: !env.isProduction,
-                    failOnError: env.isProduction,
-                    context: config.paths.src,
-                }),
-        },
-        
-        // StyleLint plugin - only when style lint commands
-        {
-            condition: env.isLintingStyles,
-            factory: () =>
-                new StyleLintPlugin({
-                    failOnError: env.isProduction,
-                    syntax: 'scss',
-                }),
-        },
-        
+
         // Bundle analyzer - only when analyzing
         {
             condition: env.isAnalyzing,
