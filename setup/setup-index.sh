@@ -53,8 +53,12 @@ while IFS= read -r line; do
             echo " * License:           $plugin_license" >>"$TMP_FILE"
             ;;
         *"License URI:"*)
+            # Always write License URI line (required by WordPress plugin header)
             if [[ -n "$license_uri" ]]; then
                 echo " * License URI:       $license_uri" >>"$TMP_FILE"
+            else
+                # Write empty License URI if not provided (e.g., for proprietary licenses)
+                echo " * License URI:       " >>"$TMP_FILE"
             fi
             ;;
         *"Text Domain:"*)

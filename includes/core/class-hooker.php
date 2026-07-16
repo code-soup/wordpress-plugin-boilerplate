@@ -35,6 +35,13 @@ class Hooker {
 	protected array $filters = array();
 
 	/**
+	 * Whether hooks have been registered with WordPress.
+	 *
+	 * @var bool
+	 */
+	private bool $hooks_registered = false;
+
+	/**
 	 * Add a WordPress action to the collection.
 	 *
 	 * Accepts either:
@@ -129,9 +136,18 @@ class Hooker {
 	/**
 	 * Register all collected filters and actions with WordPress.
 	 *
+	 * Prevents double registration by checking if hooks have already been registered.
+	 * Safe to call multiple times - subsequent calls are no-ops.
+	 *
 	 * @return void
 	 */
 	public function run(): void {
+		// Prevent double registration.
+		if ( $this->hooks_registered ) {
+			return;
+		}
+
+		$this->hooks_registered = true;
 
 		foreach ( $this->filters as $filter ) {
 			add_filter( $filter['hook'], $filter['callback'], $filter['priority'], $filter['accepted_args'] );

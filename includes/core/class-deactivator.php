@@ -21,8 +21,10 @@ class Deactivator {
 	 * Deactivate the plugin.
 	 */
 	public static function deactivate(): void {
-		// Flush rewrite rules if needed.
-		// Only uncomment if plugin registered custom post types or rewrite rules:
-		// flush_rewrite_rules();
+		// Trigger module activation hooks
+		do_action( '__PLUGIN_NAME___deactivate' );
+
+		// Flush rewrite rules after all CPTs are registered
+		flush_rewrite_rules();
 	}
 }

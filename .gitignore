@@ -119,6 +119,10 @@ package-lock.json
 # PHP CodeSniffer cache
 .phpcs.cache
 
+# PHP Scoper
+vendor-prefixed/
+scoper.inc.php
+
 # Distribution archives
 *.zip
 *.tgz

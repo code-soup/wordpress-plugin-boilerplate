@@ -100,14 +100,42 @@ plugin_license=$(echo "$plugin_license" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
 echo -e "${CYAN}Plugin License is set to: [$plugin_license]${NC}"
 
 # Prompt the user to enter License URI (optional)
-read -rp "License URI (A link to the full text of the license. Leave blank if not applicable): " license_uri
+read -rp "License URI (A link to the full text of the license. Leave blank for auto-detection): " license_uri
 
 # Sanitize user input
 license_uri=$(echo "$license_uri" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
 
-# Set default license URI for GPL-3.0+ or gpl-3 if user didn't provide one
-if [[ -z "$license_uri" && ( "$plugin_license" == "GPL-3.0+" || "$plugin_license" == "gpl-3" ) ]]; then
-    license_uri="https://www.gnu.org/licenses/gpl-3.0.en.html"
+# Auto-detect license URI based on common license types if user didn't provide one
+if [[ -z "$license_uri" ]]; then
+    # Normalize license string to lowercase for comparison
+    license_lower=$(echo "$plugin_license" | tr '[:upper:]' '[:lower:]')
+
+    case "$license_lower" in
+        "gpl-3.0+"*|"gpl-3+"*|"gpl v3"*|"gplv3"*|"gpl-3.0"*|"gpl3"*)
+            license_uri="https://www.gnu.org/licenses/gpl-3.0.html"
+            ;;
+        "gpl-2.0+"*|"gpl-2+"*|"gpl v2"*|"gplv2"*|"gpl-2.0"*|"gpl2"*)
+            license_uri="https://www.gnu.org/licenses/gpl-2.0.html"
+            ;;
+        "mit"*)
+            license_uri="https://opensource.org/licenses/MIT"
+            ;;
+        "apache-2.0"*|"apache 2.0"*|"apache2"*)
+            license_uri="https://www.apache.org/licenses/LICENSE-2.0"
+            ;;
+        "bsd-3-clause"*|"bsd 3-clause"*)
+            license_uri="https://opensource.org/licenses/BSD-3-Clause"
+            ;;
+        "bsd-2-clause"*|"bsd 2-clause"*)
+            license_uri="https://opensource.org/licenses/BSD-2-Clause"
+            ;;
+        "proprietary"*|"commercial"*)
+            license_uri=""
+            ;;
+        *)
+            license_uri=""
+            ;;
+    esac
 fi
 
 echo -e "${CYAN}License URI is set to: [$license_uri]${NC}"

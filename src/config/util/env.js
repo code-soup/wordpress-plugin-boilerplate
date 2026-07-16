@@ -8,8 +8,6 @@ import { paths } from './paths.js';
 // Environment constants - evaluated once and cached.
 export const isWatching = !!process.env.WEBPACK_SERVE;
 export const isAnalyzing = !!process.env.ANALYZE;
-export const isLintingScripts = !!process.env.LINT_SCRIPTS;
-export const isLintingStyles = !!process.env.LINT_STYLES;
 export const isDevelopment = process.env.NODE_ENV !== 'production';
 
 /**

@@ -59,12 +59,17 @@ final class Assets {
 	 */
 	public function __construct( Plugin $plugin ) {
 		$this->plugin        = $plugin;
-		$this->is_production = 'production' === $this->plugin->get_config( 'ENVIRONMENT' );
-		$this->manifest_path = $this->plugin->get_config( 'PLUGIN_BASE_PATH' ) . 'dist/manifest.json';
+		$this->is_production = 'production' === $this->plugin->config['ENVIRONMENT'];
+		
+		$this->manifest_path = sprintf(
+			'%sdist/manifest.json',
+			$this->plugin->config['PLUGIN_BASE_PATH']
+		);
+
 		$this->transient_key = sprintf(
 			'%s_asset_manifest_%s',
-			$this->plugin->get_config( 'PLUGIN_PREFIX' ),
-			$this->plugin->get_config( 'PLUGIN_VERSION' )
+			$this->plugin->config['PLUGIN_PREFIX'],
+			$this->plugin->config['PLUGIN_VERSION']
 		);
 	}
 
@@ -82,15 +87,17 @@ final class Assets {
 		$path = $asset_key;
 
 		// In production, get the hashed filename from the manifest.
-		if ( $this->is_production ) {
-			$manifest = $this->get_manifest();
-			$path     = $manifest[ $asset_key ] ?? $asset_key;
-		}
+		$manifest = $this->get_manifest();
+		$path     = $manifest[ $asset_key ] ?? $asset_key;
 
 		// Validate path - prevent directory traversal.
 		$path = str_replace( array( '..', '\\' ), '', $path );
 
-		return $this->plugin->get_config( 'PLUGIN_URL' ) . 'dist/' . $path;
+		return sprintf(
+			'%sdist/%s',
+			$this->plugin->config['PLUGIN_URL'],
+			$path
+		);
 	}
 
 	/**
@@ -100,13 +107,19 @@ final class Assets {
 	 * @return bool True if asset exists, false otherwise.
 	 */
 	public function asset_exists( string $asset_key ): bool {
-		if ( $this->is_production ) {
-			$manifest = $this->get_manifest();
-			return isset( $manifest[ $asset_key ] );
+		
+		$manifest = $this->get_manifest();
+		if ( isset( $manifest[ $asset_key ] ) ) {
+			$asset_key = isset( $manifest[ $asset_key ] );
 		}
 
 		// In development, check if file exists in dist directory.
-		$file_path = $this->plugin->get_config( 'PLUGIN_BASE_PATH' ) . 'dist/' . $asset_key;
+		$file_path = sprintf(
+			'%sdist/%s',
+			$this->plugin->config['PLUGIN_BASE_PATH'],
+			$asset_key
+		);
+
 		return file_exists( $file_path );
 	}
 
@@ -120,7 +133,8 @@ final class Assets {
 			return $this->manifest;
 		}
 
-		if ( $this->is_production ) {
+		if ( $this->is_production )
+		{
 			// Include file modification time in cache key to bust cache on deploy.
 			$manifest_mtime = file_exists( $this->manifest_path )
 				? filemtime( $this->manifest_path )
@@ -128,7 +142,9 @@ final class Assets {
 			$cache_key      = $this->transient_key . '_' . $manifest_mtime;
 
 			$cached_manifest = get_transient( $cache_key );
-			if ( false !== $cached_manifest && is_array( $cached_manifest ) ) {
+
+			if ( false !== $cached_manifest && is_array( $cached_manifest ) )
+			{
 				$this->manifest = $cached_manifest;
 				return $this->manifest;
 			}
@@ -136,20 +152,26 @@ final class Assets {
 
 		$this->init_filesystem();
 
-		if ( $this->has_filesystem() ) {
+		if ( $this->has_filesystem() )
+		{
 			global $wp_filesystem;
-			if ( ! $wp_filesystem->exists( $this->manifest_path ) ) {
+
+			if ( ! $wp_filesystem->exists( $this->manifest_path ) )
+			{
 				$this->manifest = array();
-			} else {
+			}
+			else {
 				$manifest_contents = $wp_filesystem->get_contents( $this->manifest_path );
 				$this->manifest    = json_decode( $manifest_contents, true ) ?? array();
 			}
 		} else {
 			// Fallback to direct file access.
-			if ( file_exists( $this->manifest_path ) ) {
+			if ( file_exists( $this->manifest_path ) )
+			{
 				$manifest_contents = file_get_contents( $this->manifest_path );
 				$this->manifest    = json_decode( $manifest_contents, true ) ?? array();
-			} else {
+			}
+			else {
 				$this->manifest = array();
 			}
 		}

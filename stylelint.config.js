@@ -1,10 +1,11 @@
-{
-	"extends": [
+/** @type {import('stylelint').Config} */
+export default {
+	extends: [
 		"stylelint-config-standard-scss",
-		"stylelint-config-property-sort-order-smacss"
+		"stylelint-config-property-sort-order-smacss",
 	],
-	"ignoreFiles": ["src/styles/vendor/_sprites.scss"],
-	"rules": {
+	ignoreFiles: ["src/styles/vendor/_sprites.scss"],
+	rules: {
 		"selector-class-pattern": null,
 		"scss/dollar-variable-pattern": null,
 		"scss/at-mixin-pattern": null,
@@ -13,8 +14,8 @@
 		"selector-pseudo-class-no-unknown": [
 			true,
 			{
-				"ignorePseudoClasses": ["global"]
-			}
-		]
-	}
-} 
+				ignorePseudoClasses: ["global"],
+			},
+		],
+	},
+};

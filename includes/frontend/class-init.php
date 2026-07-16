@@ -42,7 +42,7 @@ class Init {
 	public function wp_enqueue_scripts(): void {
 
 		$assets_handler = plugin()->get( 'assets' );
-		$plugin_version = plugin()->get_config( 'PLUGIN_VERSION' );
+		$plugin_version = plugin()->config['PLUGIN_VERSION'];
 
 		// Build dependencies list, only including assets that exist.
 		$dependencies = array();

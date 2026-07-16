@@ -118,16 +118,20 @@ class Container implements ContainerInterface {
 			return $this->instances[ $id ];
 		}
 
-		if ( ! isset( $this->bindings[ $id ] ) ) {
-			if ( class_exists( $id ) ) {
+		if ( ! isset( $this->bindings[ $id ] ) )
+		{
+			if ( class_exists( $id ) )
+			{
 				return $this->resolve( $id );
 			}
 
-			throw new \Exception( sprintf( 'Service "%s" not found in container.', $id ) );
+			throw new \Exception( sprintf(
+				'Service "%s" not found in container.',
+				$id
+			));
 		}
 
-		$binding = $this->bindings[ $id ];
-
+		$binding  = $this->bindings[ $id ];
 		$instance = $this->resolve( $binding['concrete'] );
 
 		if ( $binding['shared'] ) {
