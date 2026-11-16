@@ -5,6 +5,8 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB;
 
 // If this file is called directly, abort.
@@ -31,6 +33,9 @@ class Autoloader {
 
 	/**
 	 * Namespace to directory mappings (relative to root namespace).
+	 *
+	 * When you add a new top-level area (e.g. Api, Services, Repositories), append a
+	 * segment here and mirror the folder under includes/. See docs/001-ProjectStructure.md.
 	 *
 	 * @var array
 	 */

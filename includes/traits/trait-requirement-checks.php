@@ -42,6 +42,17 @@ trait RequirementChecksTrait {
 				)
 			);
 		}
+
+		$min_mysql = $config['MIN_MYSQL_VERSION'] ?? '';
+		if ( is_string( $min_mysql ) && $min_mysql !== '' && ! self::is_mysql_version_ok( $min_mysql ) ) {
+			throw new \Exception(
+				sprintf(
+					'Minimum database version required: %s. You are running version: %s.',
+					$min_mysql,
+					self::get_database_version()
+				)
+			);
+		}
 	}
 
 	/**
@@ -62,5 +73,38 @@ trait RequirementChecksTrait {
 	 */
 	private static function is_php_version_ok( string $min_php_version ): bool {
 		return version_compare( phpversion(), $min_php_version, '>=' );
+	}
+
+	/**
+	 * Check if the database server version is sufficient.
+	 *
+	 * @param string $min_mysql_version The minimum required database version.
+	 * @return bool
+	 */
+	private static function is_mysql_version_ok( string $min_mysql_version ): bool {
+		$current = self::get_database_version();
+
+		if ( $current === '' ) {
+			return false;
+		}
+
+		return version_compare( $current, $min_mysql_version, '>=' );
+	}
+
+	/**
+	 * Get the database server version reported by WordPress.
+	 *
+	 * @return string
+	 */
+	private static function get_database_version(): string {
+		global $wpdb;
+
+		if ( ! isset( $wpdb ) || ! is_object( $wpdb ) ) {
+			return '';
+		}
+
+		$version = $wpdb->db_version();
+
+		return is_string( $version ) ? $version : '';
 	}
 }

@@ -7,6 +7,8 @@ description: Handle plugin activation, deactivation, and uninstall. Use when set
 
 Handle plugin lifecycle events.
 
+The template `Activator` / `Deactivator` fire `do_action( '{prefix}_activate' )` and `do_action( '{prefix}_deactivate' )` using `__PLUGIN_PREFIX__` (replaced during setup). `flush_rewrite_rules()` is commented out until you register rewrite-dependent structures.
+
 ## Activation
 
 **File**: `includes/core/class-activator.php`

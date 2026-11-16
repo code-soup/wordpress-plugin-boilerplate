@@ -16,10 +16,16 @@ dev_proxy_url=${dev_proxy_url:-http://localhost}
 read -rp "Enter DEV_PROXY_PORT [default: 8080]: " dev_proxy_port
 dev_proxy_port=${dev_proxy_port:-8080}
 
+# Optional: override webpack publicPath (CDN, CI, custom asset host)
+read -rp "WP_PUBLIC_PATH (optional, press Enter to skip): " wp_public_path
+
 # Create a new .env.local file and add the variables as constants
-cat >.env.local <<EOF
-WP_DEV_URL=$wp_dev_url
-WP_CONTENT_PATH=$wp_content_path
-DEV_PROXY_URL=$dev_proxy_url
-DEV_PROXY_PORT=$dev_proxy_port
-EOF
+{
+	echo "WP_DEV_URL=$wp_dev_url"
+	echo "WP_CONTENT_PATH=$wp_content_path"
+	echo "DEV_PROXY_URL=$dev_proxy_url"
+	echo "DEV_PROXY_PORT=$dev_proxy_port"
+	if [[ -n "$wp_public_path" ]]; then
+		echo "WP_PUBLIC_PATH=$wp_public_path"
+	fi
+} >.env.local

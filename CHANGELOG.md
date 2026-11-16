@@ -2,44 +2,81 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.3] - 2026-06-29
+## [Unreleased]
 
-### Security
-
-- Resolved 13 npm security vulnerabilities (4 critical, 5 high, 4 moderate)
-- Upgraded webpack-dev-server from 1.16.5 to 5.2.4
-- Added uuid package override to force version >=11.1.1
-
-### Changed
-
-- Replaced eslint-plugin-import with eslint-plugin-import-x for ESLint 10 compatibility
-- Updated ESLint configuration to use import-x namespace
-- Added @eslint/js dependency for flat config support
-- Moved eslint-plugin-import-x to devDependencies
-
-### Added
-
-- Vendor prefixing infrastructure for preventing dependency conflicts
-    - Created `scoper.inc.php.example` template with WordPress-safe configuration
-    - Added comprehensive vendor prefixing documentation (`docs/016-Vendor-Prefixing.md`)
-    - Updated `.gitignore` to exclude scoped vendor directory
-- Environment configuration template (`.env.local.example`)
-- Dynamic namespace detection in autoloader
-    - Autoloader now uses `__NAMESPACE__` instead of hardcoded namespace
-    - Ensures compatibility after setup script changes namespace
-- Auto-detection of license URIs in setup script
-    - Supports GPL-3.0+, GPL-2.0+, MIT, Apache-2.0, BSD licenses
-    - Users can leave License URI blank for automatic URL assignment
+## [0.0.4] - 2026-11-16
 
 ### Fixed
 
-- **Critical:** Added missing `load_textdomain()` method in Plugin class
-    - Plugins created from boilerplate were failing on activation
-    - Method uses `__PLUGIN_TEXTDOMAIN__` placeholder replaced by setup script
+- Register admin and frontend asset hooks before `Hooker::run()` so default bundles enqueue.
+- `Assets::asset_exists()` now resolves manifest paths correctly.
+- Show compatibility admin notices when requirements fail (`Hooker::run()` on early exit).
+- Use prefixed plugin file constant and `index.php` as the main plugin file path for `Plugin::instance()`.
+- Setup replaces activation/deactivation hook prefixes; activator/deactivator use `__PLUGIN_PREFIX__`.
+- Reject empty PHP namespace during setup (validate before shell escaping).
+- Webpack passes `isWatching` into style loaders for `webpack serve`.
+- Enable source maps for the Sass/`resolve-url-loader` chain in production builds.
+- Align `.env.local.example` with `DEV_PROXY_URL` / `DEV_PROXY_PORT` used by webpack.
+- Hooker accepts closures and invokable objects as callbacks.
+- Optional MySQL/MariaDB version requirement check when `MIN_MYSQL_VERSION` is set.
+- Safer `sed` replacements and targeted `wppb`/`wppb-` prefix rewrites in setup.
+- `composer.json` setup updates via Node script (namespace-safe).
+
+### Changed
+
+- Removed unused `vlucas/phpdotenv` Composer dependency.
+- README and configuration docs: correct composer script names, project structure link, env example, `dos2unix` note.
+- Commented default `flush_rewrite_rules()` until rewrites are registered; documented `{prefix}_activate` hooks.
+- `ServiceProviderInterface` includes `boot()`; consistent `declare(strict_types=1)` and `ABSPATH` guards in includes.
+- JS entries wire `hmr-helper` for webpack dev server HMR; removed unused entry prepending.
+- Default SCSS emits a minimal `.wppb-root` rule so production CSS is non-empty.
+- `Container::has()` mirrors auto-resolution for class names.
+- Admin and frontend `Init` use constructor injection; providers register factory closures.
+- Hooker policy documented: Hooker by default, explicit exceptions when it cannot work.
+- Uninstaller template includes commented cleanup checklist; activation docs reference it.
+- Version bumped to 0.0.4 in `index.php` and `package.json`.
+
+### Added
+
+- `setup/lib-replace.sh`, `setup/update-composer-json.mjs`, optional `WP_PUBLIC_PATH` setup prompt.
+- `readme.txt.example`; autoloader map documentation.
+- Hooker lifecycle and provider boot documentation; `readme.txt.example`.
+
+### Removed
+
+- Cloud agent review export from repository root.
+
+## [0.0.3] - 2026-07-16
+
+### Security
+
+- Resolved 13 npm security vulnerabilities
+
+### Changed
+
+- Updated npm packages
+- Updated composer packages
+- Converted config files to ES module syntax
+- Replaced eslint-plugin-import with eslint-plugin-import-x
+
+### Added
+
+- Vendor prefixing infrastructure
+- Environment configuration template
+- Dynamic namespace detection in autoloader
+- Auto-detection of license URIs in setup script
+
+### Removed
+
+- @babel/plugin-transform-class-properties
+- .stylelintrc.json
+
+### Fixed
+
+- Missing `load_textdomain()` method in Plugin class
 - Version synchronization between `package.json` and `index.php`
-- Autoloader fragility when setup script changes namespace
-- CHANGELOG version history cleaned up to reflect actual git history
-- Fixed asset loader to always use manifest.json
+- Autoloader namespace handling
+- Asset loader manifest.json usage
 
 ## 2026-02-28
 

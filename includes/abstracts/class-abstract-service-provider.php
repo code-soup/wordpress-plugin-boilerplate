@@ -5,13 +5,15 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Abstracts;
 
 use WPPB\Core\Container;
 use WPPB\Interfaces\ServiceProviderInterface;
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || die;
 
 /**
  * AbstractServiceProvider class.

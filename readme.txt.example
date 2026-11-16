@@ -1,0 +1,32 @@
+=== WordPress Plugin Boilerplate ===
+Contributors: your-org
+Tags: boilerplate
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 8.1
+Stable tag: 0.0.4
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+
+Short description for the wordpress.org plugin directory (max ~150 characters).
+
+== Description ==
+
+Longer description for your plugin listing.
+
+== Installation ==
+
+1. Upload the plugin files or install via WordPress admin.
+2. Activate the plugin through the 'Plugins' screen.
+3. Run `composer install` and `npm run build` if you ship from source.
+
+== Frequently Asked Questions ==
+
+= Does this require Composer? =
+
+Yes, PHP dependencies are installed with Composer before activation.
+
+== Changelog ==
+
+= 0.0.4 =
+* See CHANGELOG.md in the repository.

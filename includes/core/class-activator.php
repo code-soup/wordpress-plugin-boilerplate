@@ -5,10 +5,12 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Core;
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || die;
 
 /**
  * Fired during plugin activation.
@@ -24,9 +26,9 @@ class Activator {
 	 */
 	public static function activate(): void {
 		// Trigger module activation hooks
-		do_action( '__PLUGIN_NAME___activate' );
+		do_action( '__PLUGIN_PREFIX___activate' );
 
-		// Flush rewrite rules after all CPTs are registered
-		flush_rewrite_rules();
+		// Uncomment when the plugin registers rewrite rules (custom post types, endpoints, etc.).
+		// flush_rewrite_rules();
 	}
 }

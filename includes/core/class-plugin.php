@@ -122,6 +122,7 @@ final class Plugin {
      */
     public function run(): void {
         if ( ! $this->is_compatible() ) {
+            $this->get( 'hooker' )->run();
             return;
         }
 

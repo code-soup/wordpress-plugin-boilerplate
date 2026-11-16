@@ -76,14 +76,17 @@ $items = ['one', 'two', 'three'];
 
 ### Hooks
 
-Never use `add_action`/`add_filter` directly. Always use Hooker:
+Use Hooker for feature hooks. Call feature `init()` from the service provider `boot()` so hooks queue before `hooker->run()`:
 
 ```php
-// Correct
-$this->hooker->add_action( 'init', $this, 'init_method' );
+// In provider boot()
+$this->container->get( 'feature' )->init();
 
-// Wrong
-add_action( 'init', array( $this, 'init_method' ) );
+// In feature init()
+$this->hooker->add_action( 'init', $this, 'on_init' );
+
+// Avoid (misses Hooker::run() if queued too late)
+add_action( 'init', array( $this, 'on_init' ) );
 ```
 
 ### Dependency Injection

@@ -1,6 +1,12 @@
 /**
- * Run scripts on document ready
- * No jQuery here sorry
+ * Frontend bundle bootstrap (runs on load and after webpack HMR updates).
  */
-document.addEventListener("DOMContentLoaded", () => {
-});
+import hmrHelper from "@/config/util/hmr-helper.js";
+
+function boot() {
+	document.addEventListener("DOMContentLoaded", () => {
+		// Frontend scripts entry point.
+	});
+}
+
+hmrHelper(boot);

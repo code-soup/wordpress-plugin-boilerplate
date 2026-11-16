@@ -5,6 +5,8 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Core;
 
 /**
@@ -22,9 +24,9 @@ class Deactivator {
 	 */
 	public static function deactivate(): void {
 		// Trigger module activation hooks
-		do_action( '__PLUGIN_NAME___deactivate' );
+		do_action( '__PLUGIN_PREFIX___deactivate' );
 
-		// Flush rewrite rules after all CPTs are registered
-		flush_rewrite_rules();
+		// Uncomment when the plugin registers rewrite rules (custom post types, endpoints, etc.).
+		// flush_rewrite_rules();
 	}
 }

@@ -46,7 +46,7 @@ const createWebpackConfig = (envArgs, argv) => {
 		},
 		target: 'web',
 		devtool: env.getEnvSpecific(isProduction, 'source-map', 'cheap-module-source-map'),
-		module: moduleConfig(userConfig, { isProduction }),
+		module: moduleConfig(userConfig, { isProduction, isWatching: env.isWatching }),
 		resolve: {
 			modules: [userConfig.paths.src, 'node_modules'],
 			extensions: ['.js', '.jsx', '.json'],
@@ -66,6 +66,10 @@ const createWebpackConfig = (envArgs, argv) => {
 		},
 		externals: {
 			jquery: 'jQuery',
+			// Uncomment and extend for block editor / @wordpress packages, e.g.:
+			// '@wordpress/element': 'wp.element',
+			// '@wordpress/i18n': 'wp.i18n',
+			// See agent-skills/webpack-config/SKILL.md and docs/002-Configuration.md.
 		},
 		performance: {
 			hints: env.getEnvSpecific(isProduction, 'warning', false),
@@ -75,28 +79,6 @@ const createWebpackConfig = (envArgs, argv) => {
 		plugins: pluginsConfig(userConfig, { ...env, isProduction }, fileName),
 		optimization: optimizationConfig(userConfig, { isProduction }),
 	};
-
-	// ------------------------------------------------------------------
-	// Inject HMR bootstrap helper into every entry when running via
-	// `webpack serve` (watch mode). This guarantees the helper is NEVER
-	// bundled in a normal `webpack --mode development` or production build.
-	// ------------------------------------------------------------------
-	if ( env.isWatching ) {
-		const hmrHelper = pathUtils.fromConfig( 'util/hmr-helper.js' );
-
-		// Support both object and function forms of `entry`.
-		const originalEntries =
-			typeof baseConfig.entry === 'function'
-				? baseConfig.entry()
-				: { ...baseConfig.entry };
-
-		Object.keys( originalEntries ).forEach( ( key ) => {
-			const value = originalEntries[ key ];
-			originalEntries[ key ] = Array.isArray( value ) ? [ hmrHelper, ...value ] : [ hmrHelper, value ];
-		} );
-
-		baseConfig.entry = originalEntries;
-	}
 
 	const devServerConfig = isProduction ? {} : watchConfig(userConfig, { isProduction });
 

@@ -6,6 +6,17 @@ Environment variables are saved in `.env.local` during setup. This file is not c
 
 Example `.env.local`:
 
+```bash
+WP_DEV_URL=http://localhost
+WP_CONTENT_PATH=/wp-content/plugins
+DEV_PROXY_URL=http://localhost
+DEV_PROXY_PORT=8080
+# Optional:
+# WP_PUBLIC_PATH=https://example.com/wp-content/plugins/my-plugin/dist/
+```
+
+See also `.env.local.example` in the project root.
+
 ## Adding entry points
 
 Webpack entry points are defined in the `src/config/config.user.js` file.
@@ -41,8 +52,8 @@ The following scripts are available for building assets:
 -   `npm run lint:scripts`: Lints JavaScript files with ESLint.
 -   `npm run lint:styles`: Lints SCSS files with Stylelint.
 -   `composer lint`: Lints PHP files for syntax errors.
--   `composer wpcs`: Checks PHP files against WordPress Coding Standards.
--   `composer cbf`: Attempts to automatically fix `phpcs` errors.
+-   `composer lint:phpcs`: Checks PHP files against WordPress Coding Standards.
+-   `composer lint:phpcbf`: Attempts to automatically fix PHPCS issues where possible.
 
 **Maintenance**
 -   `npm run clean`: Removes the `dist` directory and the webpack cache.

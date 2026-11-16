@@ -19,7 +19,7 @@ export default (config, { isProduction, isWatching }) => ({
         {
             loader: 'css-loader',
             options: {
-                sourceMap: !isProduction,
+                sourceMap: true,
                 importLoaders: 3,
                 esModule: true,
             },
@@ -37,19 +37,19 @@ export default (config, { isProduction, isWatching }) => ({
                         }],
                     ],
                 },
-                sourceMap: !isProduction,
+                sourceMap: true,
             },
         },
         {
             loader: 'resolve-url-loader',
             options: {
-                sourceMap: !isProduction,
+                sourceMap: true,
             },
         },
         {
             loader: 'sass-loader',
             options: {
-                sourceMap: !isProduction,
+                sourceMap: true,
                 sassOptions: {
                     outputStyle: isProduction ? 'compressed' : 'expanded',
                 },

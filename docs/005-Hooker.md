@@ -148,3 +148,43 @@ $hooker->add_action( 'init', $this, 'nonexistent_method' );
 ```
 
 This validation prevents WordPress errors later when hooks fire and helps catch typos early.
+
+## Bootstrap order and lifecycle (important)
+
+`Plugin::run()` loads service providers, then calls `Hooker::run()` **once**. Queuing a hook on Hooker **after** that call is a no-op: the callback is stored but never passed to WordPress.
+
+**Canonical pattern**
+
+1. Provider `boot()` runs during `load_providers()`.
+2. Feature `init()` runs inside `boot()` and calls `$hooker->add_action()` / `add_filter()`.
+3. `Plugin::run()` then calls `$hooker->run()` to register everything with WordPress.
+
+```mermaid
+sequenceDiagram
+    participant Plugin
+    participant Provider
+    participant Feature
+    participant Hooker
+    participant WP as WordPress
+    Plugin->>Provider: boot()
+    Provider->>Feature: init()
+    Feature->>Hooker: add_action / add_filter
+    Plugin->>Hooker: run()
+    Hooker->>WP: add_action / add_filter
+```
+
+## Policy: Hooker first, exceptions when it cannot work
+
+**Default:** Register application hooks through Hooker (enqueue, REST, AJAX, admin UI, frontend behavior).
+
+**Use WordPress `add_action()` / `add_filter()` directly only when Hooker cannot:**
+
+| Case | Why Hooker is not used |
+|------|------------------------|
+| `register_activation_hook` / `register_deactivation_hook` in `index.php` | WordPress requires hooks on the main plugin file; container may not exist yet. |
+| `uninstall.php` | Standalone file; no plugin bootstrap. |
+| Must run before `Plugin::run()` / before Hooker exists | Earliest bootstrap (rare). |
+| Compatibility admin notice on failed requirements | May exit before full boot; notice may use direct `add_action` or Hooker flushed early—see `Plugin::run()`. |
+| Third-party code expects a native callback shape Hooker does not support | Document the exception in your feature or provider. |
+
+Feature modules inside `includes/` should use Hooker. If you defer registration until after `Hooker::run()`, that queue is ignored—fix the boot order instead of switching to `add_action` unless one of the cases above applies.

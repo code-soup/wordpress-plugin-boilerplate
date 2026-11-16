@@ -26,7 +26,15 @@ class SettingsServiceProvider extends AbstractServiceProvider {
 	public function register(): void {
 		$this->singleton(
 			'admin.settings',
-			SettingsPage::class
+			function ( \WPPB\Core\Container $container ): SettingsPage {
+				/** @var \WPPB\Core\Plugin $plugin */
+				$plugin = $container->get( \WPPB\Core\Plugin::class );
+
+				return new SettingsPage(
+					$container->get( 'hooker' ),
+					$plugin->config
+				);
+			}
 		);
 	}
 
@@ -192,5 +200,5 @@ class ApiServiceProvider extends AbstractServiceProvider {
 - Add provider to `$providers` array in Plugin class
 - Use singleton for shared instances
 - Use descriptive service names (e.g., `admin.settings`, `api.posts`)
-- Always call `init()` method in `boot()`
+- Always call feature `init()` synchronously inside `boot()` (before `Hooker::run()`)
 

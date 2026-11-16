@@ -5,6 +5,8 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Core;
 
 /** If this file is called directly, abort. */
@@ -59,23 +61,7 @@ class Hooker {
 	 */
 	public function add_action( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
-		if ( is_object( $component ) ) {
-			$method_name = $method ?? $hook;
-
-			if ( ! method_exists( $component, $method_name ) ) {
-				throw new \Exception(
-					sprintf(
-						'Method "%s" does not exist in class "%s"',
-						$method_name,
-						get_class( $component )
-					)
-				);
-			}
-
-			$callback = array( $component, $method_name );
-		} else {
-			$callback = $component;
-		}
+		$callback = $this->resolve_callback( $hook, $component, $method );
 
 		$this->actions[] = array(
 			'hook'          => $hook,
@@ -105,23 +91,7 @@ class Hooker {
 	 */
 	public function add_filter( string $hook, $component, ?string $method = null, int $priority = 10, int $accepted_args = 1 ): self {
 
-		if ( is_object( $component ) ) {
-			$method_name = $method ?? $hook;
-
-			if ( ! method_exists( $component, $method_name ) ) {
-				throw new \Exception(
-					sprintf(
-						'Method "%s" does not exist in class "%s"',
-						$method_name,
-						get_class( $component )
-					)
-				);
-			}
-
-			$callback = array( $component, $method_name );
-		} else {
-			$callback = $component;
-		}
+		$callback = $this->resolve_callback( $hook, $component, $method );
 
 		$this->filters[] = array(
 			'hook'          => $hook,
@@ -214,5 +184,47 @@ class Hooker {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Resolve a WordPress hook callback from a component and optional method name.
+	 *
+	 * @param string          $hook      Hook name (used as default method name).
+	 * @param callable|object $component Callback, invokable object, closure, or class instance.
+	 * @param string|null     $method    Method name when using an object instance.
+	 *
+	 * @return callable
+	 */
+	private function resolve_callback( string $hook, $component, ?string $method ): callable {
+
+		if ( ! is_object( $component ) ) {
+			if ( ! is_callable( $component ) ) {
+				throw new \Exception( 'Hook callback must be callable.' );
+			}
+
+			return $component;
+		}
+
+		if ( $component instanceof \Closure ) {
+			return $component;
+		}
+
+		$method_name = $method ?? $hook;
+
+		if ( method_exists( $component, $method_name ) ) {
+			return array( $component, $method_name );
+		}
+
+		if ( is_callable( $component ) ) {
+			return $component;
+		}
+
+		throw new \Exception(
+			sprintf(
+				'Method "%s" does not exist in class "%s"',
+				$method_name,
+				get_class( $component )
+			)
+		);
 	}
 }

@@ -3,7 +3,6 @@
 A boilerplate for creating WordPress plugins, featuring a pre-configured build process and a structured PHP foundation.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/code-soup/wordpress-plugin-boilerplate)
 [![PHP Version: >=8.1](https://img.shields.io/badge/php->=8.1-8892BF.svg)](https://www.php.net/)
 [![Node Version: >=22.0](https://img.shields.io/badge/node->=22.0-339933.svg)](https://nodejs.org/)
 
@@ -11,7 +10,7 @@ This boilerplate provides a structured starting point for plugin development, in
 
 ## Features
 
--   **PHP Foundation**: Built for PHP 8.1+, using namespaces and PSR-4 autoloading.
+-   **PHP Foundation**: Built for PHP 8.1+, using namespaced PHP with a WordPress-style custom autoloader.
 -   **Dependency Injection**: Includes a Dependency Injection Container for managing services and dependencies.
 -   **Service Provider Architecture**: Provides a structure for organizing plugin features into modular Service Providers.
 -   **Webpack 5**: A pre-configured Webpack setup for asset bundling.
@@ -36,6 +35,7 @@ Before you begin, please ensure you have the following installed:
 -   Node.js >= 22.0
 -   npm (comes with Node.js)
 -   Composer
+-   **Linux setup**: `dos2unix` (optional but recommended when running `npm run setup` on Linux so line endings normalize)
 
 ## Quick Start
 
@@ -81,8 +81,8 @@ This boilerplate comes with a set of pre-configured scripts for development task
 ### PHP Scripts (via Composer)
 
 -   **`composer lint`**: Lints all PHP files for syntax errors.
--   **`composer wpcs`**: Checks PHP files against the WordPress Coding Standards.
--   **`composer cbf`**: Automatically fixes many `phpcs` errors.
+-   **`composer lint:phpcs`**: Checks PHP files against the WordPress Coding Standards.
+-   **`composer lint:phpcbf`**: Automatically fixes many PHPCS issues where possible.
 
 ### JavaScript/Asset Scripts (via npm)
 
@@ -115,7 +115,7 @@ This boilerplate comes with a set of pre-configured scripts for development task
 For more detailed information on specific topics, please refer to the documentation in the `/docs` directory.
 
 -   **[About](./docs/000-About.md)**: A general overview of the project's purpose and features.
--   **[Project Structure](./docs/001-ProjectSructure.md)**: An explanation of the project's directory layout.
+-   **[Project Structure](./docs/001-ProjectStructure.md)**: An explanation of the project's directory layout.
 -   **[Configuration](./docs/002-Configuration.md)**: How to configure the plugin and add new webpack entry points.
 -   **[Installation](./docs/003-Installation.md)**: Step-by-step guide to setting up the boilerplate.
 -   **[Plugin Activation/Deactivation](./docs/004-Activation.md)**: How to run code on the plugin activation and deactivation.

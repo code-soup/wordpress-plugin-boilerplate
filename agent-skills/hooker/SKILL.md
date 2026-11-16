@@ -1,23 +1,32 @@
 ---
 name: hooker
-description: Use Hooker service to register WordPress actions and filters. Use when adding WordPress hooks, filters, or actions in the plugin. Never use add_action or add_filter directly.
+description: Use Hooker service to register WordPress actions and filters. Use when adding WordPress hooks, filters, or actions in the plugin. Prefer Hooker over raw add_action/add_filter in application code.
 ---
 
 # Hooker Service
 
-The Hooker service manages WordPress hooks. Always use Hooker, never direct `add_action`/`add_filter`.
+The Hooker service manages WordPress hooks. **Use Hooker for all application hooks** (enqueue, REST, AJAX, features).
+
+**Lifecycle**: Queue hooks on Hooker **before** `Hooker::run()` in `Plugin::run()`. Call feature `init()` inside provider `boot()` (before `hooker->run()`).
+
+**When Hooker cannot be used** (use raw `add_action` / `add_filter` instead):
+
+- `index.php` activation / deactivation hooks
+- `uninstall.php`
+- Code that must run before the container / Hooker exists
+- Rare third-party integration constraints (document the exception)
+
+If Hooker “does not work” because hooks were queued too late, fix boot order—do not default to `add_action` in feature code.
 
 ## Get Hooker Instance
 
-Use the `plugin()` helper function to get the Hooker service:
+Prefer constructor injection (see admin/frontend providers). When needed ad hoc:
 
 ```php
 use function WPPB\plugin;
 
 $hooker = plugin()->get( 'hooker' );
 ```
-
-**Important**: Do NOT call `plugin()` in class constructors during plugin initialization to avoid circular dependencies. Call it in `init()` methods instead.
 
 ## Add Action
 
@@ -174,13 +183,13 @@ class SettingsPage {
 
 ## Rules
 
-- Always use Hooker service
-- Never use `add_action()` or `add_filter()` directly
-- Pass `$this` as second parameter
-- Use method name as string (third parameter)
-- Use dependency injection to get Hooker instance
-- Register hooks in `init()` method
-- Use `add_actions()` for multiple actions
-- Use `add_filters()` for multiple filters
-- Use `register()` for complex bulk registration
+- Use Hooker for feature hooks (enqueue, admin, frontend, REST, AJAX)
+- Call feature `init()` from provider `boot()` so hooks queue before `hooker->run()`
+- Support class methods (`$this`), closures, and invokable objects as callbacks
+- Pass `$this` as second parameter for class method hooks
+- Use method name as string (third parameter) when it differs from the hook name
+- Use dependency injection to get Hooker when possible
+- Register hook targets in the feature class `init()` method
+- Use `add_actions()` / `add_filters()` for multiple hooks
+- Avoid deferring Hooker registration to a WordPress `init` action unless hooks register with raw `add_action` (discouraged)
 

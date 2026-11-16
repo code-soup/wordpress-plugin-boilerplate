@@ -5,6 +5,8 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Traits;
 
 /**

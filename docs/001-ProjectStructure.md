@@ -19,6 +19,14 @@ An overview of the project's folder structure.
         -   `traits/`: Reusable traits for common functionality.
         -   `autoloader.php`: Custom autoloader for WordPress-style filenames.
 
+### Extending the autoloader map
+
+The autoloader only knows namespace segments listed in `$namespace_map` inside `includes/autoloader.php`. When you add a new area (for example `includes/api/` for `YourNamespace\Api\`), you must:
+
+1. Create the directory and classes using the existing `class-*` kebab filename convention.
+2. Add one line to `$namespace_map`, e.g. `'Api\\' => 'includes/api/'`.
+3. Run `composer dump-autoload` only if you change Composer’s `autoload` section (the custom map does not use PSR-4 in `composer.json`).
+
 -   `languages/`
     -   Contains the translation files for internationalization (`.pot`, `.po`, `.mo`).
 
@@ -31,8 +39,14 @@ An overview of the project's folder structure.
         -   `scripts/`: JavaScript source files.
         -   `styles/`: Sass (`.scss`) source files.
 
+-   `templates/`
+    -   Optional PHP view/partials loaded by your plugin (not core template hierarchy).
+
 -   `vendor/`
     -   Contains all PHP dependencies managed by Composer. This directory is generated and should not be edited manually.
+
+-   `readme.txt.example`
+    -   Starting point for a [wordpress.org](https://wordpress.org) plugin readme; copy to `readme.txt` when preparing a directory release.
 
 -   `run.php`
     -   The main plugin bootstrap file that WordPress loads. It initializes the plugin instance.

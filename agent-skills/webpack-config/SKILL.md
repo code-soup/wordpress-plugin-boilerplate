@@ -144,6 +144,20 @@ devServer: {
 2. Use in `src/config/util/env.js`: `export const isCustomMode = !!process.env.CUSTOM_MODE;`
 3. Use in configs: `if (env.isCustomMode) { ... }`
 
+## WordPress package externals (blocks / modern admin)
+
+jQuery is externalized in `src/config/config.webpack.js`. For block editor or `@wordpress/*` scripts, add matching `externals` and enqueue those scripts in PHP from WordPress:
+
+```javascript
+externals: {
+	jquery: "jQuery",
+	"@wordpress/element": "wp.element",
+	"@wordpress/i18n": "wp.i18n",
+},
+```
+
+See the commented block in `config.webpack.js` for a starting point.
+
 ## Rules
 
 - Use modular config (never monolithic webpack.config.js)

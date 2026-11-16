@@ -5,12 +5,16 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Providers;
 
-use WPPB\Abstracts\AbstractServiceProvider;
-
-/** If this file is called directly, abort. */
 defined( 'ABSPATH' ) || die;
+
+use WPPB\Abstracts\AbstractServiceProvider;
+use WPPB\Core\Container;
+use WPPB\Core\Plugin;
+use WPPB\Frontend\Init as FrontendInit;
 
 /**
  * The FrontendServiceProvider class.
@@ -21,7 +25,19 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 	 * Register the service provider.
 	 */
 	public function register(): void {
-		$this->container->singleton( 'frontend', \WPPB\Frontend\Init::class );
+		$this->container->singleton(
+			'frontend',
+			function ( Container $container ): FrontendInit {
+				/** @var Plugin $plugin */
+				$plugin = $container->get( Plugin::class );
+
+				return new FrontendInit(
+					$container->get( 'hooker' ),
+					$container->get( 'assets' ),
+					(string) $plugin->config['PLUGIN_VERSION']
+				);
+			}
+		);
 	}
 
 	/**
@@ -31,13 +47,7 @@ class FrontendServiceProvider extends AbstractServiceProvider {
 		parent::boot();
 
 		if ( ! is_admin() || wp_doing_ajax() ) {
-			// Register hook to initialize after WordPress is loaded
-			add_action(
-				'init',
-				function () {
-					$this->container->get( 'frontend' )->init();
-				}
-			);
+			$this->container->get( 'frontend' )->init();
 		}
 	}
 }

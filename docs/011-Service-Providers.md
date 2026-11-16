@@ -476,4 +476,6 @@ add_action( 'user_register', function( $user_id ) {
 3. **Booting**: `boot()` method is called after all providers are registered
 4. **Hook Execution**: All registered WordPress hooks are executed via `Hooker->run()`
 
-This lifecycle ensures that all services are available when you need them during the boot phase. 
+This lifecycle ensures that all services are available when you need them during the boot phase.
+
+> **Warning**: Feature classes must queue hooks on Hooker during provider `boot()` (call `init()` synchronously there). Queuing on Hooker after `Hooker::run()` does nothing. See [Using the Hooker](./005-Hooker.md#bootstrap-order-and-lifecycle-important). 

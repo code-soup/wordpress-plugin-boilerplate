@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace WPPB\Core;
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || die;
 
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -151,7 +151,11 @@ class Container implements ContainerInterface {
 	public function has( string $id ): bool {
 		$id = $this->aliases[ $id ] ?? $id;
 
-		return isset( $this->bindings[ $id ] ) || isset( $this->instances[ $id ] );
+		if ( isset( $this->bindings[ $id ] ) || isset( $this->instances[ $id ] ) ) {
+			return true;
+		}
+
+		return class_exists( $id );
 	}
 
 	/**

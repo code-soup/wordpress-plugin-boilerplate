@@ -5,6 +5,8 @@
  * @package WPPB
  */
 
+declare( strict_types=1 );
+
 namespace WPPB\Interfaces;
 
 use WPPB\Core\Container;
@@ -23,6 +25,11 @@ interface ServiceProviderInterface {
 	 * Register the service provider.
 	 */
 	public function register(): void;
+
+	/**
+	 * Boot the service provider after all providers are registered.
+	 */
+	public function boot(): void;
 
 	/**
 	 * Get the container.

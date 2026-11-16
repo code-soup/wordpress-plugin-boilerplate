@@ -10,7 +10,7 @@ declare( strict_types=1 );
 namespace WPPB\Traits;
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || die;
 
 /**
  * Helper methods

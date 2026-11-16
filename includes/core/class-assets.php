@@ -110,7 +110,7 @@ final class Assets {
 		
 		$manifest = $this->get_manifest();
 		if ( isset( $manifest[ $asset_key ] ) ) {
-			$asset_key = isset( $manifest[ $asset_key ] );
+			$asset_key = $manifest[ $asset_key ];
 		}
 
 		// In development, check if file exists in dist directory.

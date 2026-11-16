@@ -156,18 +156,17 @@ while [[ -z "$plugin_textdomain" ]]; do
 done
 
 # Prompt the user for input to replace WPPB with PHP namespace
-read -rp "$(echo -e "${YELLOW}Enter PHP namespace (required): ${NC} ")" php_namespace
+php_namespace_raw=""
+while [[ -z "$php_namespace_raw" ]]; do
+    read -rp "$(echo -e "${YELLOW}Enter PHP namespace (required): ${NC} ")" php_namespace_raw
 
-# Default Value
-php_namespace=$(printf '%q\n' "$php_namespace")
-echo -e "${CYAN}PHP namespace is set to: [$php_namespace]${NC}"
-
-while [[ -z "$php_namespace" ]]; do
-    read -rp "$(echo -e "${YELLOW}Enter PHP namespace (required): ${NC} ")" php_namespace
-
-    php_namespace=$(printf '%q\n' "$php_namespace")
-    echo -e "${CYAN}PHP namespace is set to: [$php_namespace]${NC}"
+    # Sanitize user input
+    php_namespace_raw=$(echo "$php_namespace_raw" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
+    echo -e "${CYAN}PHP namespace is set to: [$php_namespace_raw]${NC}"
 done
+
+# Shell-escaped form for sed substitutions in setup-files.sh
+php_namespace=$(printf '%q\n' "$php_namespace_raw")
 
 # Prompt the user for input plugin prefix
 read -rp "$(echo -e "${YELLOW}Enter Plugin Prefix (No space, dashes or underscores) (required): ${NC} ")" plugin_prefix

@@ -64,9 +64,11 @@ $container->instance( 'service.name', $instance );
 
 ## Check if Service Exists
 
+`has()` is true for bound services, stored instances, or **existing class names** that `get()` could auto-resolve. `get()` may still throw if the class is not instantiable or dependencies fail.
+
 ```php
-if ( $container->has( 'service.name' ) ) {
-	$service = $container->get( 'service.name' );
+if ( $container->has( SettingsPage::class ) ) {
+	$settings = $container->get( SettingsPage::class );
 }
 ```
 

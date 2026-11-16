@@ -35,8 +35,12 @@ function plugin(): Plugin {
 			'ENVIRONMENT'                  => \wp_get_environment_type(),
 		);
 
-		// Pass the main plugin file path and config to the instance method.
-		$instance = Plugin::instance( __FILE__, $config );
+		$plugin_file = defined( '__PLUGIN_PREFIX___PLUGIN_FILE' )
+			? constant( '__PLUGIN_PREFIX___PLUGIN_FILE' )
+			: __FILE__;
+
+		// Pass the WordPress main plugin file path and config to the instance method.
+		$instance = Plugin::instance( $plugin_file, $config );
 	}
 
 	return $instance;

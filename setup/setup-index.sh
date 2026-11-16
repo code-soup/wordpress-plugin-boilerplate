@@ -1,5 +1,11 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OS=$(uname)
+# shellcheck source=lib-replace.sh
+source "${SCRIPT_DIR}/lib-replace.sh"
+php_namespace_sed=$(sed_escape_replacement "${php_namespace_raw}")
+
 # This script updates the default plugin header in index.php with user-provided values.
 # It's intended to be run after prompt-header.sh, which sets the required environment variables.
 
@@ -11,12 +17,12 @@ while IFS= read -r line; do
     case "$line" in
         *\**" @package "*)
             # Ensure single backslashes for PHP namespace - should always be "MyName\Space"
-            php_namespace_clean=$(echo "$php_namespace" | sed 's/\\\\/\\/g')
+            php_namespace_clean="${php_namespace_raw:-$php_namespace}"
             echo " * @package $php_namespace_clean" >>"$TMP_FILE"
             ;;
         "namespace "*)
             # Ensure single backslashes for PHP namespace - should always be "MyName\Space"
-            php_namespace_clean=$(echo "$php_namespace" | sed 's/\\\\/\\/g')
+            php_namespace_clean="${php_namespace_raw:-$php_namespace}"
             echo "namespace $php_namespace_clean;" >>"$TMP_FILE"
             ;;
         *"Plugin Name:"*)
@@ -68,7 +74,7 @@ while IFS= read -r line; do
             # Replace any occurrence of WPPB with namespace
             # Use printf to properly handle backslashes in replacement
             if [[ "$line" == *"WPPB"* ]]; then
-                updated_line=$(printf '%s\n' "$line" | sed "s/WPPB/$php_namespace/g")
+                updated_line=$(printf '%s\n' "$line" | sed "s|WPPB|${php_namespace_sed}|g")
                 echo "$updated_line" >>"$TMP_FILE"
             else
                 echo "$line" >>"$TMP_FILE"

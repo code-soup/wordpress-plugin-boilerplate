@@ -10,6 +10,7 @@ Before you begin, please ensure you have the following installed on your local m
 -   Node.js >= 22.0
 -   npm (comes with Node.js)
 -   Composer
+-   **Linux / Git Bash**: `dos2unix` recommended for the interactive setup script (`npm run setup`) to normalize line endings before bulk file rewrites
 
 ### 1. Clone the Repository
 
@@ -24,14 +25,8 @@ cd my-new-plugin
 
 The boilerplate includes an interactive setup script that will customize the files with your plugin's specific details (like name, prefix, text domain, etc.).
 
-Before running the script, you must make it executable.
-
 ```bash
-# Make the script executable
-chmod u+x setup.sh
-
-# Run the interactive setup script
-sh setup.sh
+npm run setup
 ```
 The script will prompt you for several details. Once it's finished, the boilerplate will be configured for your project.
 

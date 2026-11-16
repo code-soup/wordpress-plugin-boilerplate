@@ -61,6 +61,23 @@ class Activator {
 
 **Note**: Requirement checks are handled in `Plugin::is_compatible()` during runtime, not during activation.
 
+### Custom activation / deactivation hook
+
+The default `Activator` fires `do_action( '{prefix}_activate' )` using your plugin prefix (placeholder `__PLUGIN_PREFIX__` in the template). Other code in your plugin or companion plugins can listen without editing the activator class:
+
+```php
+add_action(
+	'wppb_activate', // After setup: '{your_prefix}_activate'
+	static function (): void {
+		// Run one-time setup when this plugin is activated.
+	}
+);
+```
+
+The deactivator fires `{prefix}_deactivate` the same way.
+
+Rewrite rules: the template leaves `flush_rewrite_rules()` commented out until you register permastructs or custom post types—uncomment when needed.
+
 **Configuration** is set in `run.php`:
 
 ```php
@@ -283,6 +300,8 @@ class Deactivator {
 ## Plugin Uninstallation
 
 For cleanup when the plugin is deleted (not just deactivated), use the uninstall hook.
+
+**Class**: `includes/core/class-uninstaller.php` includes a commented checklist (options, transients, cron, custom tables). Implement items there and call `Uninstaller::run()` from `uninstall.php`.
 
 **File**: `uninstall.php` (already exists in the boilerplate)
 
